@@ -48,8 +48,9 @@
     "webpack-manifest-plugin": "1.2.1"
   },
   "scripts": {
+    "build": "cross-env PUBLIC_URL=\"/\" node .bin/build.js",
     "start": "node .bin/start.js",
-    "build": "node .bin/build.js",
+    "start:build": "http-server ./build -o -p 8080",
     "test": "node .bin/test.js --env=jsdom"
   },
   "jest": {
@@ -94,6 +95,8 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "cross-env": "^5.1.1",
+    "http-server": "^0.10.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1"
   }
