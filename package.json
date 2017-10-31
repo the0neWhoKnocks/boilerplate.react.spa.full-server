@@ -50,7 +50,7 @@
   "scripts": {
     "build": "cross-env PUBLIC_URL=\"/\" node .bin/build.js",
     "start": "node .bin/start.js",
-    "start:build": "http-server ./build -o -p 8080",
+    "start:build": "http-server ./build --gzip -o -p 8080",
     "test": "node .bin/test.js --env=jsdom"
   },
   "jest": {
@@ -95,6 +95,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "compression-webpack-plugin": "^1.0.1",
     "cross-env": "^5.1.1",
     "http-server": "^0.10.0",
     "stylus": "^0.54.5",
