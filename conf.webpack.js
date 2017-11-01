@@ -5,12 +5,11 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./config/env');
-const paths = require('./config/paths');
 const appConfig = require('./conf.app.js');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-const publicPath = ( process.env.NODE_ENV === 'production' ) ? paths.servedPath : '/';
+const publicPath = ( process.env.NODE_ENV === 'production' ) ? appConfig.paths.servedPath : '/';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
@@ -25,7 +24,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP === 'true';
 const moduleRules = {
   babelLoader: {
     test: /\.(js|jsx)$/,
-    include: paths.appSrc,
+    include: appConfig.paths.appSrc,
     loader: require.resolve('babel-loader'),
     options: {},
   },
@@ -41,7 +40,7 @@ const moduleRules = {
         loader: require.resolve('eslint-loader'),
       },
     ],
-    include: paths.appSrc,
+    include: appConfig.paths.appSrc,
   },
   fileLoader: {
     // Exclude `js` files to keep "css" loader working as it injects
@@ -69,7 +68,7 @@ const moduleRules = {
 };
 const htmlPluginConf = {
   inject: true,
-  template: paths.appHtml,
+  template: appConfig.paths.appHtml,
 };
 
 // These settings are shared by both `dev` & `prod` builds
@@ -78,7 +77,7 @@ const conf = {
   // This means they will be the "root" imports that are included in the JS bundle.
   entry: [
     // We ship a few polyfills by default:
-    require.resolve('./config/polyfills')
+    require.resolve('./src/polyfills')
   ],
   module: {
     strictExportPresence: true,
@@ -95,7 +94,7 @@ const conf = {
   output: {
     // The build folder.
     // Not used in dev but WebpackDevServer crashes without it:
-    path: paths.appBuild,
+    path: appConfig.paths.appBuild,
     // Set via the `homepage` prop in package.json or via the `PUBLIC_URL` CLI
     // environment variable.
     publicPath: publicPath,
@@ -124,14 +123,11 @@ const conf = {
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
   resolve: {
-    // This allows you to set a fallback for where Webpack should look for modules.
-    // We placed these paths second because we want `node_modules` to "win"
-    // if there are any conflicts. This matches Node resolution mechanism.
-    // https://github.com/facebookincubator/create-react-app/issues/253
-    modules: ['node_modules', paths.appNodeModules].concat(
-      // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
-    ),
+    alias: {
+      // Support React Native Web
+      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+      'react-native': 'react-native-web',
+    },
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
@@ -139,19 +135,24 @@ const conf = {
     // `web` extension prefixes have been added for better support
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx', '.styl'],
-    alias: {
-      // Support React Native Web
-      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web',
-    },
+    // This allows you to set a fallback for where Webpack should look for modules.
+    // We placed these paths second because we want `node_modules` to "win"
+    // if there are any conflicts. This matches Node resolution mechanism.
+    // https://github.com/facebookincubator/create-react-app/issues/253
+    modules: ['node_modules', appConfig.paths.appNodeModules].concat(
+      // It is guaranteed to exist because we tweak it in `env.js`
+      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+    ),
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
       // This often causes confusion because we only process files within src/ with babel.
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+      new ModuleScopePlugin(appConfig.paths.appSrc, [appConfig.paths.appPackageJson]),
     ],
+    // ensure any symlinked paths resolve to current repo
+    symlinks: false,
   },
 };
 
@@ -190,7 +191,7 @@ if( process.env.NODE_ENV === 'production' ){
       filename: 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
       // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
+      devtoolModuleFilenameTemplate: info => path.relative(appConfig.paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
     }
   );
   conf.plugins.push(
@@ -366,7 +367,7 @@ else{
     // to restart the development server for Webpack to discover it. This plugin
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
-    new WatchMissingNodeModulesPlugin(paths.appNodeModules)
+    new WatchMissingNodeModulesPlugin(appConfig.paths.appNodeModules)
   );
 
   // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -380,7 +381,7 @@ conf.entry = conf.entry.concat([
   // We include the app code last so that if there is a runtime error during
   // initialization, it doesn't blow up the WebpackDevServer client, and
   // changing JS code would still trigger a refresh.
-  paths.appIndexJs,
+  appConfig.paths.appIndexJs,
 ]);
 // Ensure module loader order, along with any prod/dev augmentations.
 conf.module.rules = [
@@ -419,8 +420,8 @@ conf.plugins.push(
 
 // Add paths to webpack as alias'. This will allow us to `import` or `require` a
 // path via a constant rather than having to use `../../etc/`.
-for(let _path in appConfig.paths){
-  conf.resolve.alias[_path] = appConfig.paths[_path];
+for(let _path in appConfig.webpack.paths){
+  conf.resolve.alias[_path] = appConfig.webpack.paths[_path];
 }
 
 module.exports = conf;

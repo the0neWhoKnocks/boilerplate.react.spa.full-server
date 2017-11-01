@@ -16,35 +16,35 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
-const config = require('../conf.webpack');
-const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
+const config = require('../conf.webpack');
+const appConfig = require('../conf.app');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
-const useYarn = fs.existsSync(paths.yarnLockFile);
+const useYarn = fs.existsSync(appConfig.paths.yarnLockFile);
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([appConfig.paths.appHtml, appConfig.paths.appIndexJs])) {
   process.exit(1);
 }
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
-measureFileSizesBeforeBuild(paths.appBuild)
+measureFileSizesBeforeBuild(appConfig.paths.appBuild)
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+    fs.emptyDirSync(appConfig.paths.appBuild);
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
@@ -73,16 +73,16 @@ measureFileSizesBeforeBuild(paths.appBuild)
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
-        paths.appBuild,
+        appConfig.paths.appBuild,
         WARN_AFTER_BUNDLE_GZIP_SIZE,
         WARN_AFTER_CHUNK_GZIP_SIZE
       );
       console.log();
 
-      const appPackage = require(paths.appPackageJson);
-      const publicUrl = paths.publicUrl;
+      const appPackage = require(appConfig.paths.appPackageJson);
+      const publicUrl = appConfig.paths.publicUrl;
       const publicPath = config.output.publicPath;
-      const buildFolder = path.relative(process.cwd(), paths.appBuild);
+      const buildFolder = path.relative(process.cwd(), appConfig.paths.appBuild);
       printHostingInstructions(
         appPackage,
         publicUrl,
@@ -141,8 +141,8 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
+  fs.copySync(appConfig.paths.appPublic, appConfig.paths.appBuild, {
     dereference: true,
-    filter: file => file !== paths.appHtml,
+    filter: file => file !== appConfig.paths.appHtml,
   });
 }
