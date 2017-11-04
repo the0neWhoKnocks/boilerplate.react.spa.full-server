@@ -1,7 +1,8 @@
 const path = require('path');
 const url = require('url');
 
-const _ROOT = path.resolve(__dirname);
+const ROOT = path.resolve(__dirname);
+const SRC = path.resolve(ROOT, 'src');
 const PUBLIC_URL = process.env.PUBLIC_URL;
 
 function ensureSlash(path) {
@@ -28,23 +29,25 @@ function getServedPath(appPackageJson) {
 
 module.exports = {
   paths: {
-    appBuild: path.resolve(_ROOT, 'build'),
-    appHtml: path.resolve(_ROOT, 'public/index.html'),
-    appIndexJs: path.resolve(_ROOT, 'src/index.js'),
-    appPackageJson: path.resolve(_ROOT, 'package.json'),
-    appPublic: path.resolve(_ROOT, 'public'),
-    appSrc: path.resolve(_ROOT, 'src'),
-    yarnLockFile: path.resolve(_ROOT, 'yarn.lock'),
-    testsSetup: path.resolve(_ROOT, 'src/setupTests.js'),
-    appNodeModules: path.resolve(_ROOT, 'node_modules'),
-    publicUrl: getPublicUrl(path.resolve(_ROOT, 'package.json')),
-    servedPath: getServedPath(path.resolve(_ROOT, 'package.json')),
+    appBuild: path.resolve(ROOT, 'build'),
+    appHtml: path.resolve(ROOT, 'public/index.html'),
+    appIndexJs: path.resolve(ROOT, 'src/index.js'),
+    appNodeModules: path.resolve(ROOT, 'node_modules'),
+    appPackageJson: path.resolve(ROOT, 'package.json'),
+    appPublic: path.resolve(ROOT, 'public'),
+    JEST: path.resolve(ROOT, '.jest'),
+    publicUrl: getPublicUrl(path.resolve(ROOT, 'package.json')),
+    ROOT,
+    SRC,
+    servedPath: getServedPath(path.resolve(ROOT, 'package.json')),
+    testsSetup: path.resolve(ROOT, 'src/setupTests.js'),
+    yarnLockFile: path.resolve(ROOT, 'yarn.lock'),
   },
   webpack: {
     paths: {
-      COMPONENTS: path.resolve(_ROOT, 'src/components'),
-      ROOT: _ROOT,
-      SRC: path.resolve(_ROOT, 'src'),
+      COMPONENTS: path.resolve(ROOT, 'src/components'),
+      ROOT,
+      SRC,
     }
   }
 };

@@ -4,8 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getClientEnvironment = require('./config/env');
 const appConfig = require('./conf.app.js');
+const getClientEnvironment = require('./src/utils/getClientEnvironment');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -24,7 +24,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP === 'true';
 const moduleRules = {
   babelLoader: {
     test: /\.(js|jsx)$/,
-    include: appConfig.paths.appSrc,
+    include: appConfig.paths.SRC,
     loader: require.resolve('babel-loader'),
     options: {},
   },
@@ -40,7 +40,7 @@ const moduleRules = {
         loader: require.resolve('eslint-loader'),
       },
     ],
-    include: appConfig.paths.appSrc,
+    include: appConfig.paths.SRC,
   },
   fileLoader: {
     // Exclude `js` files to keep "css" loader working as it injects
@@ -139,17 +139,17 @@ const conf = {
     // We placed these paths second because we want `node_modules` to "win"
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
-    modules: ['node_modules', appConfig.paths.appNodeModules].concat(
-      // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
-    ),
+    modules: [
+      'node_modules',
+      appConfig.paths.appNodeModules
+    ],
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
       // This often causes confusion because we only process files within src/ with babel.
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      new ModuleScopePlugin(appConfig.paths.appSrc, [appConfig.paths.appPackageJson]),
+      new ModuleScopePlugin(appConfig.paths.SRC, [appConfig.paths.appPackageJson]),
     ],
     // ensure any symlinked paths resolve to current repo
     symlinks: false,
@@ -191,7 +191,7 @@ if( process.env.NODE_ENV === 'production' ){
       filename: 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
       // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: info => path.relative(appConfig.paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
+      devtoolModuleFilenameTemplate: info => path.relative(appConfig.paths.SRC, info.absoluteResourcePath).replace(/\\/g, '/')
     }
   );
   conf.plugins.push(
