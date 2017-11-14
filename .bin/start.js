@@ -29,7 +29,7 @@ if (!checkRequiredFiles([appConfig.paths.appHtml, appConfig.paths.appIndexJs])) 
 }
 
 // Tools like Cloud9 rely on this.
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
+const DEFAULT_PORT = parseInt(process.env.PORT, 10) || appConfig.webpack.port || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
 // We attempt to use the default port but if it is busy, we offer the user to

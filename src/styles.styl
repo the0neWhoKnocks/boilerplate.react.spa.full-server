@@ -1,3 +1,5 @@
+$headerHeight = 50px;
+
 *, *::after, *::before {
   box-sizing: border-box;
 }
@@ -19,17 +21,28 @@ body {
 }
 
 .shell {
-  display: flex;
+  min-height: 100vh;
   flex-direction: column;
+  display: flex;
 }
 
 header,
 footer {
-  flex: 0 0 auto;
   z-index: 1;
 }
 
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+footer {
+  position: relative;
+}
+
 main {
-  flex: 1 1 auto;
-  //position: relative;/* need this to position inner content */
+  flex: 1;
+  padding-top: 'calc(%s + 1em)' % $headerHeight;
 }

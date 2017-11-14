@@ -48,6 +48,7 @@ module.exports = {
       COMPONENTS: path.resolve(ROOT, 'src/components'),
       ROOT,
       SRC,
-    }
+    },
+    port: 3001
   }
 };
