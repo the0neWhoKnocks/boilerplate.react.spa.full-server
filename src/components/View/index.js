@@ -1,27 +1,54 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { arrayOf, bool, string } from 'prop-types';
+import classnames from 'classnames';
 import Spinner from 'COMPONENTS/Spinner';
-import './styles';
+import styles from './styles';
 
 class View extends Component {
   render() {
-    return [
-      <div
-        key="overlay"
-        className="overlay"
-      >{ this.props.loading && <Spinner label="Loading" /> }</div>,
-      <div
-        key="view"
-        className="view"
-      >
-        <h1>{ this.props.title }</h1>
-        <div className="view__body">
-          {this.props.data && this.props.data.map((par, ndx) => (
-            <p key={ ndx }>{ par }</p>
-          ))}
+    const {
+      data,
+      loading,
+      title,
+    } = this.props;
+    const overlayClass = classnames(
+      `overlay ${ styles.overlay }`,
+      { 'is--loading': loading },
+    );
+
+    return (
+      <Fragment>
+        <div
+          key="overlay"
+          className={overlayClass}
+        >
+          { loading && (
+            <Spinner className={`${ styles.spinner }`} label="Loading" />
+          )}
         </div>
-      </div>
-    ];
+        <div
+          key="view"
+          className="view"
+        >
+          <h1>{ title }</h1>
+          <div className="view__body">
+            {data.map((par, ndx) => (
+              <p key={ ndx }>{ par }</p>
+            ))}
+          </div>
+        </div>
+      </Fragment>
+    );
   }
 }
+
+View.propTypes = {
+  data: arrayOf(string),
+  loading: bool,
+  title: string,
+};
+View.defaultProps = {
+  data: [],
+};
 
 export default View;

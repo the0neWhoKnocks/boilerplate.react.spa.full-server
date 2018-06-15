@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import './styles';
+import { arrayOf, bool, shape, string } from 'prop-types';
+import styles from './styles';
 
 // The Header creates links that can be used to navigate
 // between routes.
 class Footer extends Component {
   render() {
+    const {
+      navItems,
+    } = this.props;
+
     return (
-      <footer>
+      <footer className={`${ styles.root }`}>
         <nav>
-          {this.props.navItems.map((item, ndx) => (
+          {navItems.map((item, ndx) => (
             <NavLink
+              className={`${ styles.link }`}
               key={ ndx }
               exact={ item.exact }
               activeClassName="current"
@@ -22,5 +28,16 @@ class Footer extends Component {
     );
   }
 }
+
+Footer.propTypes = {
+  navItems: arrayOf(shape({
+    exact: bool,
+    label: string,
+    url: string,
+  })),
+};
+Footer.defaultProps = {
+  navItems: [],
+};
 
 export default Footer;

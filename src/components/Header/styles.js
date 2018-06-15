@@ -1,127 +1,182 @@
-header {
-  background-color: #dcdcdc;
+import { css } from 'glamor';
+import { mobile } from 'SRC/breakpoints';
 
-  .nav__logo,
-  nav {
-    display: inline-block;
-  }
+const headerHeight = '3.1em';
+const styles = {
+  header: css({
+    height: headerHeight,
+    backgroundColor: '#dcdcdc',
 
-  .nav__logo {
-    padding: 1em 2.5em;
-  }
+    '::before': {
+      content: "''",
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      backgroundColor: '#000',
+      opacity: 0,
+      transition: 'opacity 0.25s',
+    },
 
-  .nav__btn {
-    color: currentColor;
-    font-weight: bold;
-    text-decoration: none;
-    padding: 1em 1.5em;
-    border: solid 1px #AAA;
-    border-top: none;
-    border-bottom: none;
-    display: inline-block;
-    position: relative;
+    [`${ mobile }`]: {
+      position: 'relative',
 
-    ~ .nav__btn {
-      margin-left: -1px;
-    }
+      // add a background color element so the nav can go under
+      '::before': {
+        opacity: 1,
+      },
+    },
+  }),
 
-    &::before {
-      content: '';
-      background: rgba(#000, 0.25);
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      transition: transform 0.2s;
-      transform-origin: bottom center;
-      transform: scale(1, 0);
-      pointer-events: none;
-    }
+  nav: css({
+    display: 'inline-block',
 
-    &:hover {
-      &::before {
-        transform: scale(1, 0.1);
-      }
-    }
+    [`${ mobile }`]: {
+      background: '#fff',
+      boxShadow: '0 5px 2em rgba(0,0,0,0.5)',
+      position: 'absolute',
+      bottom: '2em', // account for shadow
+      left: 0,
+      right: 0,
+      transform: 'translateY(0%)',
+      transition: 'transform 0.25s ease-in-out',
+      zIndex: '-1',
 
-    &.current {
-      &::before {
-        transform: scale(1, 1);
-      }
-    }
-  }
+      '.is--open': {
+        transform: 'translateY(calc(100% + 2em))',
+      },
+    },
+  }),
 
-  .toggle {
-    display: none;
-  }
+  navLogo: css({
+    height: '100%',
+    background: '#000',
+    display: 'inline-block',
+    verticalAlign: 'top',
 
-  @media (max-width: 750px) {
-    position: relative;
+    ' svg': {
+      height: '100%',
+      padding: '0.25em',
+    },
 
-    // add a background color element so the nav can go under
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: #dcdcdc;
-    }
+    [`${ mobile }`]: {
+      position: 'relative',
+    },
+  }),
 
-    nav {
-      background: #fff;
-      box-shadow: 0 5px 2em rgba(0,0,0,0.5);
-      position: absolute;
-      bottom: 2em; // account for shadow
-      left: 0;
-      right: 0;
-      transform: translateY(0%);
-      transition: transform 0.25s ease-in-out;
-      z-index: -1;
+  navBtn: css({
+    color: 'currentColor',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    padding: '1em 1.5em',
+    border: 'solid 1px #AAA',
+    borderTop: 'none',
+    borderBottom: 'none',
+    display: 'inline-block',
+    position: 'relative',
 
-      &.is--open {
-        transform: translateY(calc(100% + 2em));
-      }
-    }
+    ' ~ .nav__btn': {
+      marginLeft: '-1px',
+    },
 
-    .nav__logo {
-      position: relative;
-    }
+    '::before': {
+      content: "''",
+      background: 'rgba(0, 0, 0, 0.25)',
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      transition: 'transform 0.2s',
+      transformOrigin: 'bottom center',
+      transform: 'scale(1, 0)',
+      pointerEvents: 'none',
+    },
 
-    .nav__btn {
-      border: solid 1px #aaa;
-      border-left: none;
-      border-right: none;
-      display: block;
+    ':hover': {
+      '&::before': {
+        transform: 'scale(1, 0.1)',
+      },
+    },
 
-      ~ .nav__btn {
-        margin-left: 0;
-        margin-top: -1px;
-      }
+    '.current': {
+      '&::before': {
+        transform: 'scale(1, 1)',
+      },
+    },
 
-      &::before {
-        transform-origin: center left;
-        transform: scale(0, 1);
-        pointer-events: none;
-      }
+    [`${ mobile }`]: {
+      border: 'solid 1px #aaa',
+      borderLeft: 'none',
+      borderRight: 'none',
+      display: 'block',
 
-      &:hover {
-        &::before {
-          transform: scale(0.02, 1);
-        }
-      }
+      ' ~ .nav__btn': {
+        marginLeft: 0,
+        marginTop: '-1px',
+      },
 
-      &.current {
-        &::before {
-          transform: scale(1, 1);
-        }
-      }
-    }
+      '::before': {
+        transformOrigin: 'center left',
+        transform: 'scale(0, 1)',
+        pointerEvents: 'none',
+      },
 
-    .toggle {
-      display: block;
-    }
-  }
-}
+      ':hover': {
+        '&::before': {
+          transform: 'scale(0.02, 1)',
+        },
+      },
+
+      '.current': {
+        '&::before': {
+          transform: 'scale(1, 1)',
+        },
+      },
+    },
+  }),
+
+  toggle: css({
+    display: 'none',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+
+    [`${ mobile }`]: {
+      display: 'block',
+    },
+  }),
+
+  toggleLabel: css({
+    color: '#fff',
+    padding: '1em',
+    userSelect: 'none',
+    cursor: 'pointer',
+    display: 'block',
+  }),
+
+  toggleInput: css({
+    display: 'none',
+
+    ':checked + .toggle__indicator': {
+      display: 'block',
+    },
+  }),
+
+  toggleIndicator: css({
+    width: '0.25em',
+    height: '50%',
+    background: '#666',
+    display: 'none',
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    transform: 'translateY(-50%)',
+  }),
+};
+
+export default styles;
+export {
+  headerHeight,
+};

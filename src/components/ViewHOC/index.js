@@ -9,14 +9,14 @@ const defaultView = () => (
 
 const ViewHOC = ({
   reqOpts={},
-  View=defaultView
+  View=defaultView,
 }) => (
   class Wrapper extends Component {
     constructor(props){
       super(props);
 
       this.state = {
-        loading: true
+        loading: true,
       };
     }
 
@@ -34,7 +34,7 @@ const ViewHOC = ({
         const reqArgs = [url];
 
         self.setState({
-          loading: true
+          loading: true,
         });
 
         // Default to GET if nothing was passed
@@ -47,22 +47,22 @@ const ViewHOC = ({
         if( reqData ) reqArgs.push(reqData);
 
         axios[method.toLowerCase()].apply(null, reqArgs)
-        .then(resp => {
-          self.setState({
-            data: resp.data,
-            loading: false
+          .then(resp => {
+            self.setState({
+              data: resp.data,
+              loading: false,
+            });
+          })
+          .catch(err => {
+            console.error(err);
           });
-        })
-        .catch(err => {
-          console.error(err);
-        });
       }
     }
 
     render() {
       const mergedProps = {
         ...this.props,
-        ...this.state
+        ...this.state,
       };
 
       return (

@@ -1,0 +1,12 @@
+{
+  "app": {
+    "js": "/static/js/bundle.js"
+  },
+  "": {
+    "html": "/index.html",
+    "json": [
+      "/c7f65508a8c585dbeee5.hot-update.json",
+      "/5c214b09ebded89cdb5f.hot-update.json"
+    ]
+  }
+}

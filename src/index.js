@@ -1,11 +1,19 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from 'COMPONENTS/App';
-import './styles';
+import Shell from 'COMPONENTS/Shell';
+import {
+  footerProps,
+  headerProps,
+  mainProps,
+} from './data';
 
 render((
   <BrowserRouter>
-    <App />
+    <Shell
+      headerProps={ headerProps }
+      mainProps={ mainProps }
+      footerProps={ footerProps }
+    />
   </BrowserRouter>
 ), document.getElementById('root'));

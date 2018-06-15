@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import './styles';
+import { arrayOf, bool, shape, string } from 'prop-types';
+import classnames from 'classnames';
+import Logo from './components/Logo';
+import styles from './styles';
 
 // The Header creates links that can be used to navigate
 // between routes.
 class Header extends Component {
   constructor(props){
-    super(props);
+    super();
 
     this.state = {
-      menuOpen: false
+      menuOpen: false,
     };
 
     this.handleMenuToggle = this.handleMenuToggle.bind(this);
@@ -18,73 +21,57 @@ class Header extends Component {
 
   handleMenuToggle(ev){
     this.setState({
-      menuOpen: ev.currentTarget.checked
+      menuOpen: ev.currentTarget.checked,
     });
   }
 
-  handleNavClick(ev){
-    if( this.state.menuOpen ){
-      this.toggleInput.click();
+  handleNavClick(ndx, ev){
+    if( this.state.menuOpen && ndx !== this.navNdx ){
+      if( this.toggleTimeout ) clearTimeout(this.toggleTimeout);
+
+      this.navNdx = ndx;
+
+      // close mobile nav after item click
+      this.toggleTimeout = setTimeout(() => {
+        delete this.toggleTimeout;
+        this.toggleInput.click();
+      }, 300);
     }
   }
 
   render() {
+    const {
+      navItems,
+    } = this.props;
+    const navClass = classnames(
+      `${ styles.nav }`,
+      { 'is--open': this.state.menuOpen }
+    );
+
     return (
-      <header>
-        <style>{`
-          .toggle {
-            position: absolute;
-            top: 0;
-            right: 0;
-          }
-
-          .toggle label {
-            padding: 1em;
-            user-select: none;
-            cursor: pointer;
-            display: block;
-          }
-
-          .toggle input {
-            display: none;
-          }
-
-          .toggle__indicator {
-            width: 0.25em;
-            height: 50%;
-            background: #666;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-          }
-          .toggle input:checked + .toggle__indicator {
-            display: block;
-          }
-        `}</style>
-
-        <div className="nav__logo">Logo</div>
-        <div className="toggle">
-          <label>
+      <header className={`${ styles.header }`}>
+        <Logo className={`${ styles.navLogo }`} />
+        <div className={`${ styles.toggle }`}>
+          <label className={`${ styles.toggleLabel }`}>
             <input
+              className={`${ styles.toggleInput }`}
               ref={ (toggleInput) => { this.toggleInput = toggleInput; } }
               type="checkbox"
               onChange={ this.handleMenuToggle }
             />
-            <div className="toggle__indicator"></div>
+            <div className={`toggle__indicator ${ styles.toggleIndicator }`}></div>
             Menu
           </label>
         </div>
-        <nav className={ this.state.menuOpen ? 'is--open' : '' }>
-          {this.props.navItems.map((item, ndx) => (
+        <nav className={ navClass }>
+          {navItems.map((item, ndx) => (
             <NavLink
               key={ ndx }
               exact={ item.exact }
-              className="nav__btn"
+              className={`nav__btn ${ styles.navBtn }`}
               activeClassName="current"
               to={ item.url }
-              onClick={ this.handleNavClick }
+              onClick={ this.handleNavClick.bind(null, ndx) }
             >{item.label}</NavLink>
           ))}
         </nav>
@@ -92,5 +79,16 @@ class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  navItems: arrayOf(shape({
+    exact: bool,
+    label: string,
+    url: string,
+  })),
+};
+Header.defaultProps = {
+  navItems: [],
+};
 
 export default Header;

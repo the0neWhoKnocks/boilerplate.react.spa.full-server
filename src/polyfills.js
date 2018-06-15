@@ -1,4 +1,4 @@
-if (typeof Promise === 'undefined') {
+if( typeof Promise === 'undefined' ){
   // Rejection tracking prevents a common issue where React gets into an
   // inconsistent state due to an error, but it gets swallowed by a Promise,
   // and the user has no idea what causes React's erratic future behavior.

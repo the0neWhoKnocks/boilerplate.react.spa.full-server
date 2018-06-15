@@ -1,10 +1,16 @@
-footer {
-  text-align: right;
-  padding: 1em;
-  background-color: #dcdcdc;
+import { css } from 'glamor';
 
-  a {
-    color: #333;
-    text-decoration: none;
-  }
-}
+const styles = {
+  root: css({
+    textAlign: 'right',
+    padding: '1em',
+    backgroundColor: '#dcdcdc',
+  }),
+
+  link: css({
+    color: '#333',
+    textDecoration: 'none',
+  }),
+};
+
+export default styles;
