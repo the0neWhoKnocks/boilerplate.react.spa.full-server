@@ -10,8 +10,9 @@
     "lint": "eslint ./**/*.js",
     "start": "cpy ./public/index.html --rename=404.html ./public/ && cross-conf-env http-server ./public --gzip -o -p npm_package_config_SERVER_PORT",
     "start:dev": "cross-env BABEL_ENV=\"development\" NODE_ENV=\"development\" node .bin/start.js",
-    "test": "yarn lint && cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./conf.jest.js",
-    "test:watch": "npm run test -- --watchAll"
+    "test": "yarn lint && yarn unit",
+    "test:watch": "yarn unit --watchAll",
+    "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./conf.jest.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,8 @@
     "classnames": "^2.2.6",
     "cpy-cli": "^2.0.0",
     "cross-conf-env": "^1.1.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.18.1",
     "eslint-config-react-app": "^2.0.1",
     "eslint-loader": "1.9.0",

@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import Logo from './components/Logo';
 import styles from './styles';
 
+const closeDelay = 300;
+
 // The Header creates links that can be used to navigate
 // between routes.
 class Header extends Component {
@@ -27,15 +29,17 @@ class Header extends Component {
 
   handleNavClick(ndx, ev){
     if( this.state.menuOpen && ndx !== this.navNdx ){
-      if( this.toggleTimeout ) clearTimeout(this.toggleTimeout);
+      clearTimeout(this.toggleTimeout);
 
       this.navNdx = ndx;
 
       // close mobile nav after item click
       this.toggleTimeout = setTimeout(() => {
         delete this.toggleTimeout;
-        this.toggleInput.click();
-      }, 300);
+        this.setState({
+          menuOpen: false,
+        });
+      }, closeDelay);
     }
   }
 
@@ -43,6 +47,9 @@ class Header extends Component {
     const {
       navItems,
     } = this.props;
+    const {
+      menuOpen,
+    } = this.state;
     const navClass = classnames(
       `${ styles.nav }`,
       { 'is--open': this.state.menuOpen }
@@ -55,9 +62,9 @@ class Header extends Component {
           <label className={`${ styles.toggleLabel }`}>
             <input
               className={`${ styles.toggleInput }`}
-              ref={ (toggleInput) => { this.toggleInput = toggleInput; } }
               type="checkbox"
               onChange={ this.handleMenuToggle }
+              checked={ menuOpen }
             />
             <div className={`toggle__indicator ${ styles.toggleIndicator }`}></div>
             Menu
@@ -92,3 +99,6 @@ Header.defaultProps = {
 };
 
 export default Header;
+export {
+  closeDelay,
+};

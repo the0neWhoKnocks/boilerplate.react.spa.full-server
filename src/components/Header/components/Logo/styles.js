@@ -1,6 +1,6 @@
 import { css } from 'glamor';
 
-const disco = (steps = 50) =>
+const disco = (steps) =>
   css.keyframes(`disco_${ steps }`, genRandomColors(steps));
 
 const genRandomColors = (steps = 50) => {

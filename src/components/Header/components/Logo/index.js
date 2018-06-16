@@ -5,7 +5,6 @@ import styles from './styles';
 const Logo = ({
   className,
 }) => {
-
   return (
     <div className={`${ styles.wrapper } ${ className }`}>
       <svg xmlns="http://www.w3.org/2000/svg" version="1" viewBox="0 0 490 490">

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-const defaultView = () => (
+const DefaultView = () => (
   <div>
     <h1>View Title</h1>
   </div>
@@ -9,14 +9,14 @@ const defaultView = () => (
 
 const ViewHOC = ({
   reqOpts={},
-  View=defaultView,
-}) => (
+  View=DefaultView,
+} = {}) => (
   class Wrapper extends Component {
     constructor(props){
-      super(props);
+      super();
 
       this.state = {
-        loading: true,
+        loading: false,
       };
     }
 
