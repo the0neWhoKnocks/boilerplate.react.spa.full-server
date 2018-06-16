@@ -12,7 +12,7 @@
     "start:dev": "cross-env BABEL_ENV=\"development\" NODE_ENV=\"development\" node .bin/start.js",
     "test": "yarn lint && yarn unit",
     "test:watch": "yarn unit --watchAll",
-    "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./conf.jest.js"
+    "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./.jest/conf.jest.js"
   },
   "repository": {
     "type": "git",

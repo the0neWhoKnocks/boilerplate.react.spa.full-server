@@ -1,4 +1,4 @@
-const appConfig = require('./conf.app');
+const appConfig = require('../conf.app');
 
 const conf = {
   automock: false,
