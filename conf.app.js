@@ -1,14 +1,13 @@
-const path = require('path');
+const { resolve } = require('path');
 const packageJSON = require('./package.json');
 
-const ROOT = path.resolve(__dirname);
+const ROOT = resolve(__dirname);
 const SRC = `${ ROOT }/src`;
 const SRC_PUBLIC = `${ SRC }/public`;
 const SRC_MEDIA = `${ SRC_PUBLIC }/media`;
 const PACKAGE_JSON = `${ ROOT }/package.json`;
 
-
-module.exports = {
+const conf = {
   app: {
     NAME: packageJSON.name,
     VERSION: packageJSON.version,
@@ -35,6 +34,27 @@ module.exports = {
       ROOT,
       SRC,
     },
+    // Even though `SERVER_PORT` is a number in the package.json, it comes
+    // through as a String, so cast it back to a number via `+`
     PORT: +process.env.npm_package_config_SERVER_PORT,
   },
 };
+
+/**
+ * Use `resolve` to normalize paths, so that on Windows, something like a
+ * Webpack loader won't get a path like `C:\some\path/to/something` and not
+ * apply itself.
+ *
+ * @param {Array} keys - An Array of key paths relative to the `conf` Object.
+ */
+const normalizePaths = (keys) => {
+  keys.forEach((key) => {
+    const obj = eval(`conf.${ key }`);
+    Object.keys(obj).forEach((pathKey) => {
+      obj[pathKey] = resolve(obj[pathKey]);
+    });
+  });
+};
+normalizePaths(['paths', 'webpack.aliases']);
+
+module.exports = conf;

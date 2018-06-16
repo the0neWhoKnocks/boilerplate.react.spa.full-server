@@ -7,9 +7,10 @@
   },
   "scripts": {
     "build": "cross-env PUBLIC_URL=\"/\" BABEL_ENV=\"production\" NODE_ENV=\"production\" node .bin/build.js",
-    "start": "http-server ./public --gzip -o -p $npm_package_config_SERVER_PORT",
+    "lint": "eslint ./**/*.js",
+    "start": "cpy ./public/index.html --rename=404.html ./public/ && cross-conf-env http-server ./public --gzip -o -p npm_package_config_SERVER_PORT",
     "start:dev": "cross-env BABEL_ENV=\"development\" NODE_ENV=\"development\" node .bin/start.js",
-    "test": "eslint ./**/*.js && cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./conf.jest.js",
+    "test": "yarn lint && cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./conf.jest.js",
     "test:watch": "npm run test -- --watchAll"
   },
   "repository": {
@@ -21,7 +22,6 @@
   "license": "MIT",
   "dependencies": {
     "@noxx/webpack-tidy-plugin": "^1.0.2",
-    "autoprefixer": "7.1.2",
     "axios": "^0.17.0",
     "babel-core": "6.25.0",
     "babel-eslint": "7.2.3",
@@ -32,7 +32,8 @@
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "1.1.3",
     "classnames": "^2.2.6",
-    "dotenv": "4.0.0",
+    "cpy-cli": "^2.0.0",
+    "cross-conf-env": "^1.1.2",
     "eslint": "^4.18.1",
     "eslint-config-react-app": "^2.0.1",
     "eslint-loader": "1.9.0",
@@ -40,7 +41,6 @@
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "extend": "^3.0.1",
-    "extract-text-webpack-plugin": "3.0.0",
     "file-loader": "0.11.2",
     "fs-extra": "3.0.1",
     "glamor": "^2.20.40",
@@ -59,7 +59,6 @@
     "webpack": "^3.11.0",
     "webpack-assets-manifest": "^1.0.0",
     "webpack-dev-server": "2.8.2",
-    "webpack-manifest-plugin": "1.2.1",
     "write-file-webpack-plugin": "^4.3.2"
   },
   "babel": {

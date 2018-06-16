@@ -25,6 +25,7 @@ const conf = {
       'react',
       'react-dom',
       'prop-types',
+      'glamor',
     ],
     // the actual app entry is in `conf.webpack`
     app: [],
