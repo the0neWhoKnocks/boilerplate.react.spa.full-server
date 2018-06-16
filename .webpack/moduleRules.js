@@ -1,9 +1,6 @@
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const appConfig = require('../conf.app');
-
-const hashedName = (process.env.NODE_ENV === 'production')
-  ? '[name]__[local]__[hash:base64:5].[ext]'
-  : '[path]_[name]__[local]___[hash:base64:5].[ext]';
+const { hashedName } = require('./vars');
 
 /**
  * Setup all the module rules as Objects so they can easily be inserted in any
@@ -38,7 +35,7 @@ module.exports = {
     exclude: [/\.js$/, /\.html$/, /\.json$/],
     loader: require.resolve('file-loader'),
     options: {
-      name: `${ appConfig.clientPaths.STATIC_MEDIA }/${ hashedName }`,
+      name: `${ appConfig.clientPaths.MEDIA }/${ hashedName }.[ext]`,
     },
   },
   urlLoader: {
@@ -46,7 +43,7 @@ module.exports = {
     loader: require.resolve('url-loader'),
     options: {
       limit: 10000,
-      name: `${ appConfig.clientPaths.STATIC_MEDIA }/${ hashedName }`,
+      name: `${ appConfig.clientPaths.MEDIA }/${ hashedName }.[ext]`,
     },
   },
 };

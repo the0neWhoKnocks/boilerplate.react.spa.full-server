@@ -5,25 +5,29 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
-const AssetsPlugin = require('assets-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 const appConfig = require('../conf.app');
-
-// Webpack uses `publicPath` to determine where the app is being served from.
-// In development, we always serve from the root. This makes config easier.
-const publicPath = ( process.env.NODE_ENV === 'production' ) ? appConfig.paths.SERVED_PATH : '/';
+const { hashedName } = require('./vars');
 
 // ensures the favicon is always current with every new build
 const faviconModTime = fs.statSync(appConfig.paths.FAVICON);
 
 // These settings are shared by both `dev` & `prod` builds
 const conf = {
+  // The entry and module.rules.loader option is resolved relative to this directory
+  context: appConfig.paths.ROOT,
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in the JS bundle.
   entry: {
-    // add some polyfills
-    app: [
-      require.resolve('../src/polyfills'),
+    // set up all libs that are required by the app
+    vendor: [
+      `${ appConfig.paths.SRC }/polyfills`,
+      'react',
+      'react-dom',
+      'prop-types',
     ],
+    // the actual app entry is in `conf.webpack`
+    app: [],
   },
   module: {
     strictExportPresence: true,
@@ -38,18 +42,23 @@ const conf = {
     child_process: 'empty',
   },
   output: {
+    filename: `js/${ hashedName }.js`,
     // The build folder.
     // Not used in dev but WebpackDevServer crashes without it:
-    path: appConfig.paths.APP_BUILD,
+    path: appConfig.paths.DIST_PUBLIC,
     // Set via the `homepage` prop in package.json or via the `PUBLIC_URL` CLI
     // environment variable.
-    publicPath: publicPath,
+    publicPath: process.env.WEBPACK_ASSETS_URL,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   // Any shared plugins, that need no per-build configuration changes
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+    }),
     /**
      * Provides build progress in the CLI
      */
@@ -61,10 +70,17 @@ const conf = {
      * to their corresponding output file so that tools can load them without
      * having to know the hashed name.
      */
-    new AssetsPlugin({
-      path: `${ appConfig.paths.SRC }/`,
-      prettyPrint: true,
-      update: true,
+    // new WebpackAssetsManifest({}),
+    new WebpackAssetsManifest({
+      customize: (key, val) => {
+        return {
+          key,
+          value: val.replace('public/', ''),
+        };
+      },
+      output: `${ appConfig.paths.DIST_PUBLIC }/bundle-manifest.json`,
+      publicPath: '/',
+      writeToDisk: true,
     }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
@@ -78,8 +94,11 @@ const conf = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }.
     new webpack.DefinePlugin({
-      globals: {
-        app: appConfig.app,
+      // Using `window.` so that it can be referenced in JS files without "undefined var" errors
+      // These vars should only be referenced once since WP replaces the variables
+      // with the entire value, so you could possibly have a lot of duplicated data.
+      'window.WP_GLOBALS': {
+        app: JSON.stringify(appConfig.app),
       },
     }),
     // Moment.js is an extremely popular library that bundles large locale files
@@ -102,7 +121,7 @@ const conf = {
         minifyCSS: true,
         minifyURLs: true,
       },
-      template: appConfig.paths.APP_HTML,
+      template: appConfig.paths.INDEX_TEMPLATE,
     }),
   ],
   resolve: {

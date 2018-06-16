@@ -1,18 +1,10 @@
 const chalk = require('chalk');
 const clearConsole = require('react-dev-utils/clearConsole');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const appConfig = require('../conf.app');
 
 const isInteractive = process.stdout.isTTY;
 
-/**
- * [customCompiler description]
- *
- * @param {[type]} webpack
- * @param {[type]} webpackConfig
- * @param {[type]} appName
- * @param {[type]} urls
- * @return {[type]}
- */
 function customCompiler(webpack, webpackConfig, appName, urls){
   let compiler;
 
@@ -45,15 +37,24 @@ function customCompiler(webpack, webpackConfig, appName, urls){
 
     if( isSuccessful ){
       if( isInteractive || isFirstCompile ){
-        const bundles = [];
-        const url = webpackConfig.output.publicPath;
+        const publicBundles = [];
+        const localBundles = [];
+        const publicURL = webpackConfig.output.publicPath;
+        const localURL = publicURL.replace(/\/\/.*:/, '//localhost:');
 
         Object.keys(outputJSON.assetsByChunkName).forEach((key) => {
           const bundle = outputJSON.assetsByChunkName[key];
-          bundles.push(`http:${ url }${ bundle[0] }`);
+          publicBundles.push(`http:${ publicURL }${ bundle[0] }`);
+          localBundles.push(`http:${ localURL }${ bundle[0] }`);
         });
-        
-        console.log(chalk.green("\n Bundles being served from memory:\n  ") + bundles.join("\n  ")); // eslint-disable-line
+
+        console.log(
+          chalk.green(`\n Dev-server for ${ chalk.cyan(appConfig.app.NAME) } running at: ${ chalk.cyan(`http:${localURL}`) }\n`) // eslint-disable-line
+          + chalk.green(`\n Bundles being served from memory:\n\n  `) // eslint-disable-line
+          + localBundles.join("\n  ") // eslint-disable-line
+          + "\n  " // eslint-disable-line
+          + publicBundles.join("\n  ") // eslint-disable-line
+        );
       }
     }
 

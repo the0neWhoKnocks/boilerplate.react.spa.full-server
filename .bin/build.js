@@ -3,47 +3,40 @@
 // terminate the Node.js process with a non-zero exit code.
 process.on('unhandledRejection', err => { throw err; });
 
-const path = require('path');
 const chalk = require('chalk');
-const fs = require('fs-extra');
 const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
 const config = require('../.webpack/conf.webpack');
 const appConfig = require('../conf.app');
+const prepPublic = require('./prepPublic');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
-const useYarn = fs.existsSync(appConfig.paths.YARN_LOCK);
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([appConfig.paths.APP_HTML, appConfig.paths.APP_INDEX])) {
+if(!checkRequiredFiles([appConfig.paths.INDEX_TEMPLATE, appConfig.paths.APP_INDEX])){
   process.exit(1);
 }
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
-measureFileSizesBeforeBuild(appConfig.paths.APP_BUILD)
+measureFileSizesBeforeBuild(appConfig.paths.DIST_PUBLIC)
   .then(previousFileSizes => {
-    // Remove all content but keep the directory so that
-    // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(appConfig.paths.APP_BUILD);
-    // Merge with the public folder
-    copyPublicFolder();
+    prepPublic();
     // Start the webpack build
     return build(previousFileSizes);
   })
   .then(
     ({ stats, previousFileSizes, warnings }) => {
-      if (warnings.length) {
+      if(warnings.length){
         console.log(chalk.yellow('Compiled with warnings.\n'));
         console.log(warnings.join('\n\n'));
         console.log(
@@ -56,7 +49,8 @@ measureFileSizesBeforeBuild(appConfig.paths.APP_BUILD)
             chalk.cyan('// eslint-disable-next-line') +
             ' to the line before.\n'
         );
-      } else {
+      }
+      else{
         console.log(chalk.green('Compiled successfully.\n'));
       }
 
@@ -64,23 +58,11 @@ measureFileSizesBeforeBuild(appConfig.paths.APP_BUILD)
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
-        appConfig.paths.APP_BUILD,
+        appConfig.paths.DIST_PUBLIC,
         WARN_AFTER_BUNDLE_GZIP_SIZE,
         WARN_AFTER_CHUNK_GZIP_SIZE
       );
       console.log();
-
-      const appPackage = require(appConfig.paths.PACKAGE_JSON);
-      const publicUrl = appConfig.paths.PUBLIC_URL;
-      const publicPath = config.output.publicPath;
-      const buildFolder = path.relative(process.cwd(), appConfig.paths.APP_BUILD);
-      printHostingInstructions(
-        appPackage,
-        publicUrl,
-        publicPath,
-        buildFolder,
-        useYarn
-      );
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'));
@@ -96,24 +78,24 @@ function build(previousFileSizes) {
   let compiler = webpack(config);
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
-      if (err) {
+      if(err){
         return reject(err);
       }
       const messages = formatWebpackMessages(stats.toJson({}, true));
-      if (messages.errors.length) {
+      if(messages.errors.length){
         // Only keep the first error. Others are often indicative
         // of the same problem, but confuse the reader with noise.
-        if (messages.errors.length > 1) {
+        if(messages.errors.length > 1){
           messages.errors.length = 1;
         }
         return reject(new Error(messages.errors.join('\n\n')));
       }
-      if (
+      if(
         process.env.CI &&
         (typeof process.env.CI !== 'string' ||
           process.env.CI.toLowerCase() !== 'false') &&
         messages.warnings.length
-      ) {
+      ){
         console.log(
           chalk.yellow(
             '\nTreating warnings as errors because process.env.CI = true.\n' +
@@ -128,12 +110,5 @@ function build(previousFileSizes) {
         warnings: messages.warnings,
       });
     });
-  });
-}
-
-function copyPublicFolder() {
-  fs.copySync(appConfig.paths.PUBLIC, appConfig.paths.APP_BUILD, {
-    dereference: true,
-    filter: file => file !== appConfig.paths.APP_HTML,
   });
 }

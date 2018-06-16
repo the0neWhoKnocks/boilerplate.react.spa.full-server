@@ -8,6 +8,8 @@ import {
   mainProps,
 } from './data';
 
+window.globals = window.WP_GLOBALS;
+
 render((
   <BrowserRouter>
     <Shell
@@ -17,3 +19,9 @@ render((
     />
   </BrowserRouter>
 ), document.getElementById('root'));
+
+console.log(
+  '%c APP ',
+  'background:#222; color:#bada55; padding:0.25em 0.5em; border-radius:0.5em',
+  JSON.stringify(window.globals.app, null, 2)
+);

@@ -2,7 +2,7 @@
 
 A boilerplate for creating a SPA in React.
 
-![spa-001](https://user-images.githubusercontent.com/344140/32146723-01c207e6-bc99-11e7-86f8-81deba441f98.gif)
+![flow_v2](https://user-images.githubusercontent.com/344140/41495959-9a7010d8-70e8-11e8-9f88-87d7c7bc5410.gif)
 
 - Utilizes Glamor for styling
 - Favicon updates on bundle creation
@@ -12,7 +12,7 @@ A boilerplate for creating a SPA in React.
 Start up dev server
 
 ```sh
-yarn start
+yarn start:dev
 ```
 
 ---
@@ -22,5 +22,5 @@ Build a production package
 ```sh
 yarn build
 # start up a simple server to verify the built code
-yarn start:build
+yarn start
 ```

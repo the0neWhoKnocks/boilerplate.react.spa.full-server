@@ -1,8 +1,10 @@
-const path = require('path');
 const webpack = require('webpack');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const WriteFilePlugin = require('write-file-webpack-plugin');
+const TidyPlugin = require('@noxx/webpack-tidy-plugin');
 const appConfig = require('../conf.app');
+const { hashLength } = require('./vars');
 
 const conf = {
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
@@ -26,15 +28,6 @@ const conf = {
   output: {
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
-    // This does not produce a real file. It's just the virtual path that is
-    // served by WebpackDevServer in development. This is the JS bundle
-    // containing code from all our entry points, and the Webpack runtime.
-    filename: 'static/js/bundle.js',
-    // There are also additional JS chunk files if you use code splitting.
-    chunkFilename: 'static/js/[name].chunk.js',
-    // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info =>
-      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   // Turn off performance hints during development because we don't do any
   // splitting or minification in interest of speed. These warnings become
@@ -43,10 +36,23 @@ const conf = {
     hints: false,
   },
   plugins: [
+    // No reason to have this, other than to ensure that files will be written
+    // to the proper location.
+    new WriteFilePlugin({
+      // Write only files that match extensions
+      test: /\.(js|html)$/,
+      useHashIndex: true,
+    }),
+
+    // TODO - this isn't working as expected
+    new TidyPlugin({
+      cleanPaths: './public/js/* ./public/css/*',
+      hashLength,
+      watching: true,
+    }),
+
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),
-    // This is necessary to emit hot updates (currently CSS only):
-    new webpack.HotModuleReplacementPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
     // a plugin that prints an error when you attempt to do this.
     // See https://github.com/facebookincubator/create-react-app/issues/240
