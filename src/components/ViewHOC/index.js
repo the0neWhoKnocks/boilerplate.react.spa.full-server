@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { arrayOf, object, oneOfType, string } from 'prop-types';
+import getData from 'UTILS/getData';
 
 const DefaultView = () => (
   <div>
@@ -10,45 +11,21 @@ const DefaultView = () => (
 const ViewHOC = ({
   reqOpts={},
   View=DefaultView,
-} = {}) => (
+} = {}) => {
   class Wrapper extends Component {
     constructor(props){
       super();
 
       this.state = {
-        loading: false,
+        loading: !(props.data && props.data.length),
       };
     }
 
     componentDidMount(){
-      this.getData();
-    }
-
-    getData(){
-      const self = this;
-      const { body, params, url } = reqOpts;
-      let { method } = reqOpts;
-      let reqData;
-
-      if( url ){
-        const reqArgs = [url];
-
-        self.setState({
-          loading: true,
-        });
-
-        // Default to GET if nothing was passed
-        if( !method ) method = 'GET';
-        // GETs require a `params` prop
-        if( params ) reqData = { params };
-        // POSTs take whatever Object is passed
-        if( body ) reqData = body;
-        // only add data to the call if it was provided
-        if( reqData ) reqArgs.push(reqData);
-
-        axios[method.toLowerCase()].apply(null, reqArgs)
+      if(this.state.loading){
+        getData(reqOpts)
           .then(resp => {
-            self.setState({
+            this.setState({
               data: resp.data,
               loading: false,
             });
@@ -70,6 +47,16 @@ const ViewHOC = ({
       );
     }
   }
-);
+
+  Wrapper.reqOpts = reqOpts;
+  Wrapper.propTypes = {
+    data: oneOfType([
+      arrayOf(string),
+      object,
+    ]),
+  };
+
+  return Wrapper;
+};
 
 export default ViewHOC;

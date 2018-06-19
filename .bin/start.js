@@ -21,14 +21,14 @@ const customCompiler = require('../.webpack/customCompiler');
 const webpackConfig = require('../.webpack/conf.webpack');
 const createDevServerConfig = require('../.webpack/conf.webpackServer');
 const appConfig = require('../conf.app');
-const prepPublic = require('./prepPublic');
+const prepDist = require('./prepDist');
 
 const isInteractive = process.stdout.isTTY;
 
 const DEFAULT_PORT = appConfig.webpack.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-prepPublic();
+prepDist();
 
 // We attempt to use the default port but if it is busy, we offer the user to
 // run on a different port. `detect()` Promise resolves to the next free port.

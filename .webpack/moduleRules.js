@@ -8,13 +8,13 @@ const { hashedName } = require('./vars');
  */
 module.exports = {
   babelLoader: {
-    test: /\.(js|jsx)$/,
+    test: /\.jsx?$/,
     include: appConfig.paths.SRC,
     loader: require.resolve('babel-loader'),
     options: {},
   },
   eslintLoader: {
-    test: /\.(js|jsx)$/,
+    test: /\.jsx?$/,
     enforce: 'pre',
     use: [
       {

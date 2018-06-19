@@ -1,5 +1,6 @@
 import View from 'COMPONENTS/View';
 import ViewHOC from 'COMPONENTS/ViewHOC';
+import getData from 'UTILS/getData';
 
 const View1 = ViewHOC({
   reqOpts: {
@@ -31,6 +32,7 @@ const data = {
         url: '/',
         view: View1,
         viewProps: {
+          ssr: getData,
           title: 'View 1',
         },
       },
@@ -68,6 +70,7 @@ const data = {
     ],
   },
 };
+
 const headerProps = {
   navItems: data.header.navItems,
 };

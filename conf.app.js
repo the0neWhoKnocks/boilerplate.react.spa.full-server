@@ -1,11 +1,15 @@
 const { resolve } = require('path');
 const packageJSON = require('./package.json');
 
-const ROOT = resolve(__dirname);
-const SRC = `${ ROOT }/src`;
-const SRC_PUBLIC = `${ SRC }/public`;
-const SRC_MEDIA = `${ SRC_PUBLIC }/media`;
-const PACKAGE_JSON = `${ ROOT }/package.json`;
+// Some paths have to be normalized when this file is copied over to dist
+const inDist = __dirname.endsWith('dist');
+const ROOT = resolve(__dirname, (inDist) ? '../' : '');
+const DIST = `${ ROOT }/dist`;
+const DIST_PUBLIC = `${ DIST }/public`;
+const SRC = (inDist) ? `${ DIST }/private` : `${ ROOT }/src`;
+const SRC_STATIC = (inDist) ? DIST_PUBLIC : `${ SRC }/static`;
+const SRC_MEDIA = `${ SRC_STATIC }/media`;
+const PACKAGE_JSON = (inDist) ? `${ DIST }/package.json` : `${ ROOT }/package.json`;
 
 const conf = {
   app: {
@@ -18,25 +22,36 @@ const conf = {
   },
   paths: {
     APP_INDEX: `${ SRC }/index.js`,
-    DIST_PUBLIC: `${ ROOT }/public`,
+    DIST,
+    DIST_PUBLIC,
     FAVICON: `${ SRC_MEDIA }/favicon.png`,
-    INDEX_TEMPLATE: `${ SRC_PUBLIC }/index_template.html`,
     JEST: `${ ROOT }/.jest`,
     NODE_MODULES: `${ ROOT }/node_modules`,
-    PACKAGE_JSON: PACKAGE_JSON,
+    PACKAGE_JSON,
     ROOT,
     SRC,
-    SRC_PUBLIC: SRC_PUBLIC,
+    SRC_STATIC,
   },
+  // Even though `SERVER_PORT` is a number in the package.json, it comes
+  // through as a String, so cast it back to a number via `+`
+  PORT: +process.env.npm_package_config_SERVER_PORT,
   webpack: {
+    // Normally WP is only for client code, but we're utilizing the
+    // `webpack-alias` plugin to simplify out pathing in files. So it's ok to
+    // have a mixture of public and private paths.
     aliases: {
       COMPONENTS: `${ SRC }/components`,
+      DIST_PRIVATE: `${ DIST }/private`,
+      DIST_PUBLIC,
       ROOT,
       SRC,
+      UTILS: `${ SRC }/utils`,
     },
-    // Even though `SERVER_PORT` is a number in the package.json, it comes
-    // through as a String, so cast it back to a number via `+`
-    PORT: +process.env.npm_package_config_SERVER_PORT,
+    entries: {
+      VENDOR: 'vendor',
+      APP: 'app',
+    },
+    MANIFEST_NAME: 'assets-manifest.json',
   },
 };
 

@@ -11,7 +11,7 @@ const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
 const config = require('../.webpack/conf.webpack');
 const appConfig = require('../conf.app');
-const prepPublic = require('./prepPublic');
+const prepDist = require('./prepDist');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -22,7 +22,7 @@ const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 // Warn and crash if required files are missing
-if(!checkRequiredFiles([appConfig.paths.INDEX_TEMPLATE, appConfig.paths.APP_INDEX])){
+if(!checkRequiredFiles([appConfig.paths.APP_INDEX])){
   process.exit(1);
 }
 
@@ -30,7 +30,7 @@ if(!checkRequiredFiles([appConfig.paths.INDEX_TEMPLATE, appConfig.paths.APP_INDE
 // This lets us display how much they changed later.
 measureFileSizesBeforeBuild(appConfig.paths.DIST_PUBLIC)
   .then(previousFileSizes => {
-    prepPublic();
+    prepDist();
     // Start the webpack build
     return build(previousFileSizes);
   })

@@ -1,16 +1,10 @@
-const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const appConfig = require('../conf.app');
 const { hashedName } = require('./vars');
-
-// ensures the favicon is always current with every new build
-const faviconModTime = fs.statSync(appConfig.paths.FAVICON);
 
 // These settings are shared by both `dev` & `prod` builds
 const conf = {
@@ -20,7 +14,7 @@ const conf = {
   // This means they will be the "root" imports that are included in the JS bundle.
   entry: {
     // set up all libs that are required by the app
-    vendor: [
+    [appConfig.webpack.entries.VENDOR]: [
       `${ appConfig.paths.SRC }/polyfills`,
       'react',
       'react-dom',
@@ -28,7 +22,7 @@ const conf = {
       'glamor',
     ],
     // the actual app entry is in `conf.webpack`
-    app: [],
+    [appConfig.webpack.entries.APP]: [],
   },
   module: {
     strictExportPresence: true,
@@ -71,7 +65,6 @@ const conf = {
      * to their corresponding output file so that tools can load them without
      * having to know the hashed name.
      */
-    // new WebpackAssetsManifest({}),
     new WebpackAssetsManifest({
       customize: (key, val) => {
         return {
@@ -79,18 +72,9 @@ const conf = {
           value: val.replace('public/', ''),
         };
       },
-      output: `${ appConfig.paths.DIST_PUBLIC }/bundle-manifest.json`,
+      output: `${ appConfig.paths.DIST_PUBLIC }/${ appConfig.webpack.MANIFEST_NAME }`,
       publicPath: '/',
       writeToDisk: true,
-    }),
-    // Makes some environment variables available in index.html.
-    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-    // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    // In production, it will be an empty string unless you specify "homepage"
-    // in `package.json`, in which case it will be the pathname of that URL.
-    new InterpolateHtmlPlugin({
-      FACICON_MOD_TIME: faviconModTime.mtimeMs,
-      PUBLIC_URL: appConfig.clientPaths.PUBLIC_URL,
     }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }.
@@ -108,22 +92,6 @@ const conf = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    // Generates an `index.html` file with the <script> injected.
-    new HtmlWebpackPlugin({
-      inject: true,
-      minify: {
-        removeComments: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-      template: appConfig.paths.INDEX_TEMPLATE,
-    }),
   ],
   resolve: {
     alias: {

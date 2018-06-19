@@ -35,7 +35,7 @@ extend(true, moduleRules, alteredModuleRules);
 // We include the app code last so that if there is a runtime error during
 // initialization, it doesn't blow up the WebpackDevServer client, and
 // changing JS code would still trigger a refresh.
-conf.entry.app.push(
+conf.entry[appConfig.webpack.entries.APP].push(
   appConfig.paths.APP_INDEX,
 );
 
