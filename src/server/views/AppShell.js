@@ -7,6 +7,9 @@ const bundleScripts = Object.keys(appConfig.webpack.entries).map((key) => {
 });
 
 module.exports = function(model){
+  // allows for hot-reloading
+  const reloadScript = model.dev && '<script type="text/javascript" src="/reload/reload.js"></script>';
+
   return `
     <!DOCTYPE html>
     <html lang="en-US">
@@ -29,6 +32,7 @@ module.exports = function(model){
       <body>
         <div id="root" class="root">${ model.body }</div>
         ${ bundleScripts.join('') }
+        ${ reloadScript }
       </body>
     </html>
   `;

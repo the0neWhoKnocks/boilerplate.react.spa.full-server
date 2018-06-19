@@ -20,14 +20,18 @@ A boilerplate for creating a SPA in React, with a full server.
 Start up dev server
 
 ```sh
-yarn start:dev
+yarn start:server:dev
 ```
+
+When the server starts in `dev` mode you can debug server code by visiting
+`chrome://inspect` (if you're using Chrome as your browser). Then go to the
+`Sources` tab and find the file you want to debug.
 
 ---
 
-Build a production package
+Build and start up the production package
 
 ```sh
 # builds the deployment package & starts a simple server to verify built code
-yarn build && yarn start
+yarn start:server
 ```

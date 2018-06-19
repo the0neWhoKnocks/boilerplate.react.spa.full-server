@@ -11,7 +11,7 @@
 const getSSRData = (fn, reqOpts, obj, objKey) => {
   return fn(reqOpts)
     .then((resp) => {
-      console.log('SSR - data', resp.data);
+      console.debug('SSR - data', resp.data);
       obj[objKey] = resp.data;
     })
     .catch((err) => {

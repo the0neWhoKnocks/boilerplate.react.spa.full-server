@@ -1,7 +1,6 @@
 import express from 'express';
 import compression from 'compression';
 import color from 'cli-color';
-import opn from 'opn';
 import portscanner from 'portscanner';
 import bodyParser from 'body-parser';
 
@@ -36,7 +35,15 @@ const app = {
   setupRoutes: function(){
     const _self = this;
 
-    Object.keys(routes.get).forEach(function(route){
+    if(isDev){
+      // Has to come before any other routes since it's a dynamic route inserted
+      // by reload, and won't resolve if any other routes are set up to handle
+      // js files or there are any catch-all's.
+      const reload = require('reload');
+      reload(this.expressInst);
+    }
+
+    Object.keys(routes.get).forEach((route) => {
       _self.expressInst.get(route, routes.get[route]);
     });
   },
@@ -67,22 +74,17 @@ const app = {
   onBootComplete: function(data){
     // let the user know the server is up and ready
     let msg = `${ color.green.bold('[ SERVER ]') } Running at ${ color.blue.bold(data.url) }`;
-
-    if( isDev ){
-      const getBrowser = require('UTILS/getBrowser');
-
-      msg += `\n${ color.green.bold('[ WATCHING ]') } For changes`;
-
-      opn(data.url, {
-        app: [getBrowser.chrome(), '--incognito'],
-        wait: false, // no need to wait for app to close
-      });
-    }
+    if( isDev ) msg += `\n${ color.green.bold('[ WATCHING ]') } For changes`;
 
     console.log(`${ msg } \n`);
   },
 
   startServer: function(){
+
+
+    // console.log(this.expressInst);
+    require('UTILS/listRoutes').default(this.expressInst);
+
     this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
       url: `http://localhost:${ appConfig.PORT }/`,
     }));

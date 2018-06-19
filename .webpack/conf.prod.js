@@ -46,7 +46,7 @@ const conf = {
       // If a URL is already hashed by Webpack, then there is no concern
       // about it being stale, and the cache-busting can be skipped.
       dontCacheBustUrlsMatching: /\.\w{8}\./,
-      filename: 'service-worker.js',
+      filepath: `.${ appConfig.webpack.paths.OUTPUT }/js/service-worker.js`,
       logger(message) { // eslint-disable-line
         if(message.indexOf('Total precache size is') === 0){
           // This message occurs for every build and is a bit too noisy.
@@ -61,12 +61,12 @@ const conf = {
       },
       minify: true,
       // For unknown URLs, fallback to the index page
-      navigateFallback: `${ appConfig.clientPaths.PUBLIC_URL }/index.html`,
+      navigateFallback: `${ appConfig.clientPaths.PUBLIC_URL }/`,
       // Ignores URLs starting from /__ (useful for Firebase):
       // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
       navigateFallbackWhitelist: [/^(?!\/__).*/],
       // Don't precache sourcemaps (they're large) and build asset manifest:
-      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+      staticFileGlobsIgnorePatterns: [/\.map$/, /assets-manifest\.json$/],
     }),
     new CompressionPlugin({
       asset: '[path].gz[query]',

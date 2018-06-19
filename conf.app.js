@@ -5,8 +5,9 @@ const packageJSON = require('./package.json');
 const inDist = __dirname.endsWith('dist');
 const ROOT = resolve(__dirname, (inDist) ? '../' : '');
 const DIST = `${ ROOT }/dist`;
+const DIST_PRIVATE = `${ DIST }/private`;
 const DIST_PUBLIC = `${ DIST }/public`;
-const SRC = (inDist) ? `${ DIST }/private` : `${ ROOT }/src`;
+const SRC = (inDist) ? DIST_PRIVATE : `${ ROOT }/src`;
 const SRC_STATIC = (inDist) ? DIST_PUBLIC : `${ SRC }/static`;
 const SRC_MEDIA = `${ SRC_STATIC }/media`;
 const PACKAGE_JSON = (inDist) ? `${ DIST }/package.json` : `${ ROOT }/package.json`;
@@ -23,6 +24,7 @@ const conf = {
   paths: {
     APP_INDEX: `${ SRC }/index.js`,
     DIST,
+    DIST_PRIVATE,
     DIST_PUBLIC,
     FAVICON: `${ SRC_MEDIA }/favicon.png`,
     JEST: `${ ROOT }/.jest`,
@@ -50,6 +52,9 @@ const conf = {
     entries: {
       VENDOR: 'vendor',
       APP: 'app',
+    },
+    paths: {
+      OUTPUT: '/dist/public',
     },
     MANIFEST_NAME: 'assets-manifest.json',
   },

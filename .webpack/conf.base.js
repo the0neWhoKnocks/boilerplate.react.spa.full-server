@@ -3,8 +3,9 @@ const webpack = require('webpack');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const TidyPlugin = require('@noxx/webpack-tidy-plugin');
 const appConfig = require('../conf.app');
-const { hashedName } = require('./vars');
+const { hashLength, hashedName } = require('./vars');
 
 // These settings are shared by both `dev` & `prod` builds
 const conf = {
@@ -37,19 +38,18 @@ const conf = {
     child_process: 'empty',
   },
   output: {
-    filename: `js/${ hashedName }.js`,
-    // The build folder.
-    // Not used in dev but WebpackDevServer crashes without it:
-    path: appConfig.paths.DIST_PUBLIC,
-    // Set via the `homepage` prop in package.json or via the `PUBLIC_URL` CLI
-    // environment variable.
-    publicPath: process.env.WEBPACK_ASSETS_URL,
+    filename: `.${ appConfig.webpack.paths.OUTPUT }/js/${ hashedName }.js`,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   // Any shared plugins, that need no per-build configuration changes
   plugins: [
+    new TidyPlugin({
+      cleanPaths: `.${ appConfig.webpack.paths.OUTPUT }/js/*`,
+      hashLength,
+      watching: process.env.NODE_ENV === 'development',
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: Infinity,
@@ -66,12 +66,10 @@ const conf = {
      * having to know the hashed name.
      */
     new WebpackAssetsManifest({
-      customize: (key, val) => {
-        return {
-          key,
-          value: val.replace('public/', ''),
-        };
-      },
+      customize: (key, val) => ({
+        key,
+        value: val.replace(appConfig.webpack.paths.OUTPUT, ''),
+      }),
       output: `${ appConfig.paths.DIST_PUBLIC }/${ appConfig.webpack.MANIFEST_NAME }`,
       publicPath: '/',
       writeToDisk: true,
@@ -124,6 +122,11 @@ const conf = {
     ],
     // ensure any symlinked paths resolve to current repo
     symlinks: false,
+  },
+  stats: {
+    chunks: false,
+    colors: true,
+    modules: false,
   },
 };
 
