@@ -1,18 +1,7 @@
-import { statSync } from 'fs';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router';
-import { renderStatic } from 'glamor/server';
 import appConfig from 'ROOT/conf.app';
-import Shell from 'COMPONENTS/Shell';
-import findSSRData from 'UTILS/findSSRData';
-import AppShell from './views/AppShell';
-
 
 const isDev = process.env.NODE_ENV === 'development';
-
-// ensures the favicon is always current (with every start of the server)
-const faviconModTime = statSync(appConfig.paths.FAVICON).mtimeMs;
 
 module.exports = {
   get: {
@@ -21,13 +10,25 @@ module.exports = {
 
     // route everything else to the app
     '*': (req, res) => {
+      // route specific modules
+      const { statSync } = require('fs');
+      const { renderToString } = require('react-dom/server');
+      const { renderStatic } = require('glamor/server');
+      const serialize = require('serialize-javascript');
+      const ClientShell = require('COMPONENTS/Shell').default;
+      const awaitSSRData = require('UTILS/awaitSSRData').default;
       const {
         footerProps,
         headerProps,
         mainProps,
-      } = require(`${ appConfig.paths.SRC }/data`);
+      } = require('SRC/data');
+      const store = require('STATE/store').default;
+      const AppShell = require('./views/AppShell');
 
-      findSSRData(req.url, [
+      // ensures the favicon is always current (with every start of the server)
+      const faviconModTime = statSync(appConfig.paths.FAVICON).mtimeMs;
+
+      awaitSSRData(req.url, [
         footerProps,
         headerProps,
         mainProps,
@@ -37,29 +38,30 @@ module.exports = {
         const context = {};
         let { html, css, ids } = renderStatic(() =>
           renderToString(
-            <StaticRouter
+            <ClientShell
               context={ context }
-              location={ req.url }
-            >
-              <Shell
-                headerProps={ headerProps }
-                mainProps={ mainProps }
-                footerProps={ footerProps }
-              />
-            </StaticRouter>
+              footerProps={ footerProps }
+              headerProps={ headerProps }
+              mainProps={ mainProps }
+              request={ req }
+            />
           )
         );
 
-        res.send(AppShell({
-          body: html,
-          css,
-          dev: isDev,
-          faviconModTime,
-          glamor: {
-            ids,
-          },
-          title: 'React SPA',
-        }));
+        if( context.url ){
+          res.redirect(302, context.url);
+        }
+        else{
+          res.send(AppShell({
+            body: html,
+            css,
+            dev: isDev,
+            faviconModTime,
+            glamor: { ids },
+            state: serialize(store.getState()),
+            title: 'React SPA',
+          }));
+        }
       });
     },
   },

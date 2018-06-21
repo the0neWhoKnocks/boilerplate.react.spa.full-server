@@ -7,5 +7,5 @@ export default (expressInst) => {
     }
   });
 
-  console.log(JSON.stringify(routes, null, 2));
+  return JSON.stringify(routes, null, 2);
 };

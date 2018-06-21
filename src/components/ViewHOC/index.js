@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { arrayOf, object, oneOfType, string } from 'prop-types';
+import { connect } from 'react-redux';
+import { arrayOf, func, object, oneOfType, string } from 'prop-types';
 import getData from 'UTILS/getData';
+import genCacheKey from 'UTILS/genCacheKey';
+import { getViewData } from 'STATE/selectors';
+
+const mapStateToProps = (state) => ({
+  getViewData: (key) => getViewData(state, key),
+});
 
 const DefaultView = () => (
   <div>
@@ -13,11 +20,24 @@ const ViewHOC = ({
   View=DefaultView,
 } = {}) => {
   class Wrapper extends Component {
+    static getDerivedStateFromProps(props, state){
+      const viewData = props.getViewData(genCacheKey(reqOpts));
+
+      if(props.data && props.data !== state.data) return { data: props.data };
+      if(!props.data && viewData) return { data: viewData };
+
+      return null;
+    }
+
     constructor(props){
       super();
 
+      // passed in data always takes precedence
+      const data = props.data || props.getViewData(genCacheKey(reqOpts));
+
       this.state = {
-        loading: !(props.data && props.data.length),
+        data,
+        loading: !(data && data.length),
       };
     }
 
@@ -26,7 +46,6 @@ const ViewHOC = ({
         getData(reqOpts)
           .then(resp => {
             this.setState({
-              data: resp.data,
               loading: false,
             });
           })
@@ -54,9 +73,10 @@ const ViewHOC = ({
       arrayOf(string),
       object,
     ]),
+    getViewData: func,
   };
 
-  return Wrapper;
+  return connect(mapStateToProps)(Wrapper);
 };
 
 export default ViewHOC;

@@ -8,7 +8,7 @@ import getSSRData from './getSSRData';
  * @param {Array} arr - The data Objects
  * @return {Promise}
  */
-const findSSRData = (url, arr) => {
+const awaitSSRData = (url, arr) => {
   const iterate = (item, promises) => {
     if(Array.isArray(item)){
       item.forEach((i) => {
@@ -35,4 +35,4 @@ const findSSRData = (url, arr) => {
     : Promise.resolve();
 };
 
-export default findSSRData;
+export default awaitSSRData;

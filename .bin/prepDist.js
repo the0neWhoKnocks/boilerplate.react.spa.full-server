@@ -32,3 +32,6 @@ async function prepDist() {
 }
 
 module.exports = prepDist;
+
+// CLI won't have parent
+if(!module.parent) prepDist();

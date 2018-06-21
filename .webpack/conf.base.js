@@ -58,7 +58,7 @@ const conf = {
      * Provides build progress in the CLI
      */
     new SimpleProgressWebpackPlugin({
-      format: 'compact',
+      format: 'minimal',
     }),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames
@@ -77,6 +77,9 @@ const conf = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }.
     new webpack.DefinePlugin({
+      // This is so the Shell can load up the appropriate Router, and not bloat
+      // the bundle by including modules that won't be used on the client.
+      'process.env.IS_CLIENT': JSON.stringify(true),
       // Using `window.` so that it can be referenced in JS files without "undefined var" errors
       // These vars should only be referenced once since WP replaces the variables
       // with the entire value, so you could possibly have a lot of duplicated data.

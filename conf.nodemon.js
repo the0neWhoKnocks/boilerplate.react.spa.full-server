@@ -12,10 +12,7 @@ const conf = {
   // verbose: true,
   watch: [
     // detects server changes
-    `${ appConfig.paths.DIST_PRIVATE }/server`,
-    `${ appConfig.paths.DIST_PRIVATE }/data.js`,
-    // detects changes from app
-    `${ appConfig.paths.DIST_PUBLIC }/assets-manifest.json`,
+    `${ appConfig.paths.DIST_PRIVATE }`,
   ],
 };
 

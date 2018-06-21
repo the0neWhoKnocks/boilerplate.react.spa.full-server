@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { hydrate } from 'react-dom';
+import { rehydrate } from 'glamor';
 import Shell from 'COMPONENTS/Shell';
 import {
   footerProps,
@@ -10,14 +10,13 @@ import {
 
 window.globals = window.WP_GLOBALS;
 
-render((
-  <BrowserRouter>
-    <Shell
-      headerProps={ headerProps }
-      mainProps={ mainProps }
-      footerProps={ footerProps }
-    />
-  </BrowserRouter>
+rehydrate(window._glam);
+hydrate((
+  <Shell
+    footerProps={ footerProps }
+    headerProps={ headerProps }
+    mainProps={ mainProps }
+  />
 ), document.getElementById('root'));
 
 console.log(

@@ -7,6 +7,8 @@ const bundleScripts = Object.keys(appConfig.webpack.entries).map((key) => {
 });
 
 module.exports = function(model){
+  const stateScript = model.state && `<script>window.__PRELOADED_STATE__ = ${ model.state };</script>`;
+  const glamorScript = model.glamor && `<script>window._glam = ${ JSON.stringify(model.glamor.ids) };</script>`;
   // allows for hot-reloading
   const reloadScript = model.dev && '<script type="text/javascript" src="/reload/reload.js"></script>';
 
@@ -25,9 +27,8 @@ module.exports = function(model){
 
         <style>${ model.css }</style>
 
-        <script type="text/javascript">
-          window._glam = ${ JSON.stringify(model.glamor.ids) };
-        </script>
+        ${ glamorScript }
+        ${ stateScript }
       </head>
       <body>
         <div id="root" class="root">${ model.body }</div>
