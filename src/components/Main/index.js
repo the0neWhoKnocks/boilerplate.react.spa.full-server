@@ -1,7 +1,11 @@
 import React from 'react';
 import { arrayOf, bool, func, shape, string } from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import styles from './styles';
+
+const NoRouteMatch = () => (
+  <h1>No Matching Route Found</h1>
+);
 
 const Main = ({
   routes,
@@ -27,6 +31,7 @@ const Main = ({
           />
         );
       })}
+      <Route path="*" component={ NoRouteMatch } />
     </Switch>
   </main>
 );

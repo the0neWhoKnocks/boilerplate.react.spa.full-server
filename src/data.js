@@ -73,6 +73,7 @@ const RickAndMortyItems = ViewHOC({
   View: ItemsView,
 });
 
+const itemUrlPrefix = '/view/item/';
 const itemToken = ':itemId';
 const itemOpts = {
   url: `https://rickandmortyapi.com/api/character/${ itemToken }`,
@@ -109,6 +110,7 @@ const data = {
         url: '/',
         view: RickAndMortyItems,
         viewProps: {
+          linkPrefix: itemUrlPrefix,
           ssr: getData,
           title: 'Rick & Morty Characters',
         },
@@ -151,7 +153,7 @@ const data = {
 
 const otherRoutes = [
   {
-    url: `/view/item/${ itemToken }`,
+    url: `${ itemUrlPrefix }${ itemToken }`,
     view: RickAndMortyItem,
     viewProps: {
       ssr: getData,
@@ -177,5 +179,6 @@ const footerProps = {
 export {
   footerProps,
   headerProps,
+  itemUrlPrefix,
   mainProps,
 };

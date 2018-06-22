@@ -5,6 +5,7 @@ import ViewLoader from 'COMPONENTS/ViewLoader';
 
 const ItemsView = ({
   data,
+  linkPrefix,
   loading,
   title,
 }) => {
@@ -15,7 +16,7 @@ const ItemsView = ({
         {data.map((item, ndx) => (
           <Link
             key={ item.id }
-            to={ `/view/item/${ item.id }` }
+            to={ `${ linkPrefix }${ item.id }` }
           >
             <img
               src={ item.image }
@@ -50,6 +51,7 @@ ItemsView.propTypes = {
     type: string,
     url: string,
   })),
+  linkPrefix: string,
   loading: bool,
   title: string,
 };
