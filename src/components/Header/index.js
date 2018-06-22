@@ -6,6 +6,7 @@ import Logo from './components/Logo';
 import styles from './styles';
 
 const closeDelay = 300;
+const activeClass = 'current';
 
 // The Header creates links that can be used to navigate
 // between routes.
@@ -27,11 +28,12 @@ class Header extends Component {
     });
   }
 
-  handleNavClick(ndx, ev){
-    if( this.state.menuOpen && ndx !== this.navNdx ){
+  handleNavClick(ev){
+    if(
+      this.state.menuOpen
+      && !ev.currentTarget.classList.contains(activeClass)
+    ){
       clearTimeout(this.toggleTimeout);
-
-      this.navNdx = ndx;
 
       // close mobile nav after item click
       this.toggleTimeout = setTimeout(() => {
@@ -76,9 +78,9 @@ class Header extends Component {
               key={ ndx }
               exact={ item.exact }
               className={`nav__btn ${ styles.navBtn }`}
-              activeClassName="current"
+              activeClassName={ activeClass }
               to={ item.url }
-              onClick={ this.handleNavClick.bind(null, ndx) }
+              onClick={ this.handleNavClick }
             >{item.label}</NavLink>
           ))}
         </nav>

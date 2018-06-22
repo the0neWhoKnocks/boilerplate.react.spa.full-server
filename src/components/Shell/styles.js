@@ -1,6 +1,4 @@
 import { css } from 'glamor';
-import { desktop } from 'SRC/breakpoints';
-import { headerHeight } from 'COMPONENTS/Header/styles';
 
 css.insert(`
   *,
@@ -31,34 +29,27 @@ css.insert(`
   }
 
   .shell {
-    min-height: 100vh;
-    flex-direction: column;
+    width: 100%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
   }
 
   header,
   footer {
-    z-index: 1;
-  }
-
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  footer {
+    flex-shrink: 0;
     position: relative;
   }
 
-  .shell main {
-    flex: 1;
+  header {
+    z-index: 1;
   }
 
-  ${ desktop } {
-    .shell main {
-      padding-top: calc(${ headerHeight } + 1em);
-    }
+  .shell main {
+    min-height: 2em;
+    overflow: auto;
+    flex-grow: 1;
+    position: relative;
   }
 `);
