@@ -1,10 +1,14 @@
 import { existsSync } from 'fs';
 import express from 'express';
 import compression from 'compression';
-import color from 'cli-color';
 import portscanner from 'portscanner';
 import bodyParser from 'body-parser';
 import appConfig from 'ROOT/conf.app';
+import log, {
+  BLUE,
+  BLACK_ON_GREEN,
+  BLACK_ON_YELLOW,
+} from 'UTILS/logger';
 import routes from './routes';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -38,8 +42,12 @@ const app = {
     // js files or there are any catch-all's.
     if(isDev) require('reload')(this.expressInst);
 
-    Object.keys(routes.get).forEach((route) => {
-      this.expressInst.get(route, routes.get[route]);
+    // dynamically wire up routes
+    Object.keys(routes).forEach(type => {
+      Object.keys(routes[type]).forEach(routeKey => {
+        const endpoint = routes[type][routeKey];
+        this.expressInst[type](endpoint.path, endpoint.handler);
+      });
     });
   },
 
@@ -50,7 +58,7 @@ const app = {
       switch(status){
         case 'open' : // port isn't available, so find one that is
           portscanner.findAPortNotInUse(appConfig.PORT, appConfig.PORT+20, '127.0.0.1', (error, openPort) => {
-            console.log(`${ color.yellow.bold('[PORT]') } ${ appConfig.PORT } in use, using ${ openPort }`);
+            log(`${ BLACK_ON_YELLOW } PORT`, `${ appConfig.PORT } in use, using ${ openPort }`);
 
             appConfig.PORT = openPort;
 
@@ -66,12 +74,11 @@ const app = {
 
   onBootComplete: function(data){
     // let the user know the server is up and ready
-    let msg = `${ color.green.bold.inverse(' SERVER ') } Running at ${ color.blue.bold(data.url) }`;
-    if( isDev ) msg += `\n${ color.green.bold.inverse(' WATCHING ') } For changes.\n  - You can go to ${ color.blue.bold('chrome://inspect') } to debug server code.`;
-
-    msg += `\n${ color.green.bold.inverse(' ROUTES ') }\n${ require('UTILS/listRoutes').default(this.expressInst) }`;
-
-    console.log(`${ msg } \n`);
+    log(`${ BLACK_ON_GREEN } SERVER`, 'Running at', `${ BLUE } ${ data.url }`);
+    // spit out some dev messaging
+    if( isDev ) log(`${ BLACK_ON_GREEN } WATCHING`, 'For changes.', "\n  You can go to", `${ BLUE } chrome://inspect`, 'to debug server code.'); // eslint-disable-line
+    // spit out all the routes that have been registered
+    log(`${ BLACK_ON_GREEN } ROUTES`, `\n${ require('UTILS/listRoutes').default(this.expressInst) }\n`);
   },
 
   startServer: function(){
@@ -92,7 +99,7 @@ const app = {
         }, 100);
       }
       else{
-        console.log(`${ color.yellow.bold.inverse(' WAITING ') } for ${ color.blue.bold(file) } to be created`);
+        log(`${ BLACK_ON_YELLOW } WAITING`, 'for', `${ BLUE } ${ file }`, 'to be created');
       }
     }, 200);
   },

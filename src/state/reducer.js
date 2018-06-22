@@ -1,5 +1,9 @@
 import genCacheKey from 'UTILS/genCacheKey';
-import log from 'UTILS/logger';
+import log, {
+  BLUE,
+  BLACK_ON_GREEN,
+  BLACK_ON_GRAY,
+} from 'UTILS/logger';
 import { initialState } from './constants';
 import {
   SET_VIEW_DATA,
@@ -10,7 +14,7 @@ function reducer(){
 
   return (state = st, action) => {
     if(action.type.indexOf('INIT') < 0)
-      log('%bg REDUCER', action.type);
+      log(`${ BLACK_ON_GREEN } REDUCER`, action.type);
 
     switch( action.type ){
       case SET_VIEW_DATA: {
@@ -22,7 +26,7 @@ function reducer(){
         else{
           const newState = { ...state };
           newState.viewData[uniqueKey] = data;
-          log('  SET unique key for:', `${ uniqueKey }`);
+          log('  ', `${ BLACK_ON_GRAY } SET`, 'unique key for:', `${ BLUE } "${ uniqueKey }"`);
           return newState;
         }
       }

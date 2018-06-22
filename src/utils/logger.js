@@ -1,40 +1,66 @@
 import cliColor from 'cli-color';
 
+const BLACK_ON_GRAY = '%blackgray';
+const BLACK_ON_GREEN = '%blackgreen';
+const BLACK_ON_YELLOW = '%blackyellow';
+const BLUE = '%blue';
+const GREEN_ON_BLACK = '%greenblack';
+
+// NOTE - newlines work in node, but you need another log on the client if
+// you're adding messages with color.
+
 function logger(){
   const args = Array.from(arguments);
   const msg = [];
+  let clientStyles = [];
 
   args.forEach((arg) => {
-    let m = arg;
-    let extra;
+    let text = arg;
 
     if( process.env.IS_CLIENT ){
-      let styles = 'padding:0.25em 0.5em; border-radius:0.5em';
+      const blockStyles = 'padding:0.25em 0.5em; border-radius:0.5em;';
+      const styleReset = 'color:#000; background:transparent;';
 
-      if(arg.indexOf('%bg ') > -1){
-        m = arg.replace('%bg ', '%c');
-        extra = `color:#000; background:limegreen; ${ styles }`;
+      if(arg.indexOf(`${ BLACK_ON_GRAY } `) > -1){
+        text = arg.replace(`${ BLACK_ON_GRAY } `, '%c') + '%c';
+        clientStyles.push(`color:#eee; background:gray; ${ blockStyles }`, styleReset);
       }
-      if(arg.indexOf('%gb ') > -1){
-        m = arg.replace('%gb ', '%c');
-        extra = `color:#bada55; background:#222; ${ styles }`;
+      if(arg.indexOf(`${ BLACK_ON_GREEN } `) > -1){
+        text = arg.replace(`${ BLACK_ON_GREEN } `, '%c') + '%c';
+        clientStyles.push(`color:#000; background:limegreen; ${ blockStyles }`, styleReset);
       }
-      if(arg.indexOf('%b ') > -1){
-        m = arg.replace('%b ', '%c');
-        extra = `color:blue; ${ styles }`;
+      if(arg.indexOf(`${ BLACK_ON_YELLOW } `) > -1){
+        text = arg.replace(`${ BLACK_ON_YELLOW } `, '%c') + '%c';
+        clientStyles.push(`color:#000; background:yellow; ${ blockStyles }`, styleReset);
+      }
+      if(arg.indexOf(`${ BLUE } `) > -1){
+        text = arg.replace(`${ BLUE } `, '%c') + '%c';
+        clientStyles.push('color:blue;', styleReset);
+      }
+      if(arg.indexOf(`${ GREEN_ON_BLACK } `) > -1){
+        text = arg.replace(`${ GREEN_ON_BLACK } `, '%c') + '%c';
+        clientStyles.push(`color:#bada55; background:#222; ${ blockStyles }`, styleReset);
       }
     }
     else{
-      if(arg.indexOf('%bg ') > -1) m = `${ cliColor.green.bold.inverse(` ${ arg.replace('%bg ', '') } `) }`;
-      if(arg.indexOf('%gb ') > -1) m = `${ cliColor.green.bold(` ${ arg.replace('%gb ', '') } `) }`;
-      if(arg.indexOf('%b ') > -1) m = `${ cliColor.blue.bold(arg.replace('%b ', '')) } `;
+      // list of colors https://www.npmjs.com/package/cli-color#colors
+      if(arg.indexOf(`${ BLACK_ON_GRAY } `) > -1) text = `${ cliColor.white.bgBlackBright(` ${ arg.replace(`${ BLACK_ON_GRAY } `, '') } `) }`;
+      if(arg.indexOf(`${ BLACK_ON_GREEN } `) > -1) text = `${ cliColor.green.bold.inverse(` ${ arg.replace(`${ BLACK_ON_GREEN } `, '') } `) }`;
+      if(arg.indexOf(`${ BLACK_ON_YELLOW } `) > -1) text = `${ cliColor.yellow.bold.inverse(` ${ arg.replace(`${ BLACK_ON_YELLOW } `, '') } `) }`;
+      if(arg.indexOf(`${ BLUE } `) > -1) text = `${ cliColor.blue.bold(arg.replace(`${ BLUE } `, '')) }`;
+      if(arg.indexOf(`${ GREEN_ON_BLACK } `) > -1) text = `${ cliColor.green.bold(` ${ arg.replace(`${ GREEN_ON_BLACK } `, '') } `) }`;
     }
 
-    msg.push(m);
-    if(extra) msg.push(extra);
+    msg.push(text);
   });
 
-  console.log(...msg);
+  console.log(msg.join(' '), ...clientStyles);
 }
 
 export default logger;
+export {
+  BLACK_ON_GREEN,
+  BLACK_ON_GRAY,
+  BLUE,
+  GREEN_ON_BLACK,
+};

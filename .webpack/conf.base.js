@@ -77,9 +77,14 @@ const conf = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }.
     new webpack.DefinePlugin({
-      // This is so the Shell can load up the appropriate Router, and not bloat
-      // the bundle by including modules that won't be used on the client.
-      'process.env.IS_CLIENT': JSON.stringify(true),
+      // `process.env` vars will be replaced with their values when the bundle
+      // is built. In the case `IS_CLIENT` for example, it'll always be `true`
+      // on the client, and false/undefined in node (unless someone sets it).
+      // This means that during the uglification step, it'll determine
+      // anything in a block not `IS_CLIENT` unreachable, and remove it,
+      // shrinking the bundle, and ensuring server code doesn't get shipped to
+      // the client (all without the use of another module).
+      'process.env.IS_CLIENT': true,
       // Using `window.` so that it can be referenced in JS files without "undefined var" errors
       // These vars should only be referenced once since WP replaces the variables
       // with the entire value, so you could possibly have a lot of duplicated data.

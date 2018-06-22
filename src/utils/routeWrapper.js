@@ -1,4 +1,7 @@
-import log from 'UTILS/logger';
+import log, {
+  BLACK_ON_GREEN,
+  BLUE,
+} from 'UTILS/logger';
 
 /**
  * Logs out info about the request
@@ -8,7 +11,7 @@ import log from 'UTILS/logger';
  * @param {Object} res - The response
  */
 export default (next, req, res) => {
-  const args = ['%bg ROUTE', 'matched:', `%b ${ req.route.path }`];
+  const args = [`${ BLACK_ON_GREEN } ROUTE`, 'matched:', `${ BLUE } ${ req.route.path }`];
   // add on params if token was replaced
   if(
     req.route.path !== '*'
