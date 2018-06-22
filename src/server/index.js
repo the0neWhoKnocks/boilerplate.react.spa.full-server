@@ -5,7 +5,7 @@ import color from 'cli-color';
 import portscanner from 'portscanner';
 import bodyParser from 'body-parser';
 import appConfig from 'ROOT/conf.app';
-import routes from './routes.js';
+import routes from './routes';
 
 const isDev = process.env.NODE_ENV === 'development';
 

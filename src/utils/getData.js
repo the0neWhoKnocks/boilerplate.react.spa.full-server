@@ -1,16 +1,19 @@
 import axios from 'axios';
-import store from 'STATE/store';
-import { setViewData } from 'STATE/actions';
 import { getViewData } from 'STATE/selectors';
 import genCacheKey from 'UTILS/genCacheKey';
 
 /**
  * A wrapper for whatever XHR tool you need to request data.
  *
+ * @param {Object} store - The app's store.
  * @param {Object} reqOpts - The options required to make your request.
+ * @param {Array} [reqOpts.cacheKey] - Array of strings that the key will be built from
+ * @param {Function} reqOpts.middleware - A function that will transform the response data before it's returned
+ * @param {Object} reqOpts.params - The params needed for a GET or POST
+ * @param {String} reqOpts.url - The request URL
  * @return {Promise}
  */
-export default (reqOpts) => {
+export default (store, reqOpts) => {
   const { body, params, url } = reqOpts;
   let { method } = reqOpts;
   let reqData;
@@ -30,15 +33,13 @@ export default (reqOpts) => {
     // only add data to the call if it was provided
     if( reqData ) reqArgs.push(reqData);
 
-    return axios[method.toLowerCase()].apply(null, reqArgs)
-      .then((resp) => {
-        return new Promise((resolve, reject) => {
-          store.dispatch(setViewData({
-            data: resp.data,
-            reqOpts,
-          }));
-          resolve(resp);
-        });
-      });
+    let reqPromise = axios[method.toLowerCase()].apply(null, reqArgs)
+      // axios always returns the response data in a `data` prop, so lets
+      // remove one level of parsing.
+      .then((resp) => resp.data);
+
+    return (reqOpts.middleware)
+      ? reqPromise.then(reqOpts.middleware(store))
+      : reqPromise;
   }
 };

@@ -7,6 +7,7 @@ class Main extends Component {
   render() {
     const {
       routes,
+      store,
     } = this.props;
 
     return (
@@ -20,8 +21,12 @@ class Main extends Component {
                 key={ ndx }
                 exact={ route.exact }
                 path={ route.url }
-                render={() => (
-                  <View { ...route.viewProps } />
+                render={({ match }) => (
+                  <View
+                    match={ match }
+                    store={ store }
+                    { ...route.viewProps }
+                  />
                 )}
               />
             );
@@ -39,6 +44,7 @@ Main.propTypes = {
     view: func,
     viewProps: shape({}),
   })),
+  store: shape({}),
 };
 Main.defaultProps = {
   routes: [],

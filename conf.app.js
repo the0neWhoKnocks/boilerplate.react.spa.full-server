@@ -46,8 +46,9 @@ const conf = {
       DIST_PRIVATE: `${ DIST }/private`,
       DIST_PUBLIC,
       ROOT,
-      STATE: `${ SRC }/state`,
+      SERVER: `${ SRC }/server`,
       SRC,
+      STATE: `${ SRC }/state`,
       UTILS: `${ SRC }/utils`,
     },
     entries: {

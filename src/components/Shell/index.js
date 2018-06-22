@@ -4,7 +4,11 @@ import { shape } from 'prop-types';
 import defaultHeader from 'COMPONENTS/Header';
 import defaultMain from 'COMPONENTS/Main';
 import defaultFooter from 'COMPONENTS/Footer';
-import defaultStore from 'STATE/store';
+import {
+  createStore,
+  extraArgs,
+  reducer,
+} from 'STATE/store';
 import './styles';
 
 
@@ -38,7 +42,7 @@ const composeShell = (
     request,
     store,
   }) => {
-    const _store = store || defaultStore;
+    const _store = store || createStore(reducer(), ...extraArgs);
     const routerProps = {};
 
     if(context){
@@ -51,7 +55,7 @@ const composeShell = (
         <Router { ...routerProps }>
           <div className="shell">
             <Header { ...headerProps } />
-            <Main { ...mainProps } />
+            <Main store={ _store } { ...mainProps } />
             <Footer { ...footerProps } />
           </div>
         </Router>
