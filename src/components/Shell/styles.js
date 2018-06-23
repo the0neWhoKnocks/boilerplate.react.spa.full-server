@@ -48,7 +48,7 @@ css.insert(`
 
   .shell main {
     min-height: 2em;
-    overflow: auto;
+    overflow: hidden;
     flex-grow: 1;
     position: relative;
   }

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import ViewLoader from 'COMPONENTS/ViewLoader';
+import styles from './styles';
 
 const ItemView = ({
+  backURL,
   data,
   loading,
   match,
@@ -10,19 +12,30 @@ const ItemView = ({
 }) => {
   return (
     <ViewLoader loading={ loading }>
-      <h1>{ title }</h1>
-      <div className="view__body">
-        <img
-          src={ data.image }
-          alt={ `${ data.name } thumbnail` }
-        />
-        <div>{ data.name }</div>
-      </div>
+      {data && (
+        <Fragment>
+          <h1>{ data.name }</h1>
+          <div className={`view__body ${ styles.root }`}>
+            <img
+              src={ data.image }
+              alt={ `${ data.name } thumbnail` }
+            />
+            <ul>
+              <li><label>Location</label>{ data.location && data.location.name || '' }</li>
+              <li><label>Origin</label>{ data.origin.name }</li>
+              <li><label>Species</label>{ data.species }</li>
+              <li><label>Status</label>{ data.status }</li>
+              <li><label>Type</label>{ data.type }</li>
+            </ul>
+          </div>
+        </Fragment>
+      )}
     </ViewLoader>
   );
 };
 
 ItemView.propTypes = {
+  backURL: string,
   data: shape({
     created: string,
     episode: arrayOf(string),
@@ -44,13 +57,11 @@ ItemView.propTypes = {
     url: string,
   }),
   loading: bool,
+  location: shape({}),
   match: shape({
     params: shape({}),
   }),
   title: string,
-};
-ItemView.defaultProps = {
-  data: {},
 };
 
 export default ItemView;

@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { arrayOf, bool, shape } from 'prop-types';
+import React from 'react';
+import { arrayOf, bool, oneOfType, shape } from 'prop-types';
 import classnames from 'classnames';
 import Spinner from 'COMPONENTS/Spinner';
 import styles from './styles';
@@ -14,7 +14,10 @@ const ViewLoader = ({
   );
 
   return (
-    <Fragment>
+    <div
+      key="view"
+      className={ `view ${ styles.view }` }
+    >
       <div
         key="overlay"
         className={overlayClass}
@@ -23,18 +26,18 @@ const ViewLoader = ({
           <Spinner className={`${ styles.spinner }`} label="Loading" />
         )}
       </div>
-      <div
-        key="view"
-        className="view"
-      >
+      <div className="view-content">
         { children }
       </div>
-    </Fragment>
+    </div>
   );
 };
 
 ViewLoader.propTypes = {
-  children: arrayOf(shape({})),
+  children: oneOfType([
+    arrayOf(shape({})),
+    shape({}),
+  ]),
   loading: bool,
 };
 
