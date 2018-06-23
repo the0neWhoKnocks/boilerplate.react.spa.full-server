@@ -17,6 +17,6 @@ const conf = {
 };
 
 try {
-  writeFileSync('/tmp/nodemon.json', `${ JSON.stringify(conf, null, 2) }\n`);
+  writeFileSync('./nodemon.json', `${ JSON.stringify(conf, null, 2) }\n`);
 }
 catch(err) { throw err; }

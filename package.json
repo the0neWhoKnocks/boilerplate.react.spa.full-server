@@ -13,7 +13,7 @@
     "lint": "eslint ./**/*.js",
     "start:server": "yarn build:bundle && yarn build:private && node ./dist/private/server init",
     "start:server:dev": "node .bin/prepDist && yarn build:private && concurrently --kill-others -p {name} -n WEBPACK,BABEL,SERVER -c black.bgCyan,black.bgGreen,black.bgMagenta \"yarn build:bundle:dev\" \"yarn build:private:watch\" \"yarn start:server:watch\"",
-    "start:server:watch": "node ./conf.nodemon.js && NODE_ENV=\"development\" nodemon --config /tmp/nodemon.json --inspect ./dist/private/server init",
+    "start:server:watch": "node ./conf.nodemon.js && cross-env NODE_ENV=\"development\" nodemon --config ./nodemon.json --inspect ./dist/private/server init",
     "test": "yarn lint && yarn unit",
     "test:watch": "yarn unit --watchAll",
     "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./.jest/conf.jest.js"

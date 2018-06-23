@@ -10,7 +10,7 @@ module.exports = function(model){
   const stateScript = model.state && `<script>window.__PRELOADED_STATE__ = ${ model.state };</script>`;
   const glamorScript = model.glamor && `<script>window._glam = ${ JSON.stringify(model.glamor.ids) };</script>`;
   // allows for hot-reloading
-  const reloadScript = model.dev && '<script type="text/javascript" src="/reload/reload.js"></script>';
+  const reloadScript = model.dev && '<script type="text/javascript" src="/reload/reload.js"></script>' || '';
 
   return `
     <!DOCTYPE html>

@@ -17,10 +17,16 @@ const conf = {
     // set up all libs that are required by the app
     [appConfig.webpack.entries.VENDOR]: [
       `${ appConfig.paths.SRC }/polyfills`,
+      'axios',
+      'classnames',
+      'glamor',
+      'prop-types',
       'react',
       'react-dom',
-      'prop-types',
-      'glamor',
+      'react-redux',
+      'react-router-dom',
+      'react-transition-group',
+      'redux',
     ],
     // the actual app entry is in `conf.webpack`
     [appConfig.webpack.entries.APP]: [],
@@ -85,6 +91,7 @@ const conf = {
       // shrinking the bundle, and ensuring server code doesn't get shipped to
       // the client (all without the use of another module).
       'process.env.IS_CLIENT': true,
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       // Using `window.` so that it can be referenced in JS files without "undefined var" errors
       // These vars should only be referenced once since WP replaces the variables
       // with the entire value, so you could possibly have a lot of duplicated data.
