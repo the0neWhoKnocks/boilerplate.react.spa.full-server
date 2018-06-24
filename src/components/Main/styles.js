@@ -13,14 +13,6 @@ const viewEnter = css.keyframes('view-enter', {
     opacity: 1,
   },
 });
-const viewExit = css.keyframes('view-exit', {
-  '0%': {
-    opacity: 1,
-  },
-  '100%': {
-    opacity: 0,
-  },
-});
 
 const rightToHome = css.keyframes('right-to-home', {
   '0%': {
@@ -62,10 +54,6 @@ const styles = {
     },
 
     '.view-exit': {
-      '.default': {
-        animationName: viewExit,
-      },
-
       [`.${ HANG_IN_BACK }`]: {
         zIndex: 0,
       },

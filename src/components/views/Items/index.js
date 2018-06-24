@@ -7,7 +7,7 @@ import ViewLoader from 'COMPONENTS/ViewLoader';
 import {
   setPreviousPage,
 } from 'STATE/actions';
-import styles from './styles';
+import styles, { globals as globalStyles } from './styles';
 
 const mapDispatchToProps = {
   setPreviousPage,
@@ -21,6 +21,8 @@ const ItemsView = ({
   setPreviousPage,
   title,
 }) => {
+  globalStyles();
+  
   const handleClick = () => {
     setPreviousPage(location.pathname);
   };

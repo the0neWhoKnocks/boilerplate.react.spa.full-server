@@ -1,12 +1,15 @@
 import React from 'react';
 import { arrayOf, bool, string } from 'prop-types';
 import ViewLoader from 'COMPONENTS/ViewLoader';
+import { globals as globalStyles } from './styles';
 
 const DefaultView = ({
   data,
   loading,
   title,
 }) => {
+  globalStyles();
+  
   return (
     <ViewLoader loading={ loading }>
       <h1>{ title }</h1>

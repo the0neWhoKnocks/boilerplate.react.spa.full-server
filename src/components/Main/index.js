@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import ViewTransition from 'COMPONENTS/ViewTransition';
 import { routePaths } from 'SRC/data';
+import {
+  setShellClass,
+} from 'STATE/actions';
 import styles, {
   HOME_TO_RIGHT,
   HANG_IN_BACK,
   RIGHT_TO_HOME,
   animDuration,
 } from './styles';
+
+const mapDispatchToProps = {
+  setShellClass,
+};
 
 const NoRouteMatch = () => (
   <h1>No Matching Route Found</h1>
@@ -33,43 +41,53 @@ const transitionMiddleware = ({
   return {};
 };
 
-const Main = ({
-  location,
-  routes,
-  store,
-}) => (
-  <main>
-    <ViewTransition
-      className={ `${ styles.viewTransition }` }
-      classPrefix="view"
-      middleware={ transitionMiddleware }
-      timeout={ animDuration * 1000 }
-      uid={ location.pathname }
-    >
-      <Switch location={ location }>
-        {routes.map((route, ndx) => {
-          const View = route.view;
+class Main extends Component {
+  componentDidUpdate(){
+    this.props.setShellClass(this.props.location);
+  }
 
-          return (
-            <Route
-              key={ ndx }
-              exact={ route.exact }
-              path={ route.url }
-              render={({ match }) => (
-                <View
-                  match={ match }
-                  store={ store }
-                  { ...route.viewProps }
+  render(){
+    const {
+      location,
+      routes,
+      store,
+    } = this.props;
+
+    return (
+      <main>
+        <ViewTransition
+          className={ `${ styles.viewTransition }` }
+          classPrefix="view"
+          middleware={ transitionMiddleware }
+          timeout={ animDuration * 1000 }
+          uid={ location.pathname }
+        >
+          <Switch location={ location }>
+            {routes.map((route, ndx) => {
+              const View = route.view;
+
+              return (
+                <Route
+                  key={ ndx }
+                  exact={ route.exact }
+                  path={ route.url }
+                  render={({ match }) => (
+                    <View
+                      match={ match }
+                      store={ store }
+                      { ...route.viewProps }
+                    />
+                  )}
                 />
-              )}
-            />
-          );
-        })}
-        <Route path="*" component={ NoRouteMatch } />
-      </Switch>
-    </ViewTransition>
-  </main>
-);
+              );
+            })}
+            <Route path="*" component={ NoRouteMatch } />
+          </Switch>
+        </ViewTransition>
+      </main>
+    );
+  }
+}
 
 Main.propTypes = {
   location: shape({}),
@@ -79,10 +97,11 @@ Main.propTypes = {
     view: func,
     viewProps: shape({}),
   })),
+  setShellClass: func,
   store: shape({}),
 };
 Main.defaultProps = {
   routes: [],
 };
 
-export default withRouter(Main);
+export default withRouter(connect(null, mapDispatchToProps)(Main));

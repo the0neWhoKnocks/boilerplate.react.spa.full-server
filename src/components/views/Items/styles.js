@@ -1,6 +1,19 @@
 import { css } from 'glamor';
 import { mobile } from 'SRC/breakpoints';
 
+const globals = () => {
+  css.insert(`
+    .is--ram header {
+      color: #fff;
+      background-color: #525252;
+      box-shadow: 0 1px 0 0 #bcffbc;
+    }
+    .is--ram header .nav__btn::before {
+      background: rgba(139, 255, 170, 0.25);
+    }
+  `);
+};
+
 const styles = {
   view: css({
     backgroundColor: '#b3347c',
@@ -24,6 +37,7 @@ const styles = {
 
   grid: css({
     textAlign: 'center',
+    lineHeight: 0,
   }),
 
   item: css({
@@ -71,3 +85,6 @@ const styles = {
 };
 
 export default styles;
+export {
+  globals,
+};

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { shape } from 'prop-types';
+import { connect, Provider } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { node, shape, string } from 'prop-types';
 import defaultHeader from 'COMPONENTS/Header';
 import defaultMain from 'COMPONENTS/Main';
 import defaultFooter from 'COMPONENTS/Footer';
@@ -9,6 +10,9 @@ import {
   extraArgs,
   reducer,
 } from 'STATE/store';
+import {
+  getShellClass,
+} from 'STATE/selectors';
 import './styles';
 
 
@@ -28,6 +32,23 @@ else{
   const { StaticRouter } = require('react-router');
   Router = StaticRouter;
 }
+
+const mapStateToProps = (state) => ({
+  shellClass: getShellClass(state),
+});
+
+const ShellWrap = ({
+  children,
+  shellClass,
+}) => {
+  return (
+    <div className={`shell ${ shellClass }`}>{children}</div>
+  );
+};
+ShellWrap.propTypes = {
+  children: node,
+  shellClass: string,
+};
 
 const composeShell = (
   Header=defaultHeader,
@@ -50,14 +71,16 @@ const composeShell = (
       routerProps.location = request.url;
     }
 
+    const ConnectedShell = withRouter(connect(mapStateToProps)(ShellWrap));
+
     return (
       <Provider store={ _store }>
         <Router { ...routerProps }>
-          <div className="shell">
+          <ConnectedShell>
             <Header { ...headerProps } />
             <Main store={ _store } { ...mainProps } />
             <Footer { ...footerProps } />
-          </div>
+          </ConnectedShell>
         </Router>
       </Provider>
     );

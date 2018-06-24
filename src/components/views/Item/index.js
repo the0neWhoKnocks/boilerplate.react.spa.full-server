@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Link } from 'react-router-dom';
 import ViewLoader from 'COMPONENTS/ViewLoader';
-import styles from './styles';
 import {
   getPreviousPage,
 } from 'STATE/selectors';
+import { globals as globalStyles } from 'COMPONENTS/views/Items/styles';
+import styles from './styles';
 
 const mapStateToProps = (state) => ({
   previousPage: getPreviousPage(state),
@@ -20,6 +21,8 @@ const ItemView = ({
   previousPage,
   title,
 }) => {
+  globalStyles();
+  
   return (
     <ViewLoader
       className={ `${ styles.view }` }

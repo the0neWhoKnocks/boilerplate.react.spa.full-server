@@ -23,8 +23,13 @@ export default routeWrapper.bind(null, (req, res) => {
     reducer,
   } = require('STATE/store');
   const AppShell = require('SERVER/views/AppShell');
+  const { setShellClass } = require('STATE/actions');
 
-  const store = createStore(reducer(), ...extraArgs);
+  const extendedData = {
+    shellClass: setShellClass({ pathname: req.path }).payload,
+  };
+
+  const store = createStore(reducer(extendedData), ...extraArgs);
 
   // ensures the favicon is always current (with every start of the server)
   const faviconModTime = statSync(appConfig.paths.FAVICON).mtimeMs;

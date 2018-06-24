@@ -7,11 +7,15 @@ import log, {
 import { initialState } from './constants';
 import {
   SET_PREVIOUS_PAGE,
+  SET_SHELL_CLASS,
   SET_VIEW_DATA,
 } from './actionTypes';
 
-function reducer(){
-  const st = initialState();
+function reducer(extendedData = {}){
+  const st = {
+    ...initialState(),
+    ...extendedData,
+  };
 
   return (state = st, action) => {
     if(action.type.indexOf('INIT') < 0)
@@ -23,6 +27,14 @@ function reducer(){
         return {
           ...state,
           previousPage: action.payload,
+        };
+      }
+
+      case SET_SHELL_CLASS: {
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'Shell class to:', `${ BLUE } "${ action.payload }"`);
+        return {
+          ...state,
+          shellClass: action.payload,
         };
       }
 
