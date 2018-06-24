@@ -19,6 +19,7 @@ function reducer(){
 
     switch( action.type ){
       case SET_PREVIOUS_PAGE: {
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'previous page to:', `${ BLUE } "${ action.payload }"`);
         return {
           ...state,
           previousPage: action.payload,

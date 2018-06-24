@@ -19,7 +19,14 @@ module.exports = {
 
   post: {
     POST_TEST: {
-      path: '/test/fu',
+      path: '/not/implemented',
+      handler: () => {},
+    },
+  },
+
+  put: {
+    PUT_TEST: {
+      path: '/not/implemented',
       handler: () => {},
     },
   },

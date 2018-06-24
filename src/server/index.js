@@ -76,7 +76,7 @@ const app = {
     // let the user know the server is up and ready
     log(`${ BLACK_ON_GREEN } SERVER`, 'Running at', `${ BLUE } ${ data.url }`);
     // spit out some dev messaging
-    if( isDev ) log(`${ BLACK_ON_GREEN } WATCHING`, 'For changes.', "\n  You can go to", `${ BLUE } chrome://inspect`, 'to debug server code.'); // eslint-disable-line
+    if( isDev ) log(`${ BLACK_ON_GREEN } WATCHING`, 'For changes.', '\n  You can go to', `${ BLUE } chrome://inspect`, 'to debug server code.');
     // spit out all the routes that have been registered
     log(`${ BLACK_ON_GREEN } ROUTES`, `\n${ require('UTILS/listRoutes').default(this.expressInst) }\n`);
   },

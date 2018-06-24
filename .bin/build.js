@@ -3,7 +3,7 @@
 // terminate the Node.js process with a non-zero exit code.
 process.on('unhandledRejection', err => { throw err; });
 
-const chalk = require('chalk');
+require('colors');
 const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
@@ -46,12 +46,9 @@ function build(previousFileSizes) {
           process.env.CI.toLowerCase() !== 'false') &&
         messages.warnings.length
       ){
-        console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n' +
-              'Most CI servers set it automatically.\n'
-          )
-        );
+        const msg = '\nTreating warnings as errors because process.env.CI = true.'
+                    +'\nMost CI servers set it automatically.\n';
+        console.log(msg.yellow);
         return reject(new Error(messages.warnings.join('\n\n')));
       }
       return resolve({
@@ -86,21 +83,15 @@ else{
     .then(
       ({ stats, previousFileSizes, warnings }) => {
         if(warnings.length){
-          console.log(chalk.yellow('Compiled with warnings.\n'));
-          console.log(warnings.join('\n\n'));
-          console.log(
-            '\nSearch for the ' +
-              chalk.underline(chalk.yellow('keywords')) +
-              ' to learn more about each warning.'
-          );
-          console.log(
-            'To ignore, add ' +
-              chalk.cyan('// eslint-disable-next-line') +
-              ' to the line before.\n'
-          );
+          const msg = 'Compiled with warnings.'.yellow
+                      + '\n'+ warnings.join('\n\n')
+                      + `\nSearch for the keywords ${ 'keywords'.yellow.underline } to learn more about each warning.`
+                      + `\nTo ignore, add ${ '// eslint-disable-next-line'.cyan } to the line before.\n`;
+
+          console.log(msg);
         }
         else{
-          console.log(chalk.green('Compiled successfully.\n'));
+          console.log('Compiled successfully.\n'.green);
         }
 
         console.log('File sizes after gzip:\n');
@@ -114,7 +105,7 @@ else{
         console.log();
       },
       err => {
-        console.log(chalk.red('Failed to compile.\n'));
+        console.log('Failed to compile.\n'.red);
         printBuildError(err);
         process.exit(1);
       }

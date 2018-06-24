@@ -14,8 +14,17 @@ export default (expressInst) => {
     const { route } = middleware;
 
     if(route) {
+      const method = (''+route.stack[0].method).toUpperCase();
+      let methodColor;
+
+      switch(method){
+        case 'GET': methodColor = 'green'; break;
+        case 'POST': methodColor = 'magenta'; break;
+        default: methodColor = 'gray';
+      }
+
       table.push({
-        [(''+route.stack[0].method).toUpperCase().green]: route.path.bold.blue,
+        [method[methodColor].bold]: route.path.bold.blue,
       });
     }
   });
