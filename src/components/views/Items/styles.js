@@ -1,4 +1,5 @@
 import { css } from 'glamor';
+import { mobile } from 'SRC/breakpoints';
 
 const styles = {
   view: css({
@@ -17,24 +18,26 @@ const styles = {
   }),
 
   grid: css({
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    textAlign: 'center',
   }),
 
   item: css({
-    flexBasis: '19%',
     margin: '0.15em',
-    // background: '#b8fb7b',
     borderRadius: '1em',
     overflow: 'hidden',
     border: 'solid 0.5em #b8fb7b',
     position: 'relative',
+    display: 'inline-block',
 
     ' img': {
-      width: '100%',
+      width: '200px',
+      height: '200px',
       display: 'block',
+
+      [mobile]: {
+        width: '170px',
+        height: '170px',
+      },
     },
 
     ' .name': {

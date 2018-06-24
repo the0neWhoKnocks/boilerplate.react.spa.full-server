@@ -2,15 +2,35 @@ import React from 'react';
 import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import {
-  CSSTransition,
-  TransitionGroup,
-} from 'react-transition-group';
-import { animDuration } from 'COMPONENTS/ViewLoader/styles';
+import ViewTransition from 'COMPONENTS/ViewTransition';
+import styles, {
+  HOME_TO_RIGHT,
+  HANG_IN_BACK,
+  RIGHT_TO_HOME,
+  animDuration,
+} from './styles';
 
 const NoRouteMatch = () => (
   <h1>No Matching Route Found</h1>
 );
+
+const transitionMiddleware = ({
+  from,
+  to,
+}) => {
+  // from root view to item view
+  if(from === '/' && /^\/view\/item/.test(to)) return {
+    enter: RIGHT_TO_HOME,
+    exit: HANG_IN_BACK,
+  };
+  // from item view back to root
+  else if(/^\/view\/item/.test(from) && to === '/') return {
+    enter: HANG_IN_BACK,
+    exit: HOME_TO_RIGHT,
+  };
+
+  return {};
+};
 
 const Main = ({
   location,
@@ -18,35 +38,35 @@ const Main = ({
   store,
 }) => (
   <main>
-    <TransitionGroup>
-      <CSSTransition
-        key={ location.key }
-        classNames="view"
-        timeout={ animDuration * 1000 }
-      >
-        <Switch location={ location }>
-          {routes.map((route, ndx) => {
-            const View = route.view;
+    <ViewTransition
+      className={ `${ styles.viewTransition }` }
+      classPrefix="view"
+      middleware={ transitionMiddleware }
+      timeout={ animDuration * 1000 }
+      uid={ location.pathname }
+    >
+      <Switch location={ location }>
+        {routes.map((route, ndx) => {
+          const View = route.view;
 
-            return (
-              <Route
-                key={ ndx }
-                exact={ route.exact }
-                path={ route.url }
-                render={({ match }) => (
-                  <View
-                    match={ match }
-                    store={ store }
-                    { ...route.viewProps }
-                  />
-                )}
-              />
-            );
-          })}
-          <Route path="*" component={ NoRouteMatch } />
-        </Switch>
-      </CSSTransition>
-    </TransitionGroup>
+          return (
+            <Route
+              key={ ndx }
+              exact={ route.exact }
+              path={ route.url }
+              render={({ match }) => (
+                <View
+                  match={ match }
+                  store={ store }
+                  { ...route.viewProps }
+                />
+              )}
+            />
+          );
+        })}
+        <Route path="*" component={ NoRouteMatch } />
+      </Switch>
+    </ViewTransition>
   </main>
 );
 

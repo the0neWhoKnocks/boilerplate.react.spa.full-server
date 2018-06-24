@@ -1,5 +1,5 @@
 import React from 'react';
-import { arrayOf, bool, oneOfType, shape, string } from 'prop-types';
+import { bool, node, string } from 'prop-types';
 import classnames from 'classnames';
 import Spinner from 'COMPONENTS/Spinner';
 import styles from './styles';
@@ -35,10 +35,7 @@ const ViewLoader = ({
 };
 
 ViewLoader.propTypes = {
-  children: oneOfType([
-    arrayOf(shape({})),
-    shape({}),
-  ]),
+  children: node,
   className: string,
   loading: bool,
 };
