@@ -21,25 +21,32 @@ const ItemView = ({
   title,
 }) => {
   return (
-    <ViewLoader loading={ loading }>
+    <ViewLoader
+      className={ `${ styles.view }` }
+      loading={ loading }
+    >
+      <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
       {data && (
         <Fragment>
-          {previousPage && (
-            <Link to={ previousPage }>Back</Link>
-          )}
-          <h1>{ data.name }</h1>
+          <h1 className={ `${ styles.title }` }>{ data.name }</h1>
           <div className={`view__body ${ styles.root }`}>
             <img
+              className={ `${ styles.img }` }
               src={ data.image }
               alt={ `${ data.name } thumbnail` }
             />
-            <ul>
+            <ul className={ `${ styles.info }` }>
               <li><label>Location</label>{ data.location && data.location.name || '' }</li>
               <li><label>Origin</label>{ data.origin.name }</li>
               <li><label>Species</label>{ data.species }</li>
               <li><label>Status</label>{ data.status }</li>
               <li><label>Type</label>{ data.type }</li>
             </ul>
+            {previousPage && (
+              <div className={ `${ styles.backBtn }` }>
+                <Link to={ previousPage }>Back</Link>
+              </div>
+            )}
           </div>
         </Fragment>
       )}

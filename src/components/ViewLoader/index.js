@@ -1,11 +1,12 @@
 import React from 'react';
-import { arrayOf, bool, oneOfType, shape } from 'prop-types';
+import { arrayOf, bool, oneOfType, shape, string } from 'prop-types';
 import classnames from 'classnames';
 import Spinner from 'COMPONENTS/Spinner';
 import styles from './styles';
 
 const ViewLoader = ({
   children,
+  className,
   loading,
 }) => {
   const overlayClass = classnames(
@@ -16,7 +17,7 @@ const ViewLoader = ({
   return (
     <div
       key="view"
-      className={ `view ${ styles.view }` }
+      className={ `view ${ styles.view } ${ className }` }
     >
       <div
         key="overlay"
@@ -38,6 +39,7 @@ ViewLoader.propTypes = {
     arrayOf(shape({})),
     shape({}),
   ]),
+  className: string,
   loading: bool,
 };
 

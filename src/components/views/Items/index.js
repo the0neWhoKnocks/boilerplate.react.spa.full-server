@@ -7,6 +7,7 @@ import ViewLoader from 'COMPONENTS/ViewLoader';
 import {
   setPreviousPage,
 } from 'STATE/actions';
+import styles from './styles';
 
 const mapDispatchToProps = {
   setPreviousPage,
@@ -25,12 +26,17 @@ const ItemsView = ({
   };
 
   return (
-    <ViewLoader loading={ loading }>
-      <h1>{ title }</h1>
-      <div className="view__body">
+    <ViewLoader
+      className={ `${ styles.view }` }
+      loading={ loading }
+    >
+      <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
+      <h1 className={ `${ styles.title }` }>{ title }</h1>
+      <div className={`view__body ${ styles.grid }`}>
         {data.map((item, ndx) => (
           <Link
             key={ item.id }
+            className={ styles.item }
             to={ `${ linkPrefix }${ item.id }` }
             onClick={ handleClick }
           >
@@ -38,7 +44,7 @@ const ItemsView = ({
               src={ item.image }
               alt={ `${ item.name } thumbnail` }
             />
-            <div>{ item.name }</div>
+            <div className={ `name ${ styles.name }` }>{ item.name }</div>
           </Link>
         ))}
       </div>

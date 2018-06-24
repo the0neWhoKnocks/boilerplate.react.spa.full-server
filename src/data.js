@@ -112,7 +112,7 @@ const data = {
         viewProps: {
           linkPrefix: itemUrlPrefix,
           ssr: getData,
-          title: 'Rick & Morty Characters',
+          title: 'Rick & Morty',
         },
       },
       {
