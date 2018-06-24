@@ -48,29 +48,30 @@ const styles = {
     left: 0,
     right: 0,
     transform: 'translateX(0%)',
+    animationDuration: `${ animDuration }s`,
+    animationFillMode: 'forwards', // stop on last frame, don't reset
 
     '.view-enter': {
       '.default': {
-        animation: `${ viewEnter } ${ animDuration }s`,
+        animationName: viewEnter,
       },
 
       [`.${ RIGHT_TO_HOME }`]: {
-        animation: `${ rightToHome } ${ animDuration }s`,
+        animationName: rightToHome,
       },
     },
 
     '.view-exit': {
       '.default': {
-        animation: `${ viewExit } ${ animDuration }s`,
+        animationName: viewExit,
       },
 
       [`.${ HANG_IN_BACK }`]: {
-        animation: 'none',
         zIndex: 0,
       },
 
       [`.${ HOME_TO_RIGHT }`]: {
-        animation: `${ homeToRight } ${ animDuration }s`,
+        animationName: homeToRight,
         zIndex: 1,
       },
     },

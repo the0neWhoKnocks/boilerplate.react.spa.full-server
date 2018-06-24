@@ -25,7 +25,6 @@ const conf = {
       'react-dom',
       'react-redux',
       'react-router-dom',
-      'react-transition-group',
       'redux',
     ],
     // the actual app entry is in `conf.webpack`

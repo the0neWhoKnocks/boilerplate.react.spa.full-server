@@ -3,6 +3,7 @@ import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import ViewTransition from 'COMPONENTS/ViewTransition';
+import { routePaths } from 'SRC/data';
 import styles, {
   HOME_TO_RIGHT,
   HANG_IN_BACK,
@@ -19,12 +20,12 @@ const transitionMiddleware = ({
   to,
 }) => {
   // from root view to item view
-  if(from === '/' && /^\/view\/item/.test(to)) return {
+  if(from === routePaths.ROOT && to.includes(routePaths.ITEM)) return {
     enter: RIGHT_TO_HOME,
     exit: HANG_IN_BACK,
   };
   // from item view back to root
-  else if(/^\/view\/item/.test(from) && to === '/') return {
+  else if(from.includes(routePaths.ITEM) && to === routePaths.ROOT) return {
     enter: HANG_IN_BACK,
     exit: HOME_TO_RIGHT,
   };

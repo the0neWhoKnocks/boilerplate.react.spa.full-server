@@ -1,4 +1,7 @@
-import { itemUrlPrefix } from 'SRC/data';
+import {
+  routePaths,
+  tokens,
+} from 'SRC/data';
 import catchAll from './catchAll';
 
 module.exports = {
@@ -7,7 +10,7 @@ module.exports = {
     // like static assets, or API's
 
     GET_ITEM: {
-      path: `${ itemUrlPrefix }:itemId`,
+      path: `${ routePaths.ITEM }${ tokens.ITEM }`,
       handler: catchAll,
     },
     // route everything else to the app

@@ -1,5 +1,8 @@
 import { css } from 'glamor';
+import { mobile } from 'SRC/breakpoints';
 import itemsStyles from 'COMPONENTS/views/Items/styles';
+
+const maxImgSize = '300px';
 
 const styles = {
   root: css({
@@ -19,9 +22,17 @@ const styles = {
   view: itemsStyles.view,
 
   img: css({
+    width: maxImgSize,
+    height: maxImgSize,
     borderRadius: '1em',
     overflow: 'hidden',
     border: 'solid 0.5em #b8fb7b',
+
+    [mobile]: {
+      width: '100%',
+      maxWidth: maxImgSize,
+      height: 'auto',
+    },
   }),
 
   info: css({
@@ -36,6 +47,11 @@ const styles = {
     ' label': {
       color: '#66f0ff',
       textShadow: '1px 1px 1px #481313, 2px 2px 1px #11366f, 3px 3px 1px #64136b, 4px 4px 1px #7444bf',
+    },
+
+    [mobile]: {
+      fontSize: '1.4em',
+      padding: 0,
     },
   }),
 

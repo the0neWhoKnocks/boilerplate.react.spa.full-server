@@ -7,6 +7,17 @@ import { setViewData } from 'STATE/actions';
 
 // TODO - ideally this should be broken out into other files
 
+const routePaths = {
+  IPSUM_1: '/ipsum1',
+  IPSUM_3: '/ipsum3',
+  ITEM: '/view/item/',
+  ROOT: '/',
+  TERMS: '/terms',
+};
+const tokens = {
+  ITEM: ':itemId',
+};
+
 // =============================================================================
 // Bacon Ipsum
 
@@ -73,10 +84,8 @@ const RickAndMortyItems = ViewHOC({
   View: ItemsView,
 });
 
-const itemUrlPrefix = '/view/item/';
-const itemToken = ':itemId';
 const itemOpts = {
-  url: `https://rickandmortyapi.com/api/character/${ itemToken }`,
+  url: `https://rickandmortyapi.com/api/character/${ tokens.ITEM }`,
   params: {},
   cacheKey: ['url'],
 };
@@ -107,17 +116,17 @@ const data = {
       {
         exact: true,
         label: 'Rick & Morty',
-        url: '/',
+        url: routePaths.ROOT,
         view: RickAndMortyItems,
         viewProps: {
-          linkPrefix: itemUrlPrefix,
+          linkPrefix: routePaths.ITEM,
           ssr: getData,
           title: 'Rick & Morty',
         },
       },
       {
         label: 'Bacon Ipsum (SSR)',
-        url: '/v2',
+        url: routePaths.IPSUM_1,
         view: OnePara,
         viewProps: {
           ssr: getData,
@@ -126,7 +135,7 @@ const data = {
       },
       {
         label: 'Bacon Ipsum',
-        url: '/v3',
+        url: routePaths.IPSUM_3,
         view: ThreePara,
         viewProps: {
           title: 'Bacon Ipsum (3 paragraph, Client-only)',
@@ -138,7 +147,7 @@ const data = {
     navItems: [
       {
         label: 'Terms of Service',
-        url: '/terms',
+        url: routePaths.TERMS,
         view: DefaultView,
         viewProps: {
           title: 'Terms of Service',
@@ -153,7 +162,7 @@ const data = {
 
 const otherRoutes = [
   {
-    url: `${ itemUrlPrefix }${ itemToken }`,
+    url: `${ routePaths.ITEM }${ tokens.ITEM }`,
     view: RickAndMortyItem,
     viewProps: {
       ssr: getData,
@@ -179,6 +188,7 @@ const footerProps = {
 export {
   footerProps,
   headerProps,
-  itemUrlPrefix,
   mainProps,
+  routePaths,
+  tokens,
 };

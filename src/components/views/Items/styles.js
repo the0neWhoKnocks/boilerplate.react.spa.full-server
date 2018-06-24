@@ -14,7 +14,12 @@ const styles = {
     fontFamily: 'Schoolbell, cursive',
     fontSize: '8vw',
     textShadow: '1px 2px 1px #dc7f88, 3px 3px 1px #355fa0, 5px 6px 1px #7235a0, 7px 8px 1px #396ba0',
+    textAlign: 'center',
     marginBottom: '0.25em',
+
+    [mobile]: {
+      fontSize: '14vw',
+    },
   }),
 
   grid: css({
