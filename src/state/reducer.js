@@ -6,6 +6,7 @@ import log, {
 } from 'UTILS/logger';
 import { initialState } from './constants';
 import {
+  SET_PREVIOUS_PAGE,
   SET_VIEW_DATA,
 } from './actionTypes';
 
@@ -17,6 +18,13 @@ function reducer(){
       log(`${ BLACK_ON_GREEN } REDUCER`, action.type);
 
     switch( action.type ){
+      case SET_PREVIOUS_PAGE: {
+        return {
+          ...state,
+          previousPage: action.payload,
+        };
+      }
+
       case SET_VIEW_DATA: {
         const { data, reqOpts } = action.payload;
         // fake a caching structure for data

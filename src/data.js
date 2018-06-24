@@ -106,7 +106,7 @@ const data = {
     navItems: [
       {
         exact: true,
-        label: 'NavItem1',
+        label: 'Rick & Morty',
         url: '/',
         view: RickAndMortyItems,
         viewProps: {
@@ -116,7 +116,7 @@ const data = {
         },
       },
       {
-        label: 'NavItem2',
+        label: 'Bacon Ipsum (SSR)',
         url: '/v2',
         view: OnePara,
         viewProps: {
@@ -125,7 +125,7 @@ const data = {
         },
       },
       {
-        label: 'NavItem3',
+        label: 'Bacon Ipsum',
         url: '/v3',
         view: ThreePara,
         viewProps: {

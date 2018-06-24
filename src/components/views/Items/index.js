@@ -1,14 +1,29 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { arrayOf, bool, number, shape, string } from 'prop-types';
+import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 import ViewLoader from 'COMPONENTS/ViewLoader';
+import {
+  setPreviousPage,
+} from 'STATE/actions';
+
+const mapDispatchToProps = {
+  setPreviousPage,
+};
 
 const ItemsView = ({
   data,
   linkPrefix,
   loading,
+  location,
+  setPreviousPage,
   title,
 }) => {
+  const handleClick = () => {
+    setPreviousPage(location.pathname);
+  };
+
   return (
     <ViewLoader loading={ loading }>
       <h1>{ title }</h1>
@@ -17,6 +32,7 @@ const ItemsView = ({
           <Link
             key={ item.id }
             to={ `${ linkPrefix }${ item.id }` }
+            onClick={ handleClick }
           >
             <img
               src={ item.image }
@@ -53,10 +69,12 @@ ItemsView.propTypes = {
   })),
   linkPrefix: string,
   loading: bool,
+  location: shape({}),
+  setPreviousPage: func,
   title: string,
 };
 ItemsView.defaultProps = {
   data: [],
 };
 
-export default ItemsView;
+export default withRouter(connect(null, mapDispatchToProps)(ItemsView));

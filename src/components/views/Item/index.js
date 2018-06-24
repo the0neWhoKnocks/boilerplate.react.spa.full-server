@@ -1,19 +1,32 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
+import { Link } from 'react-router-dom';
 import ViewLoader from 'COMPONENTS/ViewLoader';
 import styles from './styles';
+import {
+  getPreviousPage,
+} from 'STATE/selectors';
+
+const mapStateToProps = (state) => ({
+  previousPage: getPreviousPage(state),
+});
 
 const ItemView = ({
   backURL,
   data,
   loading,
   match,
+  previousPage,
   title,
 }) => {
   return (
     <ViewLoader loading={ loading }>
       {data && (
         <Fragment>
+          {previousPage && (
+            <Link to={ previousPage }>Back</Link>
+          )}
           <h1>{ data.name }</h1>
           <div className={`view__body ${ styles.root }`}>
             <img
@@ -57,11 +70,11 @@ ItemView.propTypes = {
     url: string,
   }),
   loading: bool,
-  location: shape({}),
   match: shape({
     params: shape({}),
   }),
+  previousPage: string,
   title: string,
 };
 
-export default ItemView;
+export default connect(mapStateToProps)(ItemView);
