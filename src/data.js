@@ -5,7 +5,8 @@ import ItemView from 'COMPONENTS/views/Item';
 import getData from 'UTILS/getData';
 import { setViewData } from 'STATE/actions';
 
-// TODO - ideally this should be broken out into other files
+// TODO - ideally this should be broken out into other files, or piped into the
+// store now that Redux is hooked up.
 
 const routePaths = {
   IPSUM_1: '/ipsum1',

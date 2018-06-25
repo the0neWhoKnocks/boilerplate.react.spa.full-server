@@ -61,6 +61,7 @@ export default logger;
 export {
   BLACK_ON_GREEN,
   BLACK_ON_GRAY,
+  BLACK_ON_YELLOW,
   BLUE,
   GREEN_ON_BLACK,
 };

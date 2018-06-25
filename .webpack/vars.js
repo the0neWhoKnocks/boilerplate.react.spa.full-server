@@ -2,7 +2,7 @@ const appConfig = require('../conf.app');
 
 const hashLength = 5;
 // list of tokens - https://github.com/webpack-contrib/css-loader/issues/226#issuecomment-334467260
-const hashedName = `[name]_[hash:${ hashLength }]`;
+const hashedName = `[name]_[chunkhash:${ hashLength }]`;
 const WEBPACK_ASSETS_URL = process.env.WEBPACK_ASSETS_URL;
 
 // Using local ip address in DEV MODE so that developers can share local

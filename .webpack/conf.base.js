@@ -11,23 +11,20 @@ const { hashLength, hashedName } = require('./vars');
 const conf = {
   // The entry and module.rules.loader option is resolved relative to this directory
   context: appConfig.paths.ROOT,
-  // These are the "entry points" to our application.
-  // This means they will be the "root" imports that are included in the JS bundle.
+  /**
+   * These are the "entry points" for the bundling system. Each entry, will
+   * be it's own file.
+   */
   entry: {
-    // set up all libs that are required by the app
+    // You can dump any files you want in here that should be included top-level.
+    // The rest of the file is generated via the CommonChunk plugin.
     [appConfig.webpack.entries.VENDOR]: [
       `${ appConfig.paths.SRC }/polyfills`,
-      'axios',
-      'classnames',
-      'glamor',
-      'prop-types',
-      'react',
-      'react-dom',
-      'react-redux',
-      'react-router-dom',
-      'redux',
     ],
-    // the actual app entry is in `conf.webpack`
+    // Where the actual app code lives
+    // NOTE - This Array has app entries pushed to it in the `conf.webpack.js`
+    // file. This allows us to dynamically add in app code for dev or production
+    // builds first, then add in the app code.
     [appConfig.webpack.entries.APP]: [],
   },
   module: {
@@ -50,14 +47,39 @@ const conf = {
   },
   // Any shared plugins, that need no per-build configuration changes
   plugins: [
+    /**
+     * Keep resources clean, ensures build dir is empty on build, and cleans out
+     * old built files while in dev watch-mode.
+     */
     new TidyPlugin({
       cleanPaths: `.${ appConfig.webpack.paths.OUTPUT }/js/*`,
       hashLength,
       watching: process.env.NODE_ENV === 'development',
     }),
+    /**
+     * Finds any references of modules from node_modules and dumps them in the
+     * vendor bundle. Unless any new module deps are brought in, the hash for
+     * this bundle won't change and can be cached independantly of app code.
+     */
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
+      name: appConfig.webpack.entries.VENDOR,
+      minChunks: (module) => {
+        // this assumes your vendor imports exist in the node_modules directory
+        return module.context && module.context.includes('node_modules');
+      },
+    }),
+    /**
+     * Dump the remaining WP bootstrapping code into this file.
+     */
+    new webpack.optimize.CommonsChunkPlugin({
+      name: appConfig.webpack.entries.BOOTSTRAP,
       minChunks: Infinity,
+    }),
+    /**
+     * Gives more control of how bundles are hashed
+     */
+    new webpack.HashedModuleIdsPlugin({
+      hashDigestLength: hashLength,
     }),
     /**
      * Provides build progress in the CLI
@@ -77,10 +99,13 @@ const conf = {
       }),
       output: `${ appConfig.paths.DIST_PUBLIC }/${ appConfig.webpack.MANIFEST_NAME }`,
       publicPath: '/',
+      sortManifest: false,
       writeToDisk: true,
     }),
-    // Makes some environment variables available to the JS code, for example:
-    // if (process.env.NODE_ENV === 'production') { ... }.
+    /**
+     * Makes some environment variables available to the JS code, for example:
+     * if (process.env.NODE_ENV === 'production') { ... }.
+     */
     new webpack.DefinePlugin({
       // `process.env` vars will be replaced with their values when the bundle
       // is built. In the case `IS_CLIENT` for example, it'll always be `true`
@@ -98,11 +123,13 @@ const conf = {
         app: JSON.stringify(appConfig.app),
       },
     }),
-    // Moment.js is an extremely popular library that bundles large locale files
-    // by default due to how Webpack interprets its code. This is a practical
-    // solution that requires the user to opt into importing specific locales.
-    // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-    // You can remove this if you don't use Moment.js:
+    /**
+     * Moment.js is an extremely popular library that bundles large locale files
+     * by default due to how Webpack interprets its code. This is a practical
+     * solution that requires the user to opt into importing specific locales.
+     * https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
+     * You can remove this if you don't use Moment.js:
+     */
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
   resolve: {

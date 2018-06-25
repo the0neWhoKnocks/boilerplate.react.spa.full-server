@@ -51,7 +51,9 @@ const conf = {
       STATE: `${ SRC }/state`,
       UTILS: `${ SRC }/utils`,
     },
+    // The order of the `entries` dictates the order that they're added in the DOM
     entries: {
+      BOOTSTRAP: 'wp_bootstrap',
       VENDOR: 'vendor',
       APP: 'app',
     },
