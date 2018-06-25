@@ -23,7 +23,7 @@ const globals = () => {
       content: '';
       background-image: linear-gradient(#fff 27%, transparent), url('https://images4.alphacoders.com/764/thumb-1920-76488.jpg');
       opacity: 0.25;
-      position: absolute;
+      position: fixed;
       top: 0;
       bottom: 0;
       left: 0;

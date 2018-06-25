@@ -19,7 +19,7 @@ const styles = {
       transition: 'opacity 0.25s',
     },
 
-    [`${ mobile }`]: {
+    [mobile]: {
       position: 'relative',
 
       // add a background color element so the nav can go under
@@ -32,7 +32,7 @@ const styles = {
   nav: css({
     display: 'inline-block',
 
-    [`${ mobile }`]: {
+    [mobile]: {
       background: '#fff',
       boxShadow: '0 5px 2em rgba(0,0,0,0.5)',
       position: 'absolute',
@@ -60,7 +60,7 @@ const styles = {
       padding: '0.25em',
     },
 
-    [`${ mobile }`]: {
+    [mobile]: {
       position: 'relative',
     },
   }),
@@ -106,7 +106,7 @@ const styles = {
       },
     },
 
-    [`${ mobile }`]: {
+    [mobile]: {
       border: 'solid 1px #aaa',
       borderLeft: 'none',
       borderRight: 'none',
@@ -143,7 +143,7 @@ const styles = {
     top: 0,
     right: 0,
 
-    [`${ mobile }`]: {
+    [mobile]: {
       display: 'block',
     },
   }),

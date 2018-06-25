@@ -22,10 +22,10 @@ const ItemView = ({
   title,
 }) => {
   globalStyles();
-  
+
   return (
     <ViewLoader
-      className={ `${ styles.view }` }
+      className={ `${ styles.view } ${ (previousPage) ? 'has--back-btn' : '' }` }
       loading={ loading }
     >
       <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
@@ -33,18 +33,35 @@ const ItemView = ({
         <Fragment>
           <h1 className={ `${ styles.title }` }>{ data.name }</h1>
           <div className={`view__body ${ styles.root }`}>
-            <img
-              className={ `${ styles.img }` }
-              src={ data.image }
-              alt={ `${ data.name } thumbnail` }
-            />
-            <ul className={ `${ styles.info }` }>
-              <li><label>Location</label>{ data.location && data.location.name || '' }</li>
-              <li><label>Origin</label>{ data.origin.name }</li>
-              <li><label>Species</label>{ data.species }</li>
-              <li><label>Status</label>{ data.status }</li>
-              <li><label>Type</label>{ data.type }</li>
-            </ul>
+            <div className={`view__body ${ styles.infoWrapper }`}>
+              <img
+                className={ `${ styles.img }` }
+                src={ data.image }
+                alt={ `${ data.name } thumbnail` }
+              />
+              <ul className={ `${ styles.info }` }>
+                <li>
+                  <label>Location</label>
+                  <span>{ data.location && data.location.name || '' }</span>
+                </li>
+                <li>
+                  <label>Origin</label>
+                  <span>{ data.origin.name }</span>
+                </li>
+                <li>
+                  <label>Species</label>
+                  <span>{ data.species }</span>
+                </li>
+                <li>
+                  <label>Status</label>
+                  <span>{ data.status }</span>
+                </li>
+                <li>
+                  <label>Type</label>
+                  <span>{ data.type }</span>
+                </li>
+              </ul>
+            </div>
             {previousPage && (
               <div className={ `${ styles.backBtn }` }>
                 <Link to={ previousPage }>Back</Link>

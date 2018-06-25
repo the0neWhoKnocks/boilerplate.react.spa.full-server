@@ -11,6 +11,11 @@ const globals = () => {
     .is--ram header .nav__btn::before {
       background: rgba(139, 255, 170, 0.25);
     }
+    ${ mobile } {
+      .is--ram header .nav__btn {
+        background-color: #333;
+      }
+    }
   `);
 };
 

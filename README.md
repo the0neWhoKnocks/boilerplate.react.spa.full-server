@@ -73,6 +73,25 @@ Files of note:
 - The `Main` component handles the SPA routing. So if you need to add
   routes that aren't defined in `navItems` for `header` or `footer`
   (within `data.js`), you need to add them to `otherRoutes` (within `data.js`).
+- ‎Everything under `src` will be compiled in some way. Parts of `src` will be
+  bundled and dumped in `dist/public` and everything will be transpiled to
+  `dist/private` so that the server code can 1 - be debugged easily (not being
+  bundled) and 2 - make use of imports (so no mental hoops of "should I use
+  require or import").
+- ‎Not using `webpack-dev-middleware` because it obfuscates where the final
+  output will be until a production bundle is created, and you have to add extra
+  Webpack specific code to your server. With the use of the `TidyPlugin`,
+  `reload`, and `webpack-assets-manifest` in conjunction with the `watch`
+  option - we get a live-reload representation of what the production server
+  will run.
+
+Notes about the `dev` server:
+- Sometimes running `rs` while the server is in dev mode, will exit with `Cannot
+  read property 'write' of null`. This will leave a bunch of zombie node
+  processes, just run `pkill node` to clean those up.
+- Sometimes after killing the server, you'll see a bunch of `node` processes
+  still hanging around in Activity Monitor or Task Manager, but if you wait a
+  couple seconds they clean themselves up.
 
 ---
 

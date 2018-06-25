@@ -1,4 +1,4 @@
-const NAME = 'app';
+const NAME = 'APP';
 const initialState = () => ({
   previousPage: undefined,
   shellClass: '',
