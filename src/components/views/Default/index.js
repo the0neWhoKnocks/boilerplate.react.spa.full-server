@@ -5,13 +5,17 @@ import { globals as globalStyles } from './styles';
 
 const DefaultView = ({
   data,
+  dataURL,
   loading,
   title,
 }) => {
   globalStyles();
-  
+
   return (
-    <ViewLoader loading={ loading }>
+    <ViewLoader
+      loading={ loading }
+      uid={ dataURL }
+    >
       <h1>{ title }</h1>
       <div className="view__body">
         {data.map((par, ndx) => (
@@ -24,6 +28,7 @@ const DefaultView = ({
 
 DefaultView.propTypes = {
   data: arrayOf(string),
+  dataURL: string,
   loading: bool,
   title: string,
 };

@@ -4,6 +4,7 @@ import {
   SET_ITEM_RESULTS,
   SET_PREVIOUS_PAGE,
   SET_SHELL_CLASS,
+  SET_SCROLL_POS,
   SET_VIEW_DATA,
 } from './actionTypes';
 
@@ -50,6 +51,14 @@ const setShellClass = loc => {
   };
 };
 
+const setScrollPos = (uid, pos) => ({
+  type: SET_SCROLL_POS,
+  payload: {
+    pos,
+    uid,
+  },
+});
+
 const setViewData = data => ({
   type: SET_VIEW_DATA,
   payload: data,
@@ -60,5 +69,6 @@ export {
   setItemResults,
   setPreviousPage,
   setShellClass,
+  setScrollPos,
   setViewData,
 };

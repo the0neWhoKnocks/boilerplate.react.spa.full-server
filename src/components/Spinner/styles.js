@@ -17,7 +17,7 @@ const styles = {
     background: 'rgba(0, 0, 0, 0.4)',
     display: 'inline-block',
 
-    '::before': {
+    '::before:not(:empty)': {
       content: 'attr(data-label)',
       color: '#fff',
       fontWeight: 'bold',

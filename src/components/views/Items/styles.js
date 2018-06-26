@@ -87,6 +87,30 @@ const styles = {
     right: 0,
     left: 0,
   }),
+
+  loadBar: css({
+    color: '#b8fb7b',
+    lineHeight: '1em',
+    padding: '1em',
+
+    ' .spinner, span': {
+      display: 'inline-block',
+      verticalAlign: 'middle',
+    },
+
+    ' .spinner': {
+      background: 'transparent',
+
+      ' div': {
+        border: 'solid 0.3em #b8fb7b40',
+        borderTopColor: '#b8fb7b',
+      },
+    },
+
+    ' span': {
+      fontSize: '1.5em',
+    },
+  }),
 };
 
 export default styles;

@@ -4,6 +4,7 @@ const initialState = () => ({
   previousPage: undefined,
   results: [],
   shellClass: '',
+  scrollPos: {},
   viewData: {},
 });
 

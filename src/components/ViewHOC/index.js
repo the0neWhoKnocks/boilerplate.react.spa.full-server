@@ -47,6 +47,7 @@ const ViewHOC = ({
 
       this.state = {
         data,
+        dataURL: reqOpts.url,
         loading: !(
           data
           && (Array.isArray(data) && data.length)
@@ -69,6 +70,7 @@ const ViewHOC = ({
           .then(resp => {
             this.setState({
               loading: false,
+              dataURL: parsedOpts.url,
             });
           })
           .catch(err => {

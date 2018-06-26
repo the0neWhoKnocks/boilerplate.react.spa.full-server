@@ -1,7 +1,8 @@
-const getNextPage = (state, key) => state.nextPage;
-const getPreviousPage = (state, key) => state.previousPage;
-const getResults = (state, key) => state.results;
-const getShellClass = (state, key) => state.shellClass;
+const getNextPage = (state) => state.nextPage;
+const getPreviousPage = (state) => state.previousPage;
+const getResults = (state) => state.results;
+const getShellClass = (state) => state.shellClass;
+const getScrollPos = (state, uid) => state.scrollPos[uid];
 const getViewData = (state, key) => state.viewData[key];
 
 export {
@@ -9,5 +10,6 @@ export {
   getPreviousPage,
   getResults,
   getShellClass,
+  getScrollPos,
   getViewData,
 };

@@ -16,6 +16,7 @@ const mapStateToProps = (state) => ({
 const ItemView = ({
   backURL,
   data,
+  dataURL,
   loading,
   match,
   previousPage,
@@ -27,6 +28,7 @@ const ItemView = ({
     <ViewLoader
       className={ `${ styles.view } ${ (previousPage) ? 'has--back-btn' : '' }` }
       loading={ loading }
+      uid={ dataURL }
     >
       <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
       {data && (
@@ -96,6 +98,7 @@ ItemView.propTypes = {
     type: string,
     url: string,
   }),
+  dataURL: string,
   loading: bool,
   match: shape({
     params: shape({}),

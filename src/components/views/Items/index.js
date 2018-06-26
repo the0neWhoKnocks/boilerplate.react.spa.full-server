@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Waypoint from 'react-waypoint';
 import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 import ViewLoader from 'COMPONENTS/ViewLoader';
+import Spinner from 'COMPONENTS/Spinner';
 import {
   fetchMoreItems,
   setPreviousPage,
@@ -46,6 +47,7 @@ class ItemsView extends Component {
 
   render(){
     const {
+      dataURL,
       linkPrefix,
       loading,
       nextPage,
@@ -57,6 +59,7 @@ class ItemsView extends Component {
       <ViewLoader
         className={ `${ styles.view }` }
         loading={ loading }
+        uid={ dataURL }
       >
         <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
         <h1 className={ `${ styles.title }` }>{ title }</h1>
@@ -78,7 +81,12 @@ class ItemsView extends Component {
           {nextPage && (
             <Waypoint
               onEnter={ this.handleWaypoint.bind(null, nextPage) }
-            />
+            >
+              <div className={ `${ styles.loadBar }` }>
+                <Spinner />
+                <span>Loading...</span>
+              </div>
+            </Waypoint>
           )}
         </div>
       </ViewLoader>
@@ -87,6 +95,7 @@ class ItemsView extends Component {
 }
 
 ItemsView.propTypes = {
+  dataURL: string,
   fetchMoreItems: func,
   linkPrefix: string,
   loading: bool,
