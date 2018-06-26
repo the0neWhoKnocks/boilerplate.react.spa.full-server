@@ -6,6 +6,7 @@ import log, {
 } from 'UTILS/logger';
 import { initialState } from './constants';
 import {
+  SET_ITEM_RESULTS,
   SET_PREVIOUS_PAGE,
   SET_SHELL_CLASS,
   SET_VIEW_DATA,
@@ -22,6 +23,18 @@ function reducer(extendedData = {}){
       log(`${ BLACK_ON_GREEN } REDUCER`, action.type);
 
     switch( action.type ){
+      case SET_ITEM_RESULTS: {
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'nextPage & reults');
+        return {
+          ...state,
+          nextPage: action.payload.nextPage,
+          results: [
+            ...state.results,
+            ...action.payload.results,
+          ],
+        };
+      }
+
       case SET_PREVIOUS_PAGE: {
         log('  ', `${ BLACK_ON_GRAY } SET`, 'previous page to:', `${ BLUE } "${ action.payload }"`);
         return {

@@ -1,61 +1,98 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
+import Waypoint from 'react-waypoint';
 import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 import ViewLoader from 'COMPONENTS/ViewLoader';
 import {
+  fetchMoreItems,
   setPreviousPage,
 } from 'STATE/actions';
+import {
+  getNextPage,
+  getResults,
+} from 'STATE/selectors';
 import styles, { globals as globalStyles } from './styles';
 
+const mapStateToProps = (state) => ({
+  nextPage: getNextPage(state),
+  results: getResults(state),
+});
 const mapDispatchToProps = {
+  fetchMoreItems,
   setPreviousPage,
 };
 
-const ItemsView = ({
-  data,
-  linkPrefix,
-  loading,
-  location,
-  setPreviousPage,
-  title,
-}) => {
-  globalStyles();
-  
-  const handleClick = () => {
-    setPreviousPage(location.pathname);
-  };
+class ItemsView extends Component {
+  constructor(){
+    super();
 
-  return (
-    <ViewLoader
-      className={ `${ styles.view }` }
-      loading={ loading }
-    >
-      <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
-      <h1 className={ `${ styles.title }` }>{ title }</h1>
-      <div className={`view__body ${ styles.grid }`}>
-        {data.map((item, ndx) => (
-          <Link
-            key={ item.id }
-            className={ styles.item }
-            to={ `${ linkPrefix }${ item.id }` }
-            onClick={ handleClick }
-          >
-            <img
-              src={ item.image }
-              alt={ `${ item.name } thumbnail` }
+    this.handleClick = this.handleClick.bind(this);
+    this.handleWaypoint = this.handleWaypoint.bind(this);
+  }
+
+  componentDidMount(){
+    globalStyles();
+  }
+
+  handleClick() {
+    this.props.setPreviousPage(this.props.location.pathname);
+  }
+
+  handleWaypoint(url) {
+    this.props.fetchMoreItems(url);
+  }
+
+  render(){
+    const {
+      linkPrefix,
+      loading,
+      nextPage,
+      results,
+      title,
+    } = this.props;
+
+    return (
+      <ViewLoader
+        className={ `${ styles.view }` }
+        loading={ loading }
+      >
+        <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
+        <h1 className={ `${ styles.title }` }>{ title }</h1>
+        <div className={`view__body ${ styles.grid }`}>
+          {results.length && results.map((item, ndx) => (
+            <Link
+              key={ item.id }
+              className={ styles.item }
+              to={ `${ linkPrefix }${ item.id }` }
+              onClick={ this.handleClick }
+            >
+              <img
+                src={ item.image }
+                alt={ `${ item.name } thumbnail` }
+              />
+              <div className={ `name ${ styles.name }` }>{ item.name }</div>
+            </Link>
+          ))}
+          {nextPage && (
+            <Waypoint
+              onEnter={ this.handleWaypoint.bind(null, nextPage) }
             />
-            <div className={ `name ${ styles.name }` }>{ item.name }</div>
-          </Link>
-        ))}
-      </div>
-    </ViewLoader>
-  );
-};
+          )}
+        </div>
+      </ViewLoader>
+    );
+  }
+}
 
 ItemsView.propTypes = {
-  data: arrayOf(shape({
+  fetchMoreItems: func,
+  linkPrefix: string,
+  loading: bool,
+  location: shape({}),
+  nextPage: string,
+  results: arrayOf(shape({
     created: string,
     episode: arrayOf(string),
     gender: string,
@@ -75,14 +112,11 @@ ItemsView.propTypes = {
     type: string,
     url: string,
   })),
-  linkPrefix: string,
-  loading: bool,
-  location: shape({}),
   setPreviousPage: func,
   title: string,
 };
 ItemsView.defaultProps = {
-  data: [],
+  results: [],
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(ItemsView));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ItemsView));

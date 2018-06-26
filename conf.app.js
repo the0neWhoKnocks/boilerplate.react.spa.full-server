@@ -17,6 +17,7 @@ const conf = {
     NAME: packageJSON.name,
     VERSION: packageJSON.version,
   },
+  APP_TITLE: 'React SPA (full server)',
   clientPaths: {
     PUBLIC_URL: '',
     MEDIA: '/media',

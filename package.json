@@ -1,5 +1,5 @@
 {
-  "name": "boilerplate.react.spa",
+  "name": "boilerplate.react.spa.full-server",
   "description": "A boilerplate for creating a SPA in React, with a full server",
   "version": "1.0.0",
   "config": {
@@ -20,9 +20,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/the0neWhoKnocks/boilerplate.react.spa.git"
+    "url": "git+https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server.git"
   },
-  "homepage": "https://github.com/the0neWhoKnocks/boilerplate.react.spa#readme",
+  "homepage": "https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server#readme",
   "author": "Trevor Lemon",
   "license": "MIT",
   "dependencies": {
@@ -69,7 +69,9 @@
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
+    "react-waypoint": "^8.0.2",
     "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
     "serialize-javascript": "^1.5.0",
     "simple-progress-webpack-plugin": "^1.1.2",
     "sw-precache-webpack-plugin": "0.11.4",

@@ -1,9 +1,34 @@
 import { routePaths } from 'SRC/data';
+import getData from 'UTILS/getData';
 import {
+  SET_ITEM_RESULTS,
   SET_PREVIOUS_PAGE,
   SET_SHELL_CLASS,
   SET_VIEW_DATA,
 } from './actionTypes';
+
+const fetchMoreItems = url => {
+  return (dispatch, getState) => {
+    const store = {
+      dispatch,
+      getState,
+    };
+
+    return getData(store, {
+      url,
+    }).then((data) => {
+      dispatch(setItemResults(data));
+    });
+  };
+};
+
+const setItemResults = data => ({
+  type: SET_ITEM_RESULTS,
+  payload: {
+    nextPage: data.info.next,
+    results: data.results,
+  },
+});
 
 const setPreviousPage = url => ({
   type: SET_PREVIOUS_PAGE,
@@ -31,6 +56,8 @@ const setViewData = data => ({
 });
 
 export {
+  fetchMoreItems,
+  setItemResults,
   setPreviousPage,
   setShellClass,
   setViewData,

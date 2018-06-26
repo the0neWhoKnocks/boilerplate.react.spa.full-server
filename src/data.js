@@ -3,7 +3,10 @@ import DefaultView from 'COMPONENTS/views/Default';
 import ItemsView from 'COMPONENTS/views/Items';
 import ItemView from 'COMPONENTS/views/Item';
 import getData from 'UTILS/getData';
-import { setViewData } from 'STATE/actions';
+import {
+  setItemResults,
+  setViewData,
+} from 'STATE/actions';
 
 // TODO - ideally this should be broken out into other files, or piped into the
 // store now that Redux is hooked up.
@@ -66,15 +69,19 @@ const ThreePara = ViewHOC({
 // Rick & Morty
 
 const itemsOpts = {
+  // all pages
   url: 'https://rickandmortyapi.com/api/character/',
+  // limited set of pages
+  // url: 'https://rickandmortyapi.com/api/character/?name=rick',
   params: {},
   cacheKey: ['url'],
 };
 const rickAndMortyMiddleware = (store) => (resp) => new Promise((resolve, reject) => {
   store.dispatch(setViewData({
-    data: resp.results,
+    data: resp,
     reqOpts: itemsOpts,
   }));
+  store.dispatch(setItemResults(resp));
   resolve(resp);
 });
 const RickAndMortyItems = ViewHOC({

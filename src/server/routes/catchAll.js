@@ -64,7 +64,7 @@ export default routeWrapper.bind(null, (req, res) => {
         faviconModTime,
         glamor: { ids },
         state: serialize(store.getState()),
-        title: 'React SPA',
+        title: appConfig.APP_TITLE,
       }));
     }
   });
