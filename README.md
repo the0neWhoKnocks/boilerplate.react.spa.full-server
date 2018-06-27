@@ -4,6 +4,20 @@ A boilerplate for creating a SPA in React, with a full server.
 
 ![spa-and-server-02](https://user-images.githubusercontent.com/344140/41952478-ec21c832-7984-11e8-904e-8213d4adf8fa.gif)
 
+**Index**
+- [Features](#features)
+- [Starting the Dev Server](#start-up-dev-server)
+- [Building a Production Package](#build-and-start-up-the-production-package)
+- [What This Repo Demonstrates](#demonstrates)
+  - [Babel](#babel)
+  - [Express](#express)
+  - [General JS Stuff](#general-js-stuff)
+  - [Jest](#jest)
+  - [React](#react)
+  - [Webpack](#webpack)
+- [How Things Work](#how-does-it-all-work)
+- [API's Used](#apis-used)
+
 ---
 
 ## Features
