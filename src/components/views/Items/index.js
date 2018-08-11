@@ -81,6 +81,7 @@ class ItemsView extends Component {
           {nextPage && (
             <Waypoint
               onEnter={ this.handleWaypoint.bind(null, nextPage) }
+              bottomOffset="-400px"
             >
               <div className={ `${ styles.loadBar }` }>
                 <Spinner />
