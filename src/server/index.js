@@ -30,6 +30,8 @@ const app = {
     this.expressInst.use(bodyParser.urlencoded({ // to support URL-encoded bodies
       extended: true,
     }));
+    // allows for reading cookies
+    this.expressInst.use(require('cookie-parser')());
 
     // bind server routes
     this.setupRoutes();

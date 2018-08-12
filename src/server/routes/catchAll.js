@@ -37,6 +37,8 @@ export default routeWrapper.bind(null, (req, res) => {
   awaitSSRData(store, req.url, req.params, [
     mainProps,
   ]).then(() => {
+    footerProps.loggingEnabled = (req.cookies.logging) ? true : false;
+
     // The `context` object contains the results of the render.
     // `context.url` will contain the URL to redirect to if a <Redirect> was used.
     const context = {};

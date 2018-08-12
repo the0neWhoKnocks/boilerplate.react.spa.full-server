@@ -5,6 +5,10 @@ const styles = {
     textAlign: 'right',
     padding: '1em',
     backgroundColor: '#dcdcdc',
+
+    ' .toggle': {
+      position: 'absolute',
+    },
   }),
 
   link: css({

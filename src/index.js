@@ -1,6 +1,7 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
 import { rehydrate } from 'glamor';
+import { getCookie } from 'UTILS/cookie';
 import Shell from 'COMPONENTS/Shell';
 import log, {
   BLUE,
@@ -13,6 +14,8 @@ import {
 } from './data';
 
 window.globals = window.WP_GLOBALS;
+
+if(getCookie('logging')) footerProps.loggingEnabled = true;
 
 rehydrate(window._glam);
 hydrate((
