@@ -1,20 +1,36 @@
+import { getCookie } from 'UTILS/cookie';
+
 export * from './constants';
 
 export default function logger() {
-  const transform = (process.env.IS_CLIENT)
-    ? require('./clientTransform').default
-    : require('./serverTransform').default;
+  let transformer;
+  let transform;
 
-  const args = Array.from(arguments);
-  const msg = [];
-  const styles = [];
+  if(process.env.IS_CLIENT){
+    transformer = (getCookie('logging'))
+      ? import(/* webpackChunkName: "clientLogger" */ './clientTransform')
+      : Promise.resolve({ default: () => {} });
+  }
+  else{
+    transformer = Promise.resolve( require('./serverTransform') );
+  }
 
-  args.forEach((arg) => {
-    const result = transform(arg);
+  transformer.then((module) => {
+    transform = module.default;
 
-    if( process.env.IS_CLIENT ) styles.push(...result.styles);
-    msg.push(result.text);
+    const args = Array.from(arguments);
+    const msg = [];
+    const styles = [];
+
+    args.forEach((arg) => {
+      const result = transform(arg);
+
+      if(result){
+        if( process.env.IS_CLIENT ) styles.push(...result.styles);
+        msg.push(result.text);
+      }
+    });
+
+    if(msg.length) console.log(msg.join(' '), ...styles);
   });
-
-  console.log(msg.join(' '), ...styles);
 }

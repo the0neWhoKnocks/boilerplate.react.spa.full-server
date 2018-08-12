@@ -16,6 +16,8 @@
         "**/test.js",
       ],
       "plugins": [
+        "dynamic-import-node",
+        "syntax-dynamic-import",
         "transform-object-rest-spread",
         "transform-react-jsx",
         ["webpack-alias", {

@@ -7,6 +7,8 @@ const TidyPlugin = require('@noxx/webpack-tidy-plugin');
 const appConfig = require('../conf.app');
 const { hashLength, hashedName } = require('./vars');
 
+const PUBLIC_PATH = '/js/';
+
 // These settings are shared by both `dev` & `prod` builds
 const conf = {
   // The entry and module.rules.loader option is resolved relative to this directory
@@ -40,7 +42,13 @@ const conf = {
     child_process: 'empty',
   },
   output: {
-    filename: `.${ appConfig.webpack.paths.OUTPUT }/js/${ hashedName }.js`,
+    // The path where bundled code is output. If this isn't set in conjunction,
+    // with `publicPath`, the dynamic imports will prefix their paths with the
+    // root directory resulting in missing scripts.
+    path: `${ appConfig.paths.DIST_PUBLIC }${ PUBLIC_PATH }`,
+    publicPath: PUBLIC_PATH,
+    // assigns the hashed name to the file
+    filename: `${ hashedName }.js`,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
@@ -82,6 +90,17 @@ const conf = {
       hashDigestLength: hashLength,
     }),
     /**
+     * Ensures chunks from dynamic imports use the chunk name that's specified.
+     */
+    new webpack.NamedChunksPlugin((chunk) => {
+      if(chunk.name) return chunk.name;
+
+      return chunk.modules.map(m => {
+        const pathComponents = m.request.split('/');
+        return pathComponents[pathComponents.length-1];
+      }).join('_');
+    }),
+    /**
      * Provides build progress in the CLI
      */
     new SimpleProgressWebpackPlugin({
@@ -93,12 +112,10 @@ const conf = {
      * having to know the hashed name.
      */
     new WebpackAssetsManifest({
-      customize: (key, val) => ({
-        key,
-        value: val.replace(appConfig.webpack.paths.OUTPUT, ''),
-      }),
       output: `${ appConfig.paths.DIST_PUBLIC }/${ appConfig.webpack.MANIFEST_NAME }`,
-      publicPath: '/',
+      // For some reason it doesn't use the `publicPath` from `output` so we
+      // have to duplicate it here.
+      publicPath: PUBLIC_PATH,
       sortManifest: false,
       writeToDisk: true,
     }),
