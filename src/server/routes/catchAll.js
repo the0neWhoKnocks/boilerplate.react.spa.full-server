@@ -5,6 +5,12 @@ import appConfig from 'ROOT/conf.app';
 const isDev = process.env.NODE_ENV === 'development';
 
 export default routeWrapper.bind(null, (req, res) => {
+  // if a relative file request makes it here, it's most likely an error
+  if( /.*\.(js|css|json|jpg|png|gif)$/.test(req.url) ){
+    res.status(404);
+    res.send('File not found in catch-all route');
+  }
+
   // route specific modules
   const { statSync } = require('fs');
   const { renderToString } = require('react-dom/server');
