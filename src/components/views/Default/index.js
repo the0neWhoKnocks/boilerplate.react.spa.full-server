@@ -1,35 +1,29 @@
-import React from 'react';
-import { arrayOf, bool, string } from 'prop-types';
-import ViewLoader from 'COMPONENTS/ViewLoader';
+import React, { Fragment } from 'react';
+import { arrayOf, string } from 'prop-types';
 import { globals as globalStyles } from './styles';
 
 const DefaultView = ({
   data,
-  dataURL,
-  loading,
   title,
 }) => {
   globalStyles();
 
+  if(!data.length) return null;
+
   return (
-    <ViewLoader
-      loading={ loading }
-      uid={ dataURL }
-    >
+    <Fragment>
       <h1>{ title }</h1>
       <div className="view__body">
         {data.map((par, ndx) => (
           <p key={ ndx }>{ par }</p>
         ))}
       </div>
-    </ViewLoader>
+    </Fragment>
   );
 };
 
 DefaultView.propTypes = {
   data: arrayOf(string),
-  dataURL: string,
-  loading: bool,
   title: string,
 };
 DefaultView.defaultProps = {

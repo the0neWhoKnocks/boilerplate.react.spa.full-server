@@ -9,11 +9,11 @@ import replaceUrlToken from './replaceUrlToken';
  * @param {Object} reqOpts - The data needed to make the request.
  * @return {Promise}
  */
-const getSSRData = (store, fn, params, reqOpts) => {
+const getSSRData = (fn, params, reqOpts) => {
   const opts = { ...reqOpts };
   opts.url = replaceUrlToken(params, opts.url);
-
-  return fn(store, opts)
+  
+  return fn(opts)
     .then((resp) => {
       console.debug('SSR - data', resp);
     })

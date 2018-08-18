@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const TidyPlugin = require('@noxx/webpack-tidy-plugin');
 const appConfig = require('../conf.app');
 const { hashLength, hashedName } = require('./vars');
@@ -104,6 +105,14 @@ const conf = {
      */
     new SimpleProgressWebpackPlugin({
       format: 'minimal',
+    }),
+    /**
+     * Creates a manifest of files that can be referenced by react-loadable
+     * on the server so it can surface what modules were rendered for proper
+     * Client hydration.
+     */
+    new ReactLoadablePlugin({
+      filename: `${ appConfig.paths.DIST_PRIVATE }/react-loadable.json`,
     }),
     /**
      * Generate a manifest file which contains a mapping of all asset filenames

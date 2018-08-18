@@ -95,13 +95,17 @@ const app = {
         // Sometimes the asset message prints after the server message, this
         // ensures the same order every time.
         setTimeout(() => {
-          // make the store available to all routes
+          const Loadable = require('react-loadable');
           const { initStore } = require('STATE/store');
           initStore();
 
-          this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
-            url: `http://localhost:${ appConfig.PORT }/`,
-          }));
+          // NOTE - `preloadAll` is required to ensure no `setState` errors
+          // occur during SSR
+          Loadable.preloadAll().then(() => {
+            this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
+              url: `http://localhost:${ appConfig.PORT }/`,
+            }));
+          });
         }, 1000);
       }
       else{

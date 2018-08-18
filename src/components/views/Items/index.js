@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import Waypoint from 'react-waypoint';
-import { arrayOf, bool, func, number, shape, string } from 'prop-types';
-import ViewLoader from 'COMPONENTS/ViewLoader';
+import { arrayOf, func, number, shape, string } from 'prop-types';
 import Spinner from 'COMPONENTS/Spinner';
 import {
   fetchMoreItems,
@@ -50,59 +49,55 @@ class ItemsView extends Component {
 
   render(){
     const {
-      dataURL,
       linkPrefix,
-      loading,
       nextPage,
       results,
       title,
     } = this.props;
 
     return (
-      <ViewLoader
-        className={ `${ styles.view }` }
-        loading={ loading }
-        uid={ dataURL }
-      >
+      <Fragment>
         <span dangerouslySetInnerHTML={{ __html: loadFonts() }} />
-        <h1 className={ `${ styles.title }` }>{ title }</h1>
-        <div className={`view__body ${ styles.grid }`}>
-          {results.length && results.map((item, ndx) => (
-            <Link
-              key={ item.id }
-              className={ styles.item }
-              to={ `${ linkPrefix }${ item.id }` }
-              onClick={ this.handleClick }
-            >
-              <img
-                src={ item.image }
-                alt={ `${ item.name } thumbnail` }
-              />
-              <div className={ `name ${ styles.name }` }>{ item.name }</div>
-            </Link>
-          ))}
-          {nextPage && (
-            <Waypoint
-              onEnter={ this.handleWaypoint.bind(null, nextPage) }
-              bottomOffset="-400px"
-            >
-              <div className={ `${ styles.loadBar }` }>
-                <Spinner />
-                <span>Loading...</span>
-              </div>
-            </Waypoint>
-          )}
-        </div>
-      </ViewLoader>
+        {results.length && (
+          <Fragment>
+            <h1 className={ `${ styles.title }` }>{ title }</h1>
+            <div className={`view__body ${ styles.grid }`}>
+              {results.length && results.map((item, ndx) => (
+                <Link
+                  key={ item.id }
+                  className={ styles.item }
+                  to={ `${ linkPrefix }${ item.id }` }
+                  onClick={ this.handleClick }
+                >
+                  <img
+                    src={ item.image }
+                    alt={ `${ item.name } thumbnail` }
+                  />
+                  <div className={ `name ${ styles.name }` }>{ item.name }</div>
+                </Link>
+              ))}
+              {nextPage && (
+                <Waypoint
+                  onEnter={ this.handleWaypoint.bind(null, nextPage) }
+                  bottomOffset="-400px"
+                >
+                  <div className={ `${ styles.loadBar }` }>
+                    <Spinner />
+                    <span>Loading...</span>
+                  </div>
+                </Waypoint>
+              )}
+            </div>
+          </Fragment>
+        )}
+      </Fragment>
     );
   }
 }
 
 ItemsView.propTypes = {
-  dataURL: string,
   fetchMoreItems: func,
   linkPrefix: string,
-  loading: bool,
   location: shape({}),
   nextPage: string,
   results: arrayOf(shape({

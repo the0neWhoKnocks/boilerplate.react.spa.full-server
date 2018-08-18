@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { arrayOf, bool, number, shape, string } from 'prop-types';
+import { arrayOf, number, shape, string } from 'prop-types';
 import { Link } from 'react-router-dom';
-import ViewLoader from 'COMPONENTS/ViewLoader';
 import {
   getPreviousView,
 } from 'STATE/selectors';
@@ -19,23 +18,16 @@ const mapStateToProps = (state) => ({
 const ItemView = ({
   backURL,
   data,
-  dataURL,
-  loading,
-  match,
   previousView,
   title,
 }) => {
   globalStyles();
 
   return (
-    <ViewLoader
-      className={ `${ styles.view } ${ (previousView) ? 'has--back-btn' : '' }` }
-      loading={ loading }
-      uid={ dataURL }
-    >
+    <Fragment>
       <span dangerouslySetInnerHTML={{ __html: loadFonts() }} />
       {data && (
-        <Fragment>
+        <div className={ `${ styles.container } ${ (previousView) ? 'has--back-btn' : '' }` }>
           <h1 className={ `${ styles.title }` }>{ data.name }</h1>
           <div className={`view__body ${ styles.root }`}>
             <div className={`view__body ${ styles.infoWrapper }`}>
@@ -73,9 +65,9 @@ const ItemView = ({
               </div>
             )}
           </div>
-        </Fragment>
+        </div>
       )}
-    </ViewLoader>
+    </Fragment>
   );
 };
 
@@ -100,11 +92,6 @@ ItemView.propTypes = {
     status: string,
     type: string,
     url: string,
-  }),
-  dataURL: string,
-  loading: bool,
-  match: shape({
-    params: shape({}),
   }),
   previousView: string,
   title: string,

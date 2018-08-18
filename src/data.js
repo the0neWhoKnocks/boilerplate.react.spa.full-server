@@ -1,15 +1,28 @@
-import ViewHOC from 'COMPONENTS/ViewHOC';
-import DefaultView from 'COMPONENTS/views/Default';
-import ItemsView from 'COMPONENTS/views/Items';
-import ItemView from 'COMPONENTS/views/Item';
-import getData from 'UTILS/getData';
+import AsyncChunk from 'COMPONENTS/AsyncChunk';
 import {
   setItemResults,
   setViewData,
 } from 'STATE/actions';
+import store from 'STATE/store';
+import composeChunk from 'UTILS/composeChunk';
+import getData from 'UTILS/getData';
 
 // TODO - ideally this should be broken out into other files, or piped into the
 // store now that Redux is hooked up.
+
+if(process.env.IS_SERVER){
+  const {
+    default: logger,
+    BLACK_ON_RED,
+  } = require('UTILS/logger');
+
+  process.on('unhandledRejection', (error) => {
+    logger(
+      `${ BLACK_ON_RED } ERROR`,
+      (error && error.stack) ? error.stack : JSON.stringify(error)
+    );
+  });
+}
 
 const routePaths = {
   IPSUM_1: '/ipsum1',
@@ -25,8 +38,8 @@ const tokens = {
 // =============================================================================
 // Bacon Ipsum
 
-const baconIpsumMiddleware = (reqOpts) => (store) => (resp) => new Promise((resolve, reject) => {
-  store.dispatch(setViewData({
+const baconIpsumMiddleware = (reqOpts) => (resp) => new Promise((resolve, reject) => {
+  store.app.dispatch(setViewData({
     data: resp,
     reqOpts,
   }));
@@ -50,19 +63,26 @@ const threeParaOpts = {
   cacheKey: ['url', 'paras', 'type'],
 };
 
-const OnePara = ViewHOC({
+const DefaultView = composeChunk({
+  load: () => import(
+    /* webpackChunkName: "DefaultView" */
+    'COMPONENTS/views/Default'
+  ),
+});
+
+const OnePara = AsyncChunk({
+  chunk: DefaultView,
   reqOpts: {
     ...oneParaOpts,
     middleware: baconIpsumMiddleware(oneParaOpts),
   },
-  View: DefaultView,
 });
-const ThreePara = ViewHOC({
+const ThreePara = AsyncChunk({
+  chunk: DefaultView,
   reqOpts: {
     ...threeParaOpts,
     middleware: baconIpsumMiddleware(threeParaOpts),
   },
-  View: DefaultView,
 });
 
 // =============================================================================
@@ -76,20 +96,31 @@ const itemsOpts = {
   params: {},
   cacheKey: ['url'],
 };
-const rickAndMortyMiddleware = (store) => (resp) => new Promise((resolve, reject) => {
-  store.dispatch(setViewData({
+const rickAndMortyMiddleware = (resp) => new Promise((resolve, reject) => {
+  store.app.dispatch(setViewData({
     data: resp,
     reqOpts: itemsOpts,
   }));
-  store.dispatch(setItemResults(resp));
+  store.app.dispatch(setItemResults(resp));
+
+  // NOTE - Errors on the Client and Server will differ due to file path
+  // resolution so a hydration error is to be expected.
+  // throw Error('poop'); // NOTE - left in for example, uncomment to see error view
+
   resolve(resp);
 });
-const RickAndMortyItems = ViewHOC({
+const RickAndMortyItems = AsyncChunk({
+  chunk: composeChunk({
+    load: () => import(
+      /* webpackChunkName: "RickAndMortyCharacters" */
+      'COMPONENTS/views/Items'
+    ),
+    type: 'ram',
+  }),
   reqOpts: {
     ...itemsOpts,
     middleware: rickAndMortyMiddleware,
   },
-  View: ItemsView,
 });
 
 const itemOpts = {
@@ -97,11 +128,18 @@ const itemOpts = {
   params: {},
   cacheKey: ['url'],
 };
-const RickAndMortyItem = ViewHOC({
+const RickAndMortyItem = AsyncChunk({
+  chunk: composeChunk({
+    load: () => import(
+      /* webpackChunkName: "RickAndMortyCharacter" */
+      'COMPONENTS/views/Item'
+    ),
+    type: 'ram',
+  }),
   reqOpts: {
     ...itemOpts,
-    middleware: (store) => (resp) => new Promise((resolve, reject) => {
-      store.dispatch(setViewData({
+    middleware: (resp) => new Promise((resolve, reject) => {
+      store.app.dispatch(setViewData({
         data: resp,
         reqOpts: {
           ...itemOpts,
@@ -111,7 +149,6 @@ const RickAndMortyItem = ViewHOC({
       resolve(resp);
     }),
   },
-  View: ItemView,
 });
 
 // =============================================================================

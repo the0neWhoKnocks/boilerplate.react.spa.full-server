@@ -10,7 +10,7 @@ import replaceUrlToken from './replaceUrlToken';
  * @param {Array} arr - The data Objects
  * @return {Promise}
  */
-const awaitSSRData = (store, url, params, arr) => {
+const awaitSSRData = (url, params, arr) => {
   const iterate = (item, promises) => {
     if(Array.isArray(item)){
       item.forEach((i) => {
@@ -27,7 +27,7 @@ const awaitSSRData = (store, url, params, arr) => {
           && url === replaceUrlToken(params, item.url)
           && item.viewProps.ssr
         ) {
-          promises.push(getSSRData(store, item.viewProps.ssr, params, i.reqOpts));
+          promises.push(getSSRData(item.viewProps.ssr, params, i.reqOpts));
         }
       });
     }
