@@ -6,9 +6,10 @@
     "SERVER_PORT": 3000
   },
   "scripts": {
-    "build:bundle": "cross-env PUBLIC_URL=\"/\" BABEL_ENV=\"production\" NODE_ENV=\"production\" node .bin/build",
-    "build:bundle:dev": "cross-env PUBLIC_URL=\"/\" BABEL_ENV=\"development\" NODE_ENV=\"development\" node .bin/build",
-    "build:private": "echo 'Compiling to CommonJS' && cross-env NODE_ENV=\"server\" babel ./src -d ./dist/private",
+    "build:babelrc": "node ./.babel/conf.babel.js",
+    "build:bundle": "yarn build:babelrc && cross-env PUBLIC_URL=\"/\" BABEL_ENV=\"production\" NODE_ENV=\"production\" node .bin/build",
+    "build:bundle:dev": "yarn build:babelrc && cross-env PUBLIC_URL=\"/\" BABEL_ENV=\"development\" NODE_ENV=\"development\" node .bin/build",
+    "build:private": "yarn build:babelrc && echo 'Compiling to CommonJS' && cross-env NODE_ENV=\"server\" babel ./src -d ./dist/private",
     "build:private:watch": "yarn build:private --watch --skip-initial-build",
     "lint": "eslint ./**/*.js",
     "start:server": "yarn build:bundle && yarn build:private && node ./dist/private/server init",
@@ -16,7 +17,7 @@
     "start:server:watch": "node ./conf.nodemon.js && cross-env NODE_ENV=\"development\" nodemon --config ./nodemon.json --inspect ./dist/private/server init",
     "test": "yarn lint && yarn unit",
     "test:watch": "yarn unit --watchAll",
-    "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./.jest/conf.jest.js"
+    "unit": "yarn build:babelrc && cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./.jest/conf.jest.js"
   },
   "repository": {
     "type": "git",
@@ -84,7 +85,6 @@
   "devDependencies": {
     "@noxx/eslint-config": "^1.0.5",
     "babel-plugin-dynamic-import-node": "^2.0.0",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "browser-sync": "^2.24.4",
     "compression-webpack-plugin": "^1.0.1",
     "cross-env": "^5.1.1",

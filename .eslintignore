@@ -1,3 +1,4 @@
+!.babel/
 !.bin/
 !.webpack/
 dist/
