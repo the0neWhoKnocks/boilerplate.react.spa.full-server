@@ -19,8 +19,10 @@ export default (store, reqOpts) => {
   let reqData;
 
   if( url ){
-    const viewData = getViewData(store.getState(), genCacheKey(reqOpts));
-    if( viewData ) return Promise.resolve(viewData);
+    if(store){
+      const viewData = getViewData(store.getState(), genCacheKey(reqOpts));
+      if( viewData ) return Promise.resolve(viewData);
+    }
 
     const reqArgs = [url];
 

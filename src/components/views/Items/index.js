@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import Waypoint from 'react-waypoint';
-import { arrayOf, bool, func, number, shape, string } from 'prop-types';
-import ViewLoader from 'COMPONENTS/ViewLoader';
+import { arrayOf, func, number, shape, string } from 'prop-types';
 import Spinner from 'COMPONENTS/Spinner';
 import {
   fetchMoreItems,
@@ -50,20 +49,14 @@ class ItemsView extends Component {
 
   render(){
     const {
-      dataURL,
       linkPrefix,
-      loading,
       nextPage,
       results,
       title,
     } = this.props;
 
     return (
-      <ViewLoader
-        className={ `${ styles.view }` }
-        loading={ loading }
-        uid={ dataURL }
-      >
+      <Fragment>
         <span dangerouslySetInnerHTML={{ __html: loadFonts() }} />
         <h1 className={ `${ styles.title }` }>{ title }</h1>
         <div className={`view__body ${ styles.grid }`}>
@@ -93,7 +86,7 @@ class ItemsView extends Component {
             </Waypoint>
           )}
         </div>
-      </ViewLoader>
+      </Fragment>
     );
   }
 }
@@ -102,7 +95,6 @@ ItemsView.propTypes = {
   dataURL: string,
   fetchMoreItems: func,
   linkPrefix: string,
-  loading: bool,
   location: shape({}),
   nextPage: string,
   results: arrayOf(shape({

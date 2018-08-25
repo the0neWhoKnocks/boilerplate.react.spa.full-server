@@ -37,34 +37,42 @@ export default routeWrapper.bind(null, (req, res) => {
   ]).then(() => {
     footerProps.loggingEnabled = (req.cookies.logging) ? true : false;
 
+    const { getLoadableState } = require('loadable-components/server');
+
     // The `context` object contains the results of the render.
     // `context.url` will contain the URL to redirect to if a <Redirect> was used.
     const context = {};
-    let { html, css, ids } = renderStatic(() =>
-      renderToString(
-        <ClientShell
-          context={ context }
-          footerProps={ footerProps }
-          headerProps={ headerProps }
-          mainProps={ mainProps }
-          request={ req }
-        />
-      )
+    const shell = (
+      <ClientShell
+        context={ context }
+        footerProps={ footerProps }
+        headerProps={ headerProps }
+        mainProps={ mainProps }
+        request={ req }
+      />
     );
 
-    if( context.url ){
-      res.redirect(302, context.url);
-    }
-    else{
-      res.send(AppShell({
-        body: html,
-        css,
-        dev: isDev,
-        faviconModTime,
-        glamor: { ids },
-        state: serialize(store.app.getState()),
-        title: appConfig.APP_TITLE,
-      }));
-    }
+    // Extract loadable state from application tree
+    getLoadableState(shell).then(loadableState => {
+      let { html, css, ids } = renderStatic(() =>
+        renderToString(shell)
+      );
+
+      if( context.url ){
+        res.redirect(302, context.url);
+      }
+      else{
+        res.send(AppShell({
+          body: html,
+          chunkScript: loadableState.getScriptTag(),
+          css,
+          dev: isDev,
+          faviconModTime,
+          glamor: { ids },
+          state: serialize(store.app.getState()),
+          title: appConfig.APP_TITLE,
+        }));
+      }
+    });
   });
 });

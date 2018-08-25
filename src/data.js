@@ -1,12 +1,16 @@
+import AsyncView from 'COMPONENTS/AsyncView';
 import ViewHOC from 'COMPONENTS/ViewHOC';
 import DefaultView from 'COMPONENTS/views/Default';
-import ItemsView from 'COMPONENTS/views/Items';
 import ItemView from 'COMPONENTS/views/Item';
 import getData from 'UTILS/getData';
 import {
   setItemResults,
   setViewData,
 } from 'STATE/actions';
+import {
+  getResults,
+} from 'STATE/selectors';
+import store from 'STATE/store';
 
 // TODO - ideally this should be broken out into other files, or piped into the
 // store now that Redux is hooked up.
@@ -76,21 +80,46 @@ const itemsOpts = {
   params: {},
   cacheKey: ['url'],
 };
-const rickAndMortyMiddleware = (store) => (resp) => new Promise((resolve, reject) => {
-  store.dispatch(setViewData({
-    data: resp,
+const RickAndMortyItems = AsyncView(
+  () => import(
+    /* webpackChunkName: "RickAndMortyCharacters" */
+    'COMPONENTS/views/Items'
+  ),
+  {
+    dependencies: [
+      () => {
+        const handleData = (data) => {
+          if(data){
+            // this only needs to occur on initial render of the component,
+            // so once on the server, and once on the client.
+            if( !getResults(store.app.getState()).length ){
+              store.app.dispatch(setViewData({
+                data,
+                reqOpts: itemsOpts,
+              }));
+              store.app.dispatch(setItemResults(data));
+            }
+          }
+        };
+
+        if(process.env.IS_CLIENT){
+          return (store.app)
+            // on client, components have mounted and store exists
+            ? getData(store.app, itemsOpts).then(handleData)
+            // on client, initial pre-load of chunk from SSR, Shell hasn't
+            // initialized store, data will by hydrated from server so no need to
+            // make any extra data requests.
+            : Promise.resolve();
+        }
+        else{
+          return getData(null, itemsOpts).then(handleData);
+        }
+      },
+    ],
+    viewType: 'ram',
     reqOpts: itemsOpts,
-  }));
-  store.dispatch(setItemResults(resp));
-  resolve(resp);
-});
-const RickAndMortyItems = ViewHOC({
-  reqOpts: {
-    ...itemsOpts,
-    middleware: rickAndMortyMiddleware,
-  },
-  View: ItemsView,
-});
+  }
+);
 
 const itemOpts = {
   url: `https://rickandmortyapi.com/api/character/${ tokens.ITEM }`,
@@ -128,7 +157,6 @@ const data = {
         view: RickAndMortyItems,
         viewProps: {
           linkPrefix: routePaths.ITEM,
-          ssr: getData,
           title: 'Rick & Morty',
         },
       },

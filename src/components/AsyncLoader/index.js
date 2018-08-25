@@ -21,16 +21,55 @@ const mapDispatchToProps = {
   setScrollPos,
 };
 
-class ViewLoader extends Component {
+class AsyncLoader extends Component {
+  static getDerivedStateFromProps(props, state) {
+    const newState = {};
+
+    if(props.children && state.loading){
+      newState.loading = false;
+    }
+
+    return newState;
+  }
+
+  constructor() {
+    super();
+
+    this.wasLoading = false;
+    this.state = {
+      loading: false,
+    };
+  }
+
   componentDidMount() {
-    const { scrollPos } = this.props;
+    const {
+      delay,
+      loading,
+      scrollPos,
+    } = this.props;
+
+    if(loading){
+      this.wasLoading = true;
+
+      if(delay){
+        setTimeout(() => {
+          // if the component hasn't loaded yet, show the loader
+          if(!this.props.children){
+            this.setState({
+              loading: true,
+            });
+          }
+        }, delay);
+      }
+    }
 
     if(scrollPos) this.viewNode.scrollTop = scrollPos;
   }
 
   shouldComponentUpdate(nextProps) {
-    // This will happen often and it shouldn't trigger updates while the user is
-    // on the current view.
+    // Scroll position prop changes happen often so we can maintain scroll
+    // position when switching between views, and it shouldn't trigger updates
+    // while the user is on the current view.
     if(
       nextProps.scrollPos !== undefined
       && nextProps.scrollPos !== this.viewNode.scrollTop
@@ -53,19 +92,26 @@ class ViewLoader extends Component {
   render() {
     const {
       children,
-      className,
-      loading,
+      error,
+      viewType,
     } = this.props;
-
+    const {
+      loading,
+    } = this.state;
     const overlayClass = classnames(
       `overlay ${ styles.overlay }`,
       { 'is--loading': loading },
     );
+    let viewModifier = (viewType)
+      ? `is--${ viewType }`
+      : '';
+    let contentTransition = (children && this.wasLoading)
+      ? `${ styles.fadeIn }` : '';
 
     return (
       <div
         key="view"
-        className={ `view ${ styles.view } ${ className }` }
+        className={ `view ${ styles.view } ${ viewModifier }` }
         ref={ (node) => {
           if(node){
             this.viewNode = node;
@@ -81,7 +127,10 @@ class ViewLoader extends Component {
             <Spinner className={`${ styles.spinner }`} label="Loading" />
           )}
         </div>
-        <div className="view-content">
+        <div className={`view-content ${ contentTransition }`}>
+          {error && (
+            <div>Error - {error}</div>
+          )}
           { children }
         </div>
       </div>
@@ -89,13 +138,17 @@ class ViewLoader extends Component {
   }
 }
 
-ViewLoader.propTypes = {
+AsyncLoader.propTypes = {
   children: node,
   className: string,
+  delay: number,
+  error: string,
   loading: bool,
   scrollPos: number,
   setScrollPos: func,
+  timeout: number,
   uid: string,
+  viewType: string,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewLoader);
+export default connect(mapStateToProps, mapDispatchToProps)(AsyncLoader);

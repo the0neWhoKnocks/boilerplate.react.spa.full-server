@@ -41,6 +41,7 @@ const globals = () => {
 };
 
 const styles = {
+  // TODO - remove this once all components are switched over to loadable
   view: css({
     backgroundColor: '#b3347c',
     backgroundImage: 'url(https://pre00.deviantart.net/4ef1/th/pre/f/2016/258/0/5/rick_and_morty_background_no_4_by_jurokoo-dahrvd7.png)',

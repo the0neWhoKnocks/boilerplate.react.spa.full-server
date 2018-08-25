@@ -8,9 +8,19 @@ const { writeFileSync } = require('fs');
 // NOTE - All paths referenced in `conf` are relative to the root of the repo
 // where the `.babelrc` file will be generated.
 
+const appendChunkProps = [
+  './.babel/plugins/appendChunkProps.js',
+  {
+    component: 'AsyncView',
+  },
+];
+
 const clientConfig = {
   presets: [
     'react-app',
+  ],
+  plugins: [
+    appendChunkProps,
   ],
 };
 const conf = {
@@ -27,6 +37,7 @@ const conf = {
           'config': './.webpack/conf.webpack.js',
         }],
         'dynamic-import-node',
+        appendChunkProps,
         'transform-object-rest-spread',
         'transform-react-jsx',
       ],
