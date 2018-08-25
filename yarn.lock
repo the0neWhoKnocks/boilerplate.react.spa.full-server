@@ -21,11 +21,12 @@
     eslint-plugin-jest "^21.12.2"
     eslint-plugin-react "^7.7.0"
 
-"@noxx/webpack-tidy-plugin@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@noxx/webpack-tidy-plugin/-/webpack-tidy-plugin-1.0.3.tgz#082a9fb024f024e2a6f323ccedbe44b3e7cfebbb"
+"@noxx/webpack-tidy-plugin@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@noxx/webpack-tidy-plugin/-/webpack-tidy-plugin-2.0.1.tgz#b727d48d8136ac013ef55e12ce10ec52d0ba9d12"
   dependencies:
     cli-color "^1.2.0"
+    fs-extra "^7.0.0"
     glob "^7.1.2"
 
 "@types/node@*":
@@ -3408,6 +3409,14 @@ fs-extra@3.0.1:
 fs-extra@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-6.0.1.tgz#8abc128f7946e310135ddc93b98bddb410e7a34b"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.0.tgz#8cc3f47ce07ef7b3593a11b9fb245f7e34c041d6"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"

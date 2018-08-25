@@ -60,9 +60,8 @@ const conf = {
      * old built files while in dev watch-mode.
      */
     new TidyPlugin({
-      cleanPaths: `.${ appConfig.webpack.paths.OUTPUT }/js/*`,
+      cleanOutput: true,
       hashLength,
-      watching: process.env.NODE_ENV === 'development',
     }),
     /**
      * Finds any references of modules from node_modules and dumps them in the

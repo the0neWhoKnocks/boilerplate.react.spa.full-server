@@ -27,7 +27,7 @@
   "author": "Trevor Lemon",
   "license": "MIT",
   "dependencies": {
-    "@noxx/webpack-tidy-plugin": "^1.0.3",
+    "@noxx/webpack-tidy-plugin": "^2.0.1",
     "axios": "^0.17.0",
     "babel-cli": "^6.26.0",
     "babel-core": "6.25.0",
