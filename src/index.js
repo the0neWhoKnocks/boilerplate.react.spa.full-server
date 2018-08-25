@@ -7,6 +7,7 @@ import log, {
   BLUE,
   GREEN_ON_BLACK,
 } from 'UTILS/logger';
+import { initStore } from 'STATE/store';
 import {
   footerProps,
   headerProps,
@@ -16,6 +17,7 @@ import {
 window.globals = window.WP_GLOBALS;
 
 if(getCookie('logging')) footerProps.loggingEnabled = true;
+initStore();
 
 rehydrate(window._glam);
 hydrate((

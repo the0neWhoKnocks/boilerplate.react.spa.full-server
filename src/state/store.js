@@ -20,9 +20,18 @@ if(process.env.IS_CLIENT){
   extraArgs.push(state, enhancer);
 }
 
+const _default = {
+  app: null,
+};
+const initStore = ({ reducerArgs = [] } = {}) => {
+  _default.app = createStore(
+    reducer(...reducerArgs), // apply any initial state props if neccessary
+    ...extraArgs
+  );
+};
+
+export default _default;
 export {
   applyMiddleware,
-  createStore,
-  extraArgs,
-  reducer,
+  initStore,
 };

@@ -95,6 +95,10 @@ const app = {
         // Sometimes the asset message prints after the server message, this
         // ensures the same order every time.
         setTimeout(() => {
+          // make the store available to all routes
+          const { initStore } = require('STATE/store');
+          initStore();
+
           this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
             url: `http://localhost:${ appConfig.PORT }/`,
           }));
