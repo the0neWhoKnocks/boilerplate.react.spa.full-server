@@ -8,7 +8,7 @@ import ViewLoader from 'COMPONENTS/ViewLoader';
 import Spinner from 'COMPONENTS/Spinner';
 import {
   fetchMoreItems,
-  setPreviousPage,
+  setPreviousView,
 } from 'STATE/actions';
 import {
   getNextPage,
@@ -25,7 +25,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = {
   fetchMoreItems,
-  setPreviousPage,
+  setPreviousView,
 };
 
 class ItemsView extends Component {
@@ -41,7 +41,7 @@ class ItemsView extends Component {
   }
 
   handleClick() {
-    this.props.setPreviousPage(this.props.location.pathname);
+    this.props.setPreviousView(this.props.location.pathname);
   }
 
   handleWaypoint(url) {
@@ -125,7 +125,7 @@ ItemsView.propTypes = {
     type: string,
     url: string,
   })),
-  setPreviousPage: func,
+  setPreviousView: func,
   title: string,
 };
 ItemsView.defaultProps = {

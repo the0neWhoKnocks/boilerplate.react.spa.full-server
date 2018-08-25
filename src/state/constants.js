@@ -1,7 +1,7 @@
 const NAME = 'APP';
 const initialState = () => ({
   nextPage: undefined,
-  previousPage: undefined,
+  previousView: undefined,
   results: [],
   shellClass: '',
   scrollPos: {},
