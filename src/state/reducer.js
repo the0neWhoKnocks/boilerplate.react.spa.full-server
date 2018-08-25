@@ -28,7 +28,7 @@ function reducer(extendedData = {}){
     switch( type ){
       case SET_ITEM_RESULTS: {
         const { nextPage, results } = payload;
-        log('  ', `${ BLACK_ON_GRAY } SET`, 'nextPage & reults');
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'nextPage & results');
         return {
           ...state,
           nextPage,
