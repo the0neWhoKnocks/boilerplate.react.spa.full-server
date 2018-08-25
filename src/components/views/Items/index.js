@@ -14,7 +14,10 @@ import {
   getNextPage,
   getResults,
 } from 'STATE/selectors';
-import styles, { globals as globalStyles } from './styles';
+import styles, {
+  globals as globalStyles,
+  loadFonts,
+} from './styles';
 
 const mapStateToProps = (state) => ({
   nextPage: getNextPage(state),
@@ -61,7 +64,7 @@ class ItemsView extends Component {
         loading={ loading }
         uid={ dataURL }
       >
-        <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
+        <span dangerouslySetInnerHTML={{ __html: loadFonts() }} />
         <h1 className={ `${ styles.title }` }>{ title }</h1>
         <div className={`view__body ${ styles.grid }`}>
           {results.length && results.map((item, ndx) => (

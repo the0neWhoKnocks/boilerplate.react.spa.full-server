@@ -6,7 +6,10 @@ import ViewLoader from 'COMPONENTS/ViewLoader';
 import {
   getPreviousPage,
 } from 'STATE/selectors';
-import { globals as globalStyles } from 'COMPONENTS/views/Items/styles';
+import {
+  globals as globalStyles,
+  loadFonts,
+} from 'COMPONENTS/views/Items/styles';
 import styles from './styles';
 
 const mapStateToProps = (state) => ({
@@ -30,7 +33,7 @@ const ItemView = ({
       loading={ loading }
       uid={ dataURL }
     >
-      <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
+      <span dangerouslySetInnerHTML={{ __html: loadFonts() }} />
       {data && (
         <Fragment>
           <h1 className={ `${ styles.title }` }>{ data.name }</h1>

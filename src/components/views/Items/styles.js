@@ -1,6 +1,27 @@
 import { css } from 'glamor';
 import { mobile } from 'SRC/breakpoints';
 
+const loadFonts = () => {
+  const fontURL = 'https://fonts.googleapis.com/css?family=Schoolbell';
+  const linkTag = `<link href="${ fontURL }" rel="stylesheet">`;
+  if(process.env.IS_CLIENT){
+    // only load custom fonts once on the client
+    if( !document.head.querySelector(`[href="${ fontURL }"]`) ){
+      // add a link to the head so any further checks detect the already loaded
+      // file.
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = fontURL;
+      document.head.appendChild(link);
+      // return the string tag so that there's no flash before the font loads
+      return linkTag;
+    }
+  }
+  else{
+    return linkTag;
+  }
+};
+
 const globals = () => {
   css.insert(`
     .is--ram header {
@@ -116,4 +137,5 @@ const styles = {
 export default styles;
 export {
   globals,
+  loadFonts,
 };
