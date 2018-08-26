@@ -38,6 +38,7 @@ const conf = {
         }],
       ],
     },
+    test: clientConfig,
   },
 };
 

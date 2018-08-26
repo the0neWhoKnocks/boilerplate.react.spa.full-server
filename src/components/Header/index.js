@@ -5,8 +5,8 @@ import classnames from 'classnames';
 import Logo from './components/Logo';
 import styles from './styles';
 
-const closeDelay = 300;
-const activeClass = 'current';
+const CLOSE_DELAY = 300;
+const ACTIVE_CLASS = 'current';
 
 // The Header creates links that can be used to navigate
 // between routes.
@@ -31,7 +31,7 @@ class Header extends Component {
   handleNavClick(ev){
     if(
       this.state.menuOpen
-      && !ev.currentTarget.classList.contains(activeClass)
+      && !ev.currentTarget.classList.contains(ACTIVE_CLASS)
     ){
       clearTimeout(this.toggleTimeout);
 
@@ -41,7 +41,7 @@ class Header extends Component {
         this.setState({
           menuOpen: false,
         });
-      }, closeDelay);
+      }, CLOSE_DELAY);
     }
   }
 
@@ -78,7 +78,7 @@ class Header extends Component {
               key={ ndx }
               exact={ item.exact }
               className={`nav__btn ${ styles.navBtn }`}
-              activeClassName={ activeClass }
+              activeClassName={ ACTIVE_CLASS }
               to={ item.url }
               onClick={ this.handleNavClick }
             >{item.label}</NavLink>
@@ -102,5 +102,5 @@ Header.defaultProps = {
 
 export default Header;
 export {
-  closeDelay,
+  CLOSE_DELAY,
 };

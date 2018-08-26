@@ -38,7 +38,7 @@ const ShellWrap = ({
   shellClass,
 }) => {
   return (
-    <div className={`shell ${ shellClass }`}>{children}</div>
+    <div className={`shell ${ shellClass || '' }`}>{children}</div>
   );
 };
 ShellWrap.propTypes = {
@@ -101,4 +101,6 @@ const composeShell = (
 export default composeShell();
 export {
   composeShell,
+  mapStateToProps,
+  ShellWrap,
 };
