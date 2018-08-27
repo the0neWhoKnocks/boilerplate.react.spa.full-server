@@ -102,7 +102,7 @@ const app = {
           this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
             url: `http://localhost:${ appConfig.PORT }/`,
           }));
-        }, 100);
+        }, 1000);
       }
       else{
         log(`${ BLACK_ON_YELLOW } WAITING`, 'for', `${ BLUE } ${ file }`, 'to be created');
