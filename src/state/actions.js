@@ -2,7 +2,7 @@ import { routePaths } from 'SRC/data';
 import getData from 'UTILS/getData';
 import {
   SET_ITEM_RESULTS,
-  SET_PREVIOUS_PAGE,
+  SET_PREVIOUS_VIEW,
   SET_SHELL_CLASS,
   SET_SCROLL_POS,
   SET_VIEW_DATA,
@@ -31,8 +31,8 @@ const setItemResults = data => ({
   },
 });
 
-const setPreviousPage = url => ({
-  type: SET_PREVIOUS_PAGE,
+const setPreviousView = url => ({
+  type: SET_PREVIOUS_VIEW,
   payload: url,
 });
 
@@ -67,7 +67,7 @@ const setViewData = data => ({
 export {
   fetchMoreItems,
   setItemResults,
-  setPreviousPage,
+  setPreviousView,
   setShellClass,
   setScrollPos,
   setViewData,

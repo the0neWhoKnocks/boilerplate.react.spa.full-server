@@ -56,7 +56,13 @@ const ViewHOC = ({
       };
     }
 
+    componentWillUnmount(){
+      this.mounted = false;
+    }
+
     componentDidMount(){
+      this.mounted = true;
+
       if(this.state.loading){
         const {
           match,
@@ -68,10 +74,12 @@ const ViewHOC = ({
 
         getData(store, parsedOpts)
           .then(resp => {
-            this.setState({
-              loading: false,
-              dataURL: parsedOpts.url,
-            });
+            if(this.mounted){
+              this.setState({
+                loading: false,
+                dataURL: parsedOpts.url,
+              });
+            }
           })
           .catch(err => {
             console.error(err);

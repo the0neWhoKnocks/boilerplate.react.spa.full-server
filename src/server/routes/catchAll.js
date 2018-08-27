@@ -1,6 +1,6 @@
 import React from 'react';
-import routeWrapper from 'UTILS/routeWrapper';
 import appConfig from 'ROOT/conf.app';
+import routeWrapper from 'UTILS/routeWrapper';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -23,24 +23,16 @@ export default routeWrapper.bind(null, (req, res) => {
     headerProps,
     mainProps,
   } = require('SRC/data');
-  const {
-    createStore,
-    extraArgs,
-    reducer,
-  } = require('STATE/store');
+  const { default: store } = require('STATE/store');
   const AppShell = require('SERVER/views/AppShell');
   const { setShellClass } = require('STATE/actions');
 
-  const extendedData = {
-    shellClass: setShellClass({ pathname: req.path }).payload,
-  };
-
-  const store = createStore(reducer(extendedData), ...extraArgs);
+  store.app.dispatch( setShellClass({ pathname: req.path }) );
 
   // ensures the favicon is always current (with every start of the server)
   const faviconModTime = statSync(appConfig.paths.FAVICON).mtimeMs;
 
-  awaitSSRData(store, req.url, req.params, [
+  awaitSSRData(store.app, req.url, req.params, [
     mainProps,
   ]).then(() => {
     footerProps.loggingEnabled = (req.cookies.logging) ? true : false;
@@ -56,7 +48,6 @@ export default routeWrapper.bind(null, (req, res) => {
           headerProps={ headerProps }
           mainProps={ mainProps }
           request={ req }
-          store={ store }
         />
       )
     );
@@ -71,7 +62,7 @@ export default routeWrapper.bind(null, (req, res) => {
         dev: isDev,
         faviconModTime,
         glamor: { ids },
-        state: serialize(store.getState()),
+        state: serialize(store.app.getState()),
         title: appConfig.APP_TITLE,
       }));
     }

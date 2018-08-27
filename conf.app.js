@@ -44,7 +44,7 @@ const conf = {
     // have a mixture of public and private paths.
     aliases: {
       COMPONENTS: `${ SRC }/components`,
-      DIST_PRIVATE: `${ DIST }/private`,
+      DIST_PRIVATE,
       DIST_PUBLIC,
       ROOT,
       SERVER: `${ SRC }/server`,

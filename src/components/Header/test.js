@@ -1,10 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Header, { closeDelay } from './index';
+import Header, {
+  CLOSE_DELAY,
+} from './index';
 import styles from './styles';
 
 describe('Header', () => {
-  let instance, props, wrapper;
+  let instance, props, wrapper, clickEv, changeEv, mockContains;
 
   beforeEach(() => {
     props = {
@@ -13,6 +15,19 @@ describe('Header', () => {
         label: 'Nav Item',
         url: 'http://test.com/some/page',
       }],
+    };
+    mockContains = false;
+    clickEv = {
+      currentTarget: {
+        classList: {
+          contains: jest.fn(() => mockContains),
+        },
+      },
+    };
+    changeEv = {
+      currentTarget: {
+        checked: false,
+      },
     };
   });
 
@@ -29,7 +44,7 @@ describe('Header', () => {
     wrapper.setState({ menuOpen: true }, () => {
       instance = wrapper.instance();
       instance.toggleTimeout = 1234;
-      wrapper.find('NavLink').simulate('click');
+      wrapper.find('NavLink').simulate('click', clickEv);
 
       // timeout cleared
       expect(instance.toggleTimeout).toBe(1);
@@ -37,7 +52,7 @@ describe('Header', () => {
       expect(wrapper.state().menuOpen).toBe(true);
       expect(wrapper.state().menuOpen).toBe(true);
 
-      jest.runTimersToTime(closeDelay);
+      jest.runTimersToTime(CLOSE_DELAY);
       wrapper.update();
 
       // menu closed
@@ -53,15 +68,16 @@ describe('Header', () => {
     instance = wrapper.instance();
     instance.navNdx = initialNdx;
 
-    wrapper.find('NavLink').simulate('click');
-    jest.runTimersToTime(closeDelay);
+    wrapper.find('NavLink').simulate('click', clickEv);
+    jest.runTimersToTime(CLOSE_DELAY);
 
     expect(instance.navNdx).toBe(initialNdx);
 
+    mockContains = true;
     wrapper.setState({ menuOpen: true });
     wrapper.update();
-    wrapper.find('NavLink').simulate('click');
-    jest.runTimersToTime(closeDelay);
+    wrapper.find('NavLink').simulate('click', clickEv);
+    jest.runTimersToTime(CLOSE_DELAY);
 
     expect(instance.navNdx).toBe(initialNdx);
     expect(wrapper.state().menuOpen).toBe(true);
@@ -73,15 +89,13 @@ describe('Header', () => {
 
     expect(wrapper.state().menuOpen).toBe(false);
 
-    input.simulate('change', {
-      currentTarget: { checked: true },
-    });
+    changeEv.currentTarget.checked = true;
+    input.simulate('change', changeEv);
     wrapper.update();
     expect(wrapper.state().menuOpen).toBe(true);
 
-    input.simulate('change', {
-      currentTarget: { checked: false },
-    });
+    changeEv.currentTarget.checked = false;
+    input.simulate('change', changeEv);
     wrapper.update();
     expect(wrapper.state().menuOpen).toBe(false);
   });

@@ -4,13 +4,16 @@ import { arrayOf, bool, number, shape, string } from 'prop-types';
 import { Link } from 'react-router-dom';
 import ViewLoader from 'COMPONENTS/ViewLoader';
 import {
-  getPreviousPage,
+  getPreviousView,
 } from 'STATE/selectors';
-import { globals as globalStyles } from 'COMPONENTS/views/Items/styles';
+import {
+  globals as globalStyles,
+  loadFonts,
+} from 'COMPONENTS/views/Items/styles';
 import styles from './styles';
 
 const mapStateToProps = (state) => ({
-  previousPage: getPreviousPage(state),
+  previousView: getPreviousView(state),
 });
 
 const ItemView = ({
@@ -19,18 +22,18 @@ const ItemView = ({
   dataURL,
   loading,
   match,
-  previousPage,
+  previousView,
   title,
 }) => {
   globalStyles();
 
   return (
     <ViewLoader
-      className={ `${ styles.view } ${ (previousPage) ? 'has--back-btn' : '' }` }
+      className={ `${ styles.view } ${ (previousView) ? 'has--back-btn' : '' }` }
       loading={ loading }
       uid={ dataURL }
     >
-      <link href="https://fonts.googleapis.com/css?family=Schoolbell" rel="stylesheet" />
+      <span dangerouslySetInnerHTML={{ __html: loadFonts() }} />
       {data && (
         <Fragment>
           <h1 className={ `${ styles.title }` }>{ data.name }</h1>
@@ -64,9 +67,9 @@ const ItemView = ({
                 </li>
               </ul>
             </div>
-            {previousPage && (
+            {previousView && (
               <div className={ `${ styles.backBtn }` }>
-                <Link to={ previousPage }>Back</Link>
+                <Link to={ previousView }>Back</Link>
               </div>
             )}
           </div>
@@ -103,7 +106,7 @@ ItemView.propTypes = {
   match: shape({
     params: shape({}),
   }),
-  previousPage: string,
+  previousView: string,
   title: string,
 };
 

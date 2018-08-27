@@ -44,6 +44,8 @@ conf.module.rules = [
   // First, run the linter.
   // It's important to do this before Babel processes the JS.
   moduleRules.eslintLoader,
+  // Process JS with Babel.
+  moduleRules.babelLoader,
   {
     // "oneOf" will traverse all following loaders until one will
     // match the requirements. When no loader matches it will fall
@@ -52,8 +54,6 @@ conf.module.rules = [
       // "url" loader works like "file" loader except that it embeds assets
       // smaller than specified limit in bytes as data URLs to avoid requests.
       moduleRules.urlLoader,
-      // Process JS with Babel.
-      moduleRules.babelLoader,
       // "file" loader makes sure those assets get served by WebpackDevServer.
       // When you `import` an asset, you get its (virtual) filename.
       // In production, they would get copied to the `build` folder.

@@ -11,24 +11,20 @@ describe('View', () => {
         "I'm a paragraph!",
         'No shit? Me to!!',
       ],
+      dataURL: 'http://fake.com/some/path',
       loading: false,
       title: 'Page 1',
     };
   });
 
-  it('should NOT be in a loading state', () => {
+  it('should pass required props to ViewLoader', () => {
     wrapper = shallow(<View { ...props } />);
+    const viewLoader = wrapper.find('Connect(ViewLoader)');
 
-    expect(wrapper.find('.is--loading').length).toBe(0);
-    expect(wrapper.find('Spinner').length).toBe(0);
-  });
-
-  it('should be in a loading state', () => {
-    props.loading = true;
-    wrapper = shallow(<View { ...props } />);
-
-    expect(wrapper.find('.is--loading').length).toBe(1);
-    expect(wrapper.find('Spinner').length).toBe(1);
+    expect(viewLoader.props()).toEqual(expect.objectContaining({
+      loading: props.loading,
+      uid: props.dataURL,
+    }));
   });
 
   it('should populate content', () => {

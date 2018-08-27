@@ -7,7 +7,7 @@ import log, {
 import { initialState } from './constants';
 import {
   SET_ITEM_RESULTS,
-  SET_PREVIOUS_PAGE,
+  SET_PREVIOUS_VIEW,
   SET_SHELL_CLASS,
   SET_SCROLL_POS,
   SET_VIEW_DATA,
@@ -28,7 +28,7 @@ function reducer(extendedData = {}){
     switch( type ){
       case SET_ITEM_RESULTS: {
         const { nextPage, results } = payload;
-        log('  ', `${ BLACK_ON_GRAY } SET`, 'nextPage & reults');
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'nextPage & results');
         return {
           ...state,
           nextPage,
@@ -39,11 +39,11 @@ function reducer(extendedData = {}){
         };
       }
 
-      case SET_PREVIOUS_PAGE: {
-        log('  ', `${ BLACK_ON_GRAY } SET`, 'previous page to:', `${ BLUE } "${ payload }"`);
+      case SET_PREVIOUS_VIEW: {
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'previous view to:', `${ BLUE } "${ payload }"`);
         return {
           ...state,
-          previousPage: payload,
+          previousView: payload,
         };
       }
 

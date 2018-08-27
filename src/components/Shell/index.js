@@ -5,11 +5,7 @@ import { node, shape, string } from 'prop-types';
 import defaultHeader from 'COMPONENTS/Header';
 import defaultMain from 'COMPONENTS/Main';
 import defaultFooter from 'COMPONENTS/Footer';
-import {
-  createStore,
-  extraArgs,
-  reducer,
-} from 'STATE/store';
+import store from 'STATE/store';
 import {
   getShellClass,
 } from 'STATE/selectors';
@@ -42,7 +38,7 @@ const ShellWrap = ({
   shellClass,
 }) => {
   return (
-    <div className={`shell ${ shellClass }`}>{children}</div>
+    <div className={`shell ${ shellClass || '' }`}>{children}</div>
   );
 };
 ShellWrap.propTypes = {
@@ -61,9 +57,7 @@ const composeShell = (
     headerProps,
     mainProps,
     request,
-    store,
   }) => {
-    const _store = store || createStore(reducer(), ...extraArgs);
     const routerProps = {};
 
     if(context){
@@ -74,11 +68,11 @@ const composeShell = (
     const ConnectedShell = withRouter(connect(mapStateToProps)(ShellWrap));
 
     return (
-      <Provider store={ _store }>
+      <Provider store={ store.app }>
         <Router { ...routerProps }>
           <ConnectedShell>
             <Header { ...headerProps } />
-            <Main store={ _store } { ...mainProps } />
+            <Main store={ store.app } { ...mainProps } />
             <Footer { ...footerProps } />
           </ConnectedShell>
         </Router>
@@ -107,4 +101,6 @@ const composeShell = (
 export default composeShell();
 export {
   composeShell,
+  mapStateToProps,
+  ShellWrap,
 };

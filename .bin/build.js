@@ -74,7 +74,7 @@ if( process.env.NODE_ENV === 'development' ){
 else{
   // First, read the current file sizes in build directory.
   // This lets us display how much they changed later.
-  measureFileSizesBeforeBuild(appConfig.paths.ROOT)
+  measureFileSizesBeforeBuild(config.output.path)
     .then(previousFileSizes => {
       prepDist();
       // Start the webpack build
