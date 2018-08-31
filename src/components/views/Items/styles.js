@@ -74,14 +74,18 @@ const styles = {
     position: 'relative',
     display: 'inline-block',
 
+    [mobile]: {
+      width: '48%',
+    },
+
     ' img': {
       width: '200px',
       height: '200px',
       display: 'block',
 
       [mobile]: {
-        width: '170px',
-        height: '170px',
+        width: '100%',
+        height: 'auto',
       },
     },
 

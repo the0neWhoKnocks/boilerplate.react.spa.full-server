@@ -8,18 +8,20 @@ import {
   SET_VIEW_DATA,
 } from './actionTypes';
 
+let pendingItems;
+
 const fetchMoreItems = url => {
   return (dispatch, getState) => {
-    const store = {
-      dispatch,
-      getState,
-    };
+    // On slow connections this can stack up if the user scrolls up and down
+    // quickly.
+    if(!pendingItems){
+      pendingItems = getData({ url }).then((data) => {
+        pendingItems = null;
+        dispatch(setItemResults(data));
+      });
+    }
 
-    return getData(store, {
-      url,
-    }).then((data) => {
-      dispatch(setItemResults(data));
-    });
+    return pendingItems;
   };
 };
 

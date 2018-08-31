@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const TidyPlugin = require('@noxx/webpack-tidy-plugin');
 const appConfig = require('../conf.app');
 const { hashLength, hashedName } = require('./vars');
@@ -106,6 +107,14 @@ const conf = {
       format: 'minimal',
     }),
     /**
+     * Creates a manifest of files that can be referenced by react-loadable
+     * on the server so it can surface what modules were rendered for proper
+     * Client hydration.
+     */
+    new ReactLoadablePlugin({
+      filename: `${ appConfig.paths.DIST_PRIVATE }/react-loadable.json`,
+    }),
+    /**
      * Generate a manifest file which contains a mapping of all asset filenames
      * to their corresponding output file so that tools can load them without
      * having to know the hashed name.
@@ -131,6 +140,7 @@ const conf = {
       // shrinking the bundle, and ensuring server code doesn't get shipped to
       // the client (all without the use of another module).
       'process.env.IS_CLIENT': true,
+      'process.env.IS_SERVER': false,
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       // Using `window.` so that it can be referenced in JS files without "undefined var" errors
       // These vars should only be referenced once since WP replaces the variables

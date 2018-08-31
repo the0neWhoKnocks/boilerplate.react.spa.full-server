@@ -19,10 +19,10 @@ const styles = {
   }),
 
   title: itemsStyles.title,
-  view: css(itemsStyles.view, {
+  container: css({
     [mobile]: {
       '.has--back-btn': {
-        paddingTop: '2.5em',
+        paddingTop: '1.5em',
       },
     },
   }),

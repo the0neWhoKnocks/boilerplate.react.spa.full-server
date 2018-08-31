@@ -1,11 +1,17 @@
 import axios from 'axios';
-import { getViewData } from 'STATE/selectors';
+import {
+  getViewData,
+} from 'STATE/selectors';
+import store from 'STATE/store';
 import genCacheKey from 'UTILS/genCacheKey';
+import logger, {
+  BLACK_ON_GREEN,
+  BLUE,
+} from 'UTILS/logger';
 
 /**
  * A wrapper for whatever XHR tool you need to request data.
  *
- * @param {Object} store - The app's store.
  * @param {Object} reqOpts - The options required to make your request.
  * @param {Array} [reqOpts.cacheKey] - Array of strings that the key will be built from
  * @param {Function} reqOpts.middleware - A function that will transform the response data before it's returned
@@ -13,16 +19,17 @@ import genCacheKey from 'UTILS/genCacheKey';
  * @param {String} reqOpts.url - The request URL
  * @return {Promise}
  */
-export default (store, reqOpts) => {
+export default (reqOpts) => {
   const { body, params, url } = reqOpts;
+  const state = store.app.getState();
   let { method } = reqOpts;
   let reqData;
 
   if( url ){
-    const viewData = getViewData(store.getState(), genCacheKey(reqOpts));
+    const viewData = getViewData(state, genCacheKey(reqOpts));
     if( viewData ) return Promise.resolve(viewData);
 
-    const reqArgs = [url];
+    const reqArgs = [reqOpts.url];
 
     // Default to GET if nothing was passed
     if( !method ) method = 'GET';
@@ -33,13 +40,15 @@ export default (store, reqOpts) => {
     // only add data to the call if it was provided
     if( reqData ) reqArgs.push(reqData);
 
+    logger(`${ BLACK_ON_GREEN } ${ method }`, 'data for:', `${ BLUE } "${ reqArgs[0] }"`);
+
     let reqPromise = axios[method.toLowerCase()].apply(null, reqArgs)
       // axios always returns the response data in a `data` prop, so lets
       // remove one level of parsing.
       .then((resp) => resp.data);
 
     return (reqOpts.middleware)
-      ? reqPromise.then(reqOpts.middleware(store))
+      ? reqPromise.then(reqOpts.middleware)
       : reqPromise;
   }
 };
