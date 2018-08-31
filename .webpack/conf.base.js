@@ -140,6 +140,7 @@ const conf = {
       // shrinking the bundle, and ensuring server code doesn't get shipped to
       // the client (all without the use of another module).
       'process.env.IS_CLIENT': true,
+      'process.env.IS_SERVER': false,
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       // Using `window.` so that it can be referenced in JS files without "undefined var" errors
       // These vars should only be referenced once since WP replaces the variables
