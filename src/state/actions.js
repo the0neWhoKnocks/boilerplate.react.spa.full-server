@@ -1,6 +1,7 @@
 import { routePaths } from 'SRC/data';
 import getData from 'UTILS/getData';
 import {
+  SET_ITEM_LOADED,
   SET_ITEM_RESULTS,
   SET_PREVIOUS_VIEW,
   SET_SHELL_CLASS,
@@ -24,6 +25,11 @@ const fetchMoreItems = url => {
     return pendingItems;
   };
 };
+
+const setItemLoaded = ndx => ({
+  type: SET_ITEM_LOADED,
+  payload: ndx,
+});
 
 const setItemResults = data => ({
   type: SET_ITEM_RESULTS,
@@ -68,6 +74,7 @@ const setViewData = data => ({
 
 export {
   fetchMoreItems,
+  setItemLoaded,
   setItemResults,
   setPreviousView,
   setShellClass,

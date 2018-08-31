@@ -4,9 +4,11 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import Waypoint from 'react-waypoint';
 import { arrayOf, func, number, shape, string } from 'prop-types';
+import ImageLoader from 'COMPONENTS/ImageLoader';
 import Spinner from 'COMPONENTS/Spinner';
 import {
   fetchMoreItems,
+  setItemLoaded,
   setPreviousView,
 } from 'STATE/actions';
 import {
@@ -14,6 +16,8 @@ import {
   getResults,
 } from 'STATE/selectors';
 import styles, {
+  ITEM_BG_COLOR,
+  ITEM_LOADER_COLOR,
   globals as globalStyles,
   loadFonts,
 } from './styles';
@@ -24,6 +28,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = {
   fetchMoreItems,
+  setItemLoaded,
   setPreviousView,
 };
 
@@ -32,6 +37,7 @@ class ItemsView extends Component {
     super();
 
     this.handleClick = this.handleClick.bind(this);
+    this.handleImageLoad = this.handleImageLoad.bind(this);
     this.handleWaypoint = this.handleWaypoint.bind(this);
   }
 
@@ -41,6 +47,13 @@ class ItemsView extends Component {
 
   handleClick() {
     this.props.setPreviousView(this.props.location.pathname);
+  }
+  
+  // NOTE - to facilitate consitent view transitions, we need to record the
+  // images that have loaded so that the loaded images don't flicker a loading
+  // state on initial render.
+  handleImageLoad(ndx) {
+    this.props.setItemLoaded(ndx);
   }
 
   handleWaypoint(url) {
@@ -69,10 +82,22 @@ class ItemsView extends Component {
                   to={ `${ linkPrefix }${ item.id }` }
                   onClick={ this.handleClick }
                 >
-                  <img
-                    src={ item.image }
-                    alt={ `${ item.name } thumbnail` }
-                  />
+                  { item._loaded && (
+                    <img
+                      alt={ `${ item.name } thumbnail` }
+                      src={ item.image }
+                    />
+                  )}
+                  { !item._loaded && (
+                    <ImageLoader
+                      alt={ `${ item.name } thumbnail` }
+                      onLoad={ this.handleImageLoad.bind(null, ndx) }
+                      overlayColor={ITEM_BG_COLOR}
+                      spinnerBGColor="transparent"
+                      spinnerColor={ITEM_LOADER_COLOR}
+                      src={ item.image }
+                    />
+                  )}
                   <div className={ `name ${ styles.name }` }>{ item.name }</div>
                 </Link>
               ))}
@@ -120,6 +145,7 @@ ItemsView.propTypes = {
     type: string,
     url: string,
   })),
+  setItemLoaded: func,
   setPreviousView: func,
   title: string,
 };

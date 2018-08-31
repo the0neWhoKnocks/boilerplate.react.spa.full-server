@@ -6,6 +6,7 @@ import log, {
 } from 'UTILS/logger';
 import { initialState } from './constants';
 import {
+  SET_ITEM_LOADED,
   SET_ITEM_RESULTS,
   SET_PREVIOUS_VIEW,
   SET_SHELL_CLASS,
@@ -26,6 +27,19 @@ function reducer(extendedData = {}){
       log(`${ BLACK_ON_GREEN } REDUCER`, type);
 
     switch( type ){
+      case SET_ITEM_LOADED: {
+        const ndx = payload;
+        const results = [...state.results];
+        
+        results[ndx]._loaded = true;
+        
+        log('  ', `${ BLACK_ON_GRAY } SET`, `Item ${ ndx }'s image has loaded'`);
+        return {
+          ...state,
+          results,
+        };
+      }
+      
       case SET_ITEM_RESULTS: {
         const { nextPage, results } = payload;
         log('  ', `${ BLACK_ON_GRAY } SET`, 'nextPage & results');

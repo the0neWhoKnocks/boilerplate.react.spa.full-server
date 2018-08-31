@@ -40,16 +40,13 @@ const globals = () => {
   `);
 };
 
-const styles = {
-  view: css({
-    backgroundColor: '#b3347c',
-    backgroundImage: 'url(https://pre00.deviantart.net/4ef1/th/pre/f/2016/258/0/5/rick_and_morty_background_no_4_by_jurokoo-dahrvd7.png)',
-    backgroundSize: 'cover',
-    backgroundBlendMode: 'multiply',
-  }),
+const ITEM_COLOR = '#b8fb7b';
+const ITEM_BG_COLOR = 'rgba(0, 0, 0, 0.5)';
+const ITEM_LOADER_COLOR = '#5ddefe';
 
+const styles = {
   title: css({
-    color: '#b8fb7b',
+    color: ITEM_COLOR,
     fontFamily: 'Schoolbell, cursive',
     fontSize: '8vw',
     textShadow: '1px 2px 1px #dc7f88, 3px 3px 1px #355fa0, 5px 6px 1px #7235a0, 7px 8px 1px #396ba0',
@@ -70,7 +67,7 @@ const styles = {
     margin: '0.15em',
     borderRadius: '1em',
     overflow: 'hidden',
-    border: 'solid 0.5em #b8fb7b',
+    border: `solid 0.5em ${ ITEM_COLOR }`,
     position: 'relative',
     display: 'inline-block',
 
@@ -114,7 +111,7 @@ const styles = {
   }),
 
   loadBar: css({
-    color: '#b8fb7b',
+    color: ITEM_COLOR,
     lineHeight: '1em',
     padding: '1em',
 
@@ -127,8 +124,8 @@ const styles = {
       background: 'transparent',
 
       ' div': {
-        border: 'solid 0.3em #b8fb7b40',
-        borderTopColor: '#b8fb7b',
+        border: `solid 0.3em ${ ITEM_COLOR }40`,
+        borderTopColor: ITEM_COLOR,
       },
     },
 
@@ -140,6 +137,8 @@ const styles = {
 
 export default styles;
 export {
+  ITEM_BG_COLOR,
+  ITEM_LOADER_COLOR,
   globals,
   loadFonts,
 };
