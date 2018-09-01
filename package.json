@@ -93,6 +93,7 @@
     "compression-webpack-plugin": "^1.0.1",
     "cross-env": "^5.1.1",
     "import-inspector": "^2.0.0",
+    "jest-skipped-reporter": "^0.0.4",
     "nodemon": "^1.17.5",
     "reload": "^2.3.0"
   }
