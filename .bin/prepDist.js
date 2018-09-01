@@ -5,6 +5,7 @@ async function prepDist() {
   try {
     // Create directories if they don't exist
     await fs.ensureDir(appConfig.paths.DIST);
+    await fs.ensureDir(appConfig.paths.DIST_PRIVATE);
     await fs.ensureDir(appConfig.paths.DIST_PUBLIC);
 
     // Copy over any top-level files that are needed
@@ -19,7 +20,12 @@ async function prepDist() {
 
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
+    await fs.emptyDir(appConfig.paths.DIST_PRIVATE);
     await fs.emptyDir(appConfig.paths.DIST_PUBLIC);
+
+    // This is needed so `TidyPlugin` doesn't error on `start:server` after
+    // a fresh clone when a user hasn't built anything.
+    await fs.ensureDir(`${ appConfig.paths.DIST_PUBLIC }/js`);
 
     // Merge with the public folder
     await fs.copy(appConfig.paths.SRC_STATIC, appConfig.paths.DIST_PUBLIC, {
