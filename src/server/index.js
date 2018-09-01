@@ -1,5 +1,9 @@
-import { existsSync } from 'fs';
+import {
+  existsSync,
+  readFileSync,
+} from 'fs';
 import express from 'express';
+import spdy from 'spdy';
 import compression from 'compression';
 import portscanner from 'portscanner';
 import bodyParser from 'body-parser';
@@ -18,7 +22,13 @@ const isDev = process.env.NODE_ENV === 'development';
 const app = {
   init: function(){
     this.expressInst = express();
-    this.server = require('http').createServer(this.expressInst);
+
+    this.server = spdy.createServer({
+      key: readFileSync(`${ __dirname }/server.key`),
+      cert: readFileSync(`${ __dirname }/server.crt`),
+    }, this.expressInst);
+
+    // this.server = require('http').createServer(this.expressInst);
     // enable gzip (must come before `static` assets)
     this.expressInst.use(compression());
     // serve static files from `public`
@@ -114,7 +124,7 @@ const app = {
 
           Loadable.preloadAll().then(() => {
             this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
-              url: `http://localhost:${ appConfig.PORT }/`,
+              url: `https://localhost:${ appConfig.PORT }/`,
             }));
           });
         }, 1000);

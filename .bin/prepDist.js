@@ -33,6 +33,20 @@ async function prepDist() {
       // Can be used to filter out any files that shouldn't be copied.
       // filter: file => file !== appConfig.paths.INDEX_TEMPLATE,
     });
+
+    // Copy over keys for https
+    await fs.copy(
+      `${ appConfig.paths.SRC }/server/server.crt`,
+      `${ appConfig.paths.DIST_PRIVATE }/server/server.crt`
+    );
+    await fs.copy(
+      `${ appConfig.paths.SRC }/server/server.csr`,
+      `${ appConfig.paths.DIST_PRIVATE }/server/server.csr`
+    );
+    await fs.copy(
+      `${ appConfig.paths.SRC }/server/server.key`,
+      `${ appConfig.paths.DIST_PRIVATE }/server/server.key`
+    );
   }
   catch(err) { console.error(err); }
 }
