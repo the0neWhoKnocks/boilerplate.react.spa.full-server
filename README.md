@@ -17,6 +17,7 @@ A boilerplate for creating a SPA in React, with a full server.
   - [Webpack](#webpack)
 - [How Things Work](#how-does-it-all-work)
 - [API's Used](#apis-used)
+- [Gotchas](#gotchas)
 
 ---
 
@@ -124,12 +125,26 @@ Files of note:
 │
 ├── /src
 │   ├── /components # Where all the React components live
-│   │   ├── /Main # Where are all the React routes are set up
+│   │   ├── /AsyncChunk # Ensures data is loaded before the view is rendered
+│   │   ├── /AsyncLoader # Displays the spinner and maintains scroll position
+│   │   ├── /Main # Where all the React routes are set up
 │   │   ├── /Shell # Uses a BrowserRouter or StaticRouter based on the env it's running on
-│   │   ├── /ViewHOC # Ensures data is loaded before the view is rendered
-│   │   ├── /ViewLoader # Displays the spinner and maintains scroll position
 │   │   ├── /views # Where all the views live (think of them like pages)
 │   │   └── /ViewTransition # Handles transitioning between pages
+│   │
+│   │   # Configurations for each route path. They define what's picked up by
+│   │   # react-router & Express, and what view to serve up if the path is matched.
+│   ├── /routes
+│   │   ├── /shared
+│   │   │   ├── composedChunks.js # Where `Loadable` chunks are composed for dynamic imports.
+│   │   │   └── middleware.js # If a component is dependent on loaded data, these functions update the store with that data.
+│   │   │
+│   │   └── ... # Route config files
+│   │
+│   ├── /state # Redux stuff
+│   │   ├── ...
+│   │   └── store.js # A singleton that allows for using/accessing the store anywhere without having to use Connect.
+│   │
 │   │
 │   ├── /server # All server specific code
 │   │   ├── /routes # Separate files for each route handler
@@ -155,7 +170,7 @@ Files of note:
 - Each `View` that's defined in `data.js` is responsible for loading it's own
   `data`. It does that by providing a static value, or via a function that
   returns a Promise.
-- `ViewHOC` will display a spinner if it's data isn't found in cache, otherwise
+- `AsyncChunk` will display a spinner if it's data isn't found in cache, otherwise
   it'll pass the data on to the `View` it was provided.
 - The `Main` component handles the SPA routing. So if you need to add
   routes that aren't defined in `navItems` for `header` or `footer`
@@ -186,3 +201,14 @@ Notes about the `dev` server:
 
 - https://baconipsum.com/json-api/
 - https://rickandmortyapi.com/documentation/
+
+---
+
+## Gotchas
+
+**Testing**
+- `genMockFromModule` doesn't work with `moduleNameMapper` (Webpack aliases), so
+  for now you have to manually mock aliased deps. For example, this pattern works
+  ```js
+  jest.mock('ALIAS/file', () => ({ key:'val' }))
+  ```

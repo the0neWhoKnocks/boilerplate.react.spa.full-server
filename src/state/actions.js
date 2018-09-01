@@ -1,4 +1,8 @@
-import { routePaths } from 'SRC/data';
+import {
+  ITEM,
+  ROOT,
+  TERMS,
+} from 'CONSTANTS/routePaths';
 import getData from 'UTILS/getData';
 import {
   SET_ITEM_LOADED,
@@ -48,9 +52,9 @@ const setShellClass = loc => {
   const { pathname } = loc;
   let cssClass = '';
 
-  if(pathname === routePaths.ROOT || pathname.includes(routePaths.ITEM))
+  if(pathname === ROOT || pathname.includes(ITEM))
     cssClass = 'is--ram';
-  else if(pathname !== routePaths.TERMS)
+  else if(pathname !== TERMS)
     cssClass = 'is--ipsum';
 
   return {

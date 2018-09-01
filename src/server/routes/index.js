@@ -1,7 +1,5 @@
-import {
-  routePaths,
-  tokens,
-} from 'SRC/data';
+import { ITEM as ITEM_ROUTE } from 'CONSTANTS/routePaths';
+import { ITEM as ITEM_TOKEN } from 'CONSTANTS/routeTokens';
 import catchAll from './catchAll';
 
 module.exports = {
@@ -10,7 +8,7 @@ module.exports = {
     // like static assets, or API's
 
     GET_ITEM: {
-      path: `${ routePaths.ITEM }${ tokens.ITEM }`,
+      path: `${ ITEM_ROUTE }${ ITEM_TOKEN }`,
       handler: catchAll,
     },
     // route everything else to the app

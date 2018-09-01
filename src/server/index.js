@@ -99,8 +99,19 @@ const app = {
           const { initStore } = require('STATE/store');
           initStore();
 
-          // NOTE - `preloadAll` is required to ensure no `setState` errors
-          // occur during SSR
+          // NOTE - Any Loadable components that need to be rendered on the
+          // server have to call `Loadable` before `preloadAll` is called,
+          // otherwise it's internal `ALL_INITIALIZERS` var won't be populated
+          // and the component may load outside of that mechanism causing the
+          // component to call `componentWillMount`, then `setState`, leading
+          // to an SSR error and an eventual hydration error on the client.
+          //
+          // TODO - Once this PR https://github.com/jamiebuilds/react-loadable/pull/127
+          // or anything that switches out `componentWillMount` with
+          // `componentDidMount` should fix the issue, and the below `require`
+          // can be removed.
+          require('ROUTES/shared/composedChunks');
+
           Loadable.preloadAll().then(() => {
             this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
               url: `http://localhost:${ appConfig.PORT }/`,

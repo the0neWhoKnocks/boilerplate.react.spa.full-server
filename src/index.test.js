@@ -2,14 +2,29 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 describe('app', () => {
-  let wrapper, hydrate, cookie, logger, data, footerProps, headerProps,
-    mainProps;
+  let wrapper, hydrate, data, cookie, logger, footerProps, headerProps,
+    mainProps, Loadable;
 
   beforeEach(() => {
     jest.resetModules();
+    jest.mock('react-dom', () => jest.genMockFromModule('react-dom'));
+    jest.mock('react-loadable', () => jest.genMockFromModule('react-loadable'));
+    jest.mock('react-router-dom', () => jest.genMockFromModule('react-router-dom'));
+    jest.mock('./data', () => ({
+      footerProps: {
+        isFooter: true,
+      },
+      headerProps: {
+        isHeader: true,
+      },
+      mainProps: {
+        isMain: true,
+      },
+    }));
 
     // require all deps that need mocking, instead of importing
     require('react-router-dom');
+    Loadable = require('react-loadable');
     hydrate = require('react-dom').hydrate;
     cookie = require('UTILS/cookie');
     logger = require('UTILS/logger');
@@ -17,9 +32,6 @@ describe('app', () => {
     footerProps = data.footerProps;
     headerProps = data.headerProps;
     mainProps = data.mainProps;
-
-    jest.mock('react-dom', () => jest.genMockFromModule('react-dom'));
-    jest.mock('react-router-dom', () => jest.genMockFromModule('react-router-dom'));
 
     window.WP_GLOBALS = {
       app: {
@@ -31,6 +43,9 @@ describe('app', () => {
     jest.spyOn(logger, 'default');
     logger.default.mockImplementation(() => {});
     document.body.innerHTML = '<div id="root"></div>';
+    Loadable.preloadReady.mockReturnValue({
+      then: (cb) => cb(),
+    });
   });
 
   afterEach(() => {

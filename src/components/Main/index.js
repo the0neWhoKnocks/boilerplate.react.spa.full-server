@@ -4,7 +4,10 @@ import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import ViewTransition from 'COMPONENTS/ViewTransition';
-import { routePaths } from 'SRC/data';
+import {
+  ITEM,
+  ROOT,
+} from 'CONSTANTS/routePaths';
 import {
   setShellClass,
 } from 'STATE/actions';
@@ -28,12 +31,12 @@ const transitionMiddleware = ({
   to,
 }) => {
   // from root view to item view
-  if(from === routePaths.ROOT && to.includes(routePaths.ITEM)) return {
+  if(from === ROOT && to.includes(ITEM)) return {
     enter: RIGHT_TO_HOME,
     exit: HANG_IN_BACK,
   };
   // from item view back to root
-  else if(from.includes(routePaths.ITEM) && to === routePaths.ROOT) return {
+  else if(from.includes(ITEM) && to === ROOT) return {
     enter: HANG_IN_BACK,
     exit: HOME_TO_RIGHT,
   };

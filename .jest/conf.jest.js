@@ -18,10 +18,10 @@ const conf = {
   ],
   coverageThreshold: {
     global: {
-      branches: 26.83,
-      functions: 34.59,
-      lines: 43.02,
-      statements: 39.04,
+      branches: 15.23,
+      functions: 24.35,
+      lines: 29.65,
+      statements: 25.32,
     },
   },
   moduleFileExtensions: [ 'js' ],

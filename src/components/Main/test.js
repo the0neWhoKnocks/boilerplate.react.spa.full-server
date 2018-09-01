@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { mount } from 'enzyme';
-import { routePaths } from 'SRC/data';
+import * as routePaths from 'CONSTANTS/routePaths';
 import Main from './index';
 import styles, {
   HOME_TO_RIGHT,

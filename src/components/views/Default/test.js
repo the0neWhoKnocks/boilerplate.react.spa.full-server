@@ -17,14 +17,12 @@ describe('View', () => {
     };
   });
 
-  it('should pass required props to ViewLoader', () => {
-    wrapper = shallow(<View { ...props } />);
-    const viewLoader = wrapper.find('Connect(ViewLoader)');
+  it('should NOT return anything if there is no data', () => {
+    props.data = [];
 
-    expect(viewLoader.props()).toEqual(expect.objectContaining({
-      loading: props.loading,
-      uid: props.dataURL,
-    }));
+    wrapper = shallow(<View { ...props } />);
+
+    expect(wrapper.children().length).toBe(0);
   });
 
   it('should populate content', () => {
