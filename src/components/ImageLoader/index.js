@@ -43,14 +43,16 @@ class ImageLoader extends Component {
          * animate it via CSS.
          */
         window.requestAnimationFrame(() => {
-          this.setState({
-            revealImage: true,
-          }, () => {
-            const { onLoad } = this.props;
-            
-            // wait until the animation has completed or the image may pop in
-            if(onLoad) setTimeout(onLoad, REVEAL_DURATION * 1000);
-          });
+          if(this.mounted){
+            this.setState({
+              revealImage: true,
+            }, () => {
+              const { onLoad } = this.props;
+
+              // wait until the animation has completed or the image may pop in
+              if(onLoad) setTimeout(onLoad, REVEAL_DURATION * 1000);
+            });
+          }
         });
       });
     }

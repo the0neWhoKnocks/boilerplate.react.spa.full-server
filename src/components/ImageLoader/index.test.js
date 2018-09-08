@@ -75,7 +75,7 @@ describe('ImageLoader', () => {
 
     expect(instance.state.loaded).toBe(false);
   });
-  
+
   describe('Animate image on load', () => {
     const mountIt = () => {
       wrapper = mount(<ImageLoader {...props} />);
@@ -84,7 +84,7 @@ describe('ImageLoader', () => {
       wrapper.update();
     };
     let rafCB, instance, props;
-    
+
     beforeEach(() => {
       jest.spyOn(global, 'requestAnimationFrame');
       global.requestAnimationFrame.mockImplementation((cb) => { rafCB = cb; });
@@ -93,37 +93,46 @@ describe('ImageLoader', () => {
       };
       jest.useFakeTimers();
     });
-    
+
     afterEach(() => {
       global.requestAnimationFrame.mockRestore();
     });
-    
+
     it('should add class to fade image in', () => {
       jest.spyOn(global, 'setTimeout');
       mountIt();
-      
+
       expect(instance.state.loaded).toBe(true);
       expect(instance.state.revealImage).toBe(false);
       expect(wrapper.find('img').props().className).toEqual(`${ styles.img }`);
-      
+
+      // shouldn't call setState if not mounted
+      instance.mounted = false;
+      rafCB();
+      jest.runTimersToTime(REVEAL_DURATION * 1000);
+      wrapper.update();
+      expect(instance.state.revealImage).not.toBe(true);
+
+      // should update state and reveal image when mounted
+      instance.mounted = true;
       rafCB();
       jest.runTimersToTime(REVEAL_DURATION * 1000);
       wrapper.update();
       expect(instance.state.revealImage).toBe(true);
       expect(wrapper.find('img').props().className).toEqual(`${ styles.img } is--loaded`);
       expect(global.setTimeout).not.toHaveBeenCalled();
-      
+
       global.setTimeout.mockRestore();
     });
-    
+
     it('should execute callback after the image has transitioned', () => {
       props.onLoad = jest.fn();
-      
+
       mountIt();
       rafCB();
       jest.runTimersToTime(REVEAL_DURATION * 1000);
       wrapper.update();
-      
+
       expect(props.onLoad).toHaveBeenCalled();
     });
   });
