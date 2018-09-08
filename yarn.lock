@@ -35,9 +35,9 @@
     eslint-plugin-jest "^21.12.2"
     eslint-plugin-react "^7.7.0"
 
-"@noxx/webpack-tidy-plugin@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@noxx/webpack-tidy-plugin/-/webpack-tidy-plugin-2.0.1.tgz#b727d48d8136ac013ef55e12ce10ec52d0ba9d12"
+"@noxx/webpack-tidy-plugin@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@noxx/webpack-tidy-plugin/-/webpack-tidy-plugin-2.0.2.tgz#64f500195fb9491a292762b4e425642b42445285"
   dependencies:
     cli-color "^1.2.0"
     fs-extra "^7.0.0"

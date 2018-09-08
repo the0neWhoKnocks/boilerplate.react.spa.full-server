@@ -4,6 +4,8 @@
   - Candidates
     - `config/paths.js`
 - [x] Condense WebPack configs into just one.
+- [ ] Swap out server logs with something else
+  - https://blog.risingstack.com/node-js-logging-tutorial/
 - [ ] Think of a better way to generate and access cache keys
   - [ ] Cache responses locally so server loads are faster.
     - https://www.npmjs.com/package/express-redis-cache
