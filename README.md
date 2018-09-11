@@ -76,12 +76,7 @@ yarn start:server
   1. The top-level [config has a `webpack` section with an `aliases`][conf-wp-aliases]
      list. I do this to allow for more control of what's considered an alias.
   1. Then I just use the `webpack-alias` Babel plugin to [use the aliases wired up
-     in my Webpack config][babel-wp-aliases].
-- How to generate a `.babelrc` from a JS config.
-  1. I [created a JS config][file-conf.babel] in a `.babel` directory.
-  1. Created a `build:babelrc` command that will generate the `.babelrc`. Then
-     [that command is run before other commands][packagejson-gen-babelrc] that
-     need the `rc` file.
+     in my Webpack config][babel-wp-aliases].     
 - How to use a custom internal Babel plugin.
   1. When integrating `react-loadable` I needed to edit it's Babel plugin to
      allow for usage with a composable function. So I duplicated it to the
@@ -355,7 +350,6 @@ Notes about the `dev` server:
 [conf-wp-aliases]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/conf.app.js#L45
 [dynamic-import]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/src/routes/BaconIpsumSingle.js#L16-L22
 [dynamic-import-2]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/src/utils/logger/index.js#L10-L12
-[file-conf.babel]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/master/.babel/conf.babel.js
 [file-composedChunks]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/master/src/routes/shared/composedChunks.js
 [file-breakpoints]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/master/src/breakpoints.js
 [file-logger]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/master/src/utils/logger/index.js
@@ -364,7 +358,6 @@ Notes about the `dev` server:
 [jest-wp-aliases]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/.jest/conf.jest.js#L53-L56
 [logger-usage]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/src/server/index.js#L79-L83
 [nodemon-usage]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/package.json#L17
-[packagejson-gen-babelrc]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/package.json#L9-L10
 [reload-exp-usage]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/src/server/index.js#L42-L45
 [reload-client-usage]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/src/server/views/AppShell.js#L8
 [routeWrapper-usage]: https://github.com/the0neWhoKnocks/boilerplate.react.spa.full-server/blob/d6a0aec320e80d624c407d71b2054fea9f2c7929/src/server/routes/catchAll.js#L13

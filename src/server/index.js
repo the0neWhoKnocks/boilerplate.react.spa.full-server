@@ -122,7 +122,7 @@ const app = {
       else{
         log(`${ BLACK_ON_YELLOW } WAITING`, 'for', `${ BLUE } ${ file }`, 'to be created');
       }
-    }, 200);
+    }, 1000);
   },
 };
 

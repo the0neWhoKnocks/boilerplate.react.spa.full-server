@@ -1,13 +1,3 @@
-const { writeFileSync } = require('fs');
-
-// NOTE - This is here to cut down on config duplication.
-//
-// NOTE - Babel 7 supports a JS config https://babeljs.io/docs/en/next/babelconfigjs.html
-// but would require a refactor of existing code to implement.
-//
-// NOTE - All paths referenced in `conf` are relative to the root of the repo
-// where the `.babelrc` file will be generated.
-
 const appendChunkProps = [
   './.babel/plugins/appendChunkProps.js',
   {
@@ -25,14 +15,15 @@ const appendChunkProps = [
 
 const clientConfig = {
   presets: [
-    'react-app',
+    'react-app-babel-7',
   ],
   plugins: [
     appendChunkProps,
-    'syntax-dynamic-import',
+    '@babel/plugin-syntax-dynamic-import',
   ],
 };
-const conf = {
+
+module.exports = {
   env: {
     development: clientConfig,
     production: clientConfig,
@@ -49,18 +40,14 @@ const conf = {
           'process.env.IS_CLIENT': false,
           'process.env.IS_SERVER': true,
         }],
-        'dynamic-import-node',
-        ['import-inspector', {
-          'serverSideRequirePath': true,
-          'webpackRequireWeakId': true,
-        }],
+        'dynamic-import-node-babel-7',
         appendChunkProps,
-        'syntax-dynamic-import',
-        'transform-object-rest-spread',
-        'transform-react-jsx',
+        '@babel/plugin-syntax-dynamic-import',
+        '@babel/plugin-proposal-object-rest-spread',
+        '@babel/plugin-transform-react-jsx',
       ],
       presets: [
-        ['env', {
+        ['@babel/preset-env', {
           'targets': {
             'node': 'current',
           },
@@ -70,9 +57,3 @@ const conf = {
     test: clientConfig,
   },
 };
-
-try {
-  writeFileSync('./.babelrc', `${ JSON.stringify(conf, null, 2) }\n`);
-}catch(err) {
-  throw err;
-}

@@ -41,7 +41,6 @@ const conf = {
   testURL: 'http://localhost',
   timers: 'fake',
   transform: {
-    '^.+\\.(js)$': `${ appConfig.paths.ROOT }/node_modules/babel-jest`,
     '^.+\\.css$': `${ appConfig.paths.JEST }/cssTransform.js`,
     '^(?!.*\\.(js|css|json)$)': `${ appConfig.paths.JEST }/fileTransform.js`,
   },

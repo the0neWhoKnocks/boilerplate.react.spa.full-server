@@ -18,7 +18,6 @@
 /*.gif
 /nodemon.json
 /.assets
-.babelrc
 
 npm-debug.log*
 yarn-debug.log*
