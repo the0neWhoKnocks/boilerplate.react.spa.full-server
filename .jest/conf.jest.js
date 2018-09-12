@@ -37,16 +37,13 @@ const conf = {
     `${ appConfig.paths.JEST }/shims.js`,
     `${ appConfig.paths.JEST }/bootstrap.js`,
   ],
-  testEnvironment: 'node',
   testURL: 'http://localhost',
   timers: 'fake',
   transform: {
+    '^.+\\.js$': 'babel-jest',
     '^.+\\.css$': `${ appConfig.paths.JEST }/cssTransform.js`,
     '^(?!.*\\.(js|css|json)$)': `${ appConfig.paths.JEST }/fileTransform.js`,
   },
-  transformIgnorePatterns: [
-    '[/\\\\]node_modules[/\\\\].+\\.(jsx?)$',
-  ],
 };
 
 // map Webpack alias' so files resolve

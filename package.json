@@ -15,7 +15,7 @@
     "start:server:dev": "node .bin/prepDist && yarn build:private && concurrently --kill-others -p {name} -n WEBPACK,BABEL,SERVER -c black.bgCyan,black.bgGreen,black.bgMagenta \"yarn build:bundle:dev\" \"yarn build:private:watch\" \"yarn start:server:watch\"",
     "start:server:watch": "node ./conf.nodemon.js && cross-env NODE_ENV=\"development\" nodemon --config ./nodemon.json --inspect ./dist/private/server init",
     "test": "yarn lint && yarn unit",
-    "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --env=jsdom --config ./.jest/conf.jest.js",
+    "unit": "cross-env BABEL_ENV=\"test\" NODE_ENV=\"test\" jest --config ./.jest/conf.jest.js --no-cache",
     "unit:watch": "yarn unit --watchAll"
   },
   "repository": {
@@ -29,13 +29,15 @@
     "babel-core": "^7.0.0-bridge.0"
   },
   "dependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/plugin-transform-react-jsx": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/runtime": "^7.0.0",
+    "@babel/cli": "^7.0.0-beta.46",
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.46",
+    "@babel/plugin-transform-arrow-functions": "^7.0.0-beta.46",
+    "@babel/plugin-transform-react-jsx": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/preset-react": "^7.0.0-beta.46",
+    "@babel/runtime": "^7.0.0-beta.46",
     "@noxx/eslint-config": "^1.0.5",
     "@noxx/webpack-tidy-plugin": "^2.0.2",
     "axios": "^0.17.0",
@@ -45,7 +47,7 @@
     "babel-plugin-dynamic-import-node-babel-7": "^2.0.7",
     "babel-plugin-transform-define": "^1.3.0",
     "babel-plugin-webpack-alias": "^2.1.2",
-    "babel-preset-react-app-babel-7": "^4.0.1",
+    "babel-preset-react-app": "^4.0.0-next.a671462c",
     "body-parser": "^1.18.3",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "classnames": "^2.2.6",
@@ -58,8 +60,6 @@
     "cpy-cli": "^2.0.0",
     "cross-conf-env": "^1.1.2",
     "cross-env": "^5.1.1",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.18.1",
     "eslint-config-react-app": "^2.0.1",
     "eslint-loader": "1.9.0",
@@ -97,10 +97,11 @@
   "devDependencies": {
     "babel-jest": "^23.6.0",
     "browser-sync": "^2.24.4",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^23.6.0",
     "jest-skipped-reporter": "^0.0.4",
     "nodemon": "^1.17.5",
-    "regenerator-runtime": "^0.12.1",
     "reload": "^2.3.0"
   }
 }

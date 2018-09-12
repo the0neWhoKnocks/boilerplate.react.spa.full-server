@@ -15,11 +15,19 @@ const appendChunkProps = [
 
 const clientConfig = {
   presets: [
-    'react-app-babel-7',
+    ['@babel/preset-env', {
+      targets: {
+        chrome: 58,
+        ie: 11,
+      },
+    }],
+    // '@babel/preset-react',
+    'react-app',
   ],
   plugins: [
     appendChunkProps,
     '@babel/plugin-syntax-dynamic-import',
+    '@babel/plugin-transform-arrow-functions',
   ],
 };
 
@@ -48,8 +56,8 @@ module.exports = {
       ],
       presets: [
         ['@babel/preset-env', {
-          'targets': {
-            'node': 'current',
+          targets: {
+            node: 'current',
           },
         }],
       ],

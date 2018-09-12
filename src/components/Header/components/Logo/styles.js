@@ -18,10 +18,10 @@ const genRandomColors = (steps = 50) => {
 };
 
 // randomly generated rules can't be hydrated, so insert them as globals
-css.insert(`
-  @keyframes disco{${ genRandomColors() }}
-  @webkit-keyframes disco{${ genRandomColors() }}
-`);
+// css.insert(`
+//   @keyframes disco{${ genRandomColors() }}
+//   @webkit-keyframes disco{${ genRandomColors() }}
+// `);
 const styles = {
   wrapper: css({
     color: '#fff', // default color
