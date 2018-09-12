@@ -5,9 +5,9 @@ import {
 import {
   ITEM as ITEM_TOKEN,
 } from 'CONSTANTS/routeTokens';
+import { RickAndMortyCharacter } from 'ROUTES/shared/composedChunks';
+import { rickAndMortyCharacter as middleware } from 'ROUTES/shared/middleware';
 import getData from 'UTILS/getData';
-import { RickAndMortyCharacter } from './shared/composedChunks';
-import { rickAndMortyCharacter as middleware } from './shared/middleware';
 
 const reqOpts = {
   url: `https://rickandmortyapi.com/api/character/${ ITEM_TOKEN }`,
@@ -23,11 +23,21 @@ const Item = AsyncChunk({
   },
 });
 
+let handler;
+if(process.env.IS_SERVER){
+  handler = require('ROUTES/handlers/catchAll').default;
+}
+
 export default {
-  url: `${ ITEM_ROUTE }${ ITEM_TOKEN }`,
-  view: Item,
-  viewProps: {
-    ssr: getData,
-    title: 'Rick & Morty Character',
-  },
+  get: [
+    {
+      handler,
+      path: `${ ITEM_ROUTE }${ ITEM_TOKEN }`,
+      view: Item,
+      viewProps: {
+        ssr: getData,
+        title: 'Rick & Morty Character',
+      },
+    },
+  ],
 };

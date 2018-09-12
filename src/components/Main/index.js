@@ -73,7 +73,7 @@ class Main extends Component {
                 <Route
                   key={ ndx }
                   exact={ route.exact }
-                  path={ route.url }
+                  path={ route.path }
                   render={({ match }) => (
                     <View
                       match={ match }

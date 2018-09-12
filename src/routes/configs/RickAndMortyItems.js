@@ -1,8 +1,8 @@
 import AsyncChunk from 'COMPONENTS/AsyncChunk';
 import { ROOT, ITEM } from 'CONSTANTS/routePaths';
+import { RickAndMortyCharacters } from 'ROUTES/shared/composedChunks';
+import { rickAndMortyCharacters as middleware } from 'ROUTES/shared/middleware';
 import getData from 'UTILS/getData';
-import { RickAndMortyCharacters } from './shared/composedChunks';
-import { rickAndMortyCharacters as middleware } from './shared/middleware';
 
 const reqOpts = {
   // all pages
@@ -21,14 +21,24 @@ const Items = AsyncChunk({
   },
 });
 
+let handler;
+if(process.env.IS_SERVER){
+  handler = require('ROUTES/handlers/catchAll').default;
+}
+
 export default {
-  exact: true,
-  label: 'Rick & Morty',
-  url: ROOT,
-  view: Items,
-  viewProps: {
-    linkPrefix: ITEM,
-    ssr: getData,
-    title: 'Rick & Morty',
-  },
+  get: [
+    {
+      exact: true,
+      handler,
+      label: 'Rick & Morty',
+      path: ROOT,
+      view: Items,
+      viewProps: {
+        linkPrefix: ITEM,
+        ssr: getData,
+        title: 'Rick & Morty',
+      },
+    },
+  ],
 };

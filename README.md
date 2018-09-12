@@ -259,49 +259,61 @@ Files of note:
 ```sh
 .
 ├── /dist
-│   ├── /private # ES Webpack bundles (exposed to the users)
-│   └── /public # CommonJS compiled server code (nothing in here should be exposed to users)
+│   ├── /private # ES Webpack bundles (exposed to the users).
+│   └── /public # CommonJS compiled server code (nothing in here should be
+│               # exposed to users).
 │
 ├── /src
-│   ├── /components # Where all the React components live
-│   │   ├── /AsyncChunk # Ensures data is loaded before the view is rendered
-│   │   ├── /AsyncLoader # Displays the spinner and maintains scroll position
-│   │   ├── /Main # Where all the React routes are set up
-│   │   ├── /Shell # Uses a BrowserRouter or StaticRouter based on the env it's running on
-│   │   ├── /views # Where all the views live (think of them like pages)
-│   │   └── /ViewTransition # Handles transitioning between pages
+│   ├── /components # Where all the React components live.
+│   │   ├── /AsyncChunk # Ensures data is loaded before the view is rendered.
+│   │   ├── /AsyncLoader # Displays the spinner and maintains scroll position.
+│   │   ├── /Main # Where all the React routes are set up.
+│   │   ├── /Shell # Uses a BrowserRouter or StaticRouter based on the env it's
+│   │   │          # running on.
+│   │   ├── /views # Where all the views live (think of them like pages).
+│   │   └── /ViewTransition # Handles transitioning between pages.
 │   │
-│   │   # Configurations for each route path. They define what's picked up by
-│   │   # react-router & Express, and what view to serve up if the path is matched.
+│   │   # Configurations for each route path that are shared by the Client
+│   │   # (react-router) and the Server (Express). Basically they define what
+│   │   # view to serve up if a route is matched.
 │   ├── /routes
+│   │   ├── /configs
+│   │   │   └── ... # Individual route configurations so you don't end up with
+│   │   │           # a monolith of routes in one file.
+│   │   │
 │   │   ├── /shared
-│   │   │   ├── composedChunks.js # Where `Loadable` chunks are composed for dynamic imports.
-│   │   │   └── middleware.js # If a component is dependent on loaded data, these functions update the store with that data.
+│   │   │   ├── composedChunks.js # Where `Loadable` chunks are composed for
+│   │   │   │                     # dynamic imports.
+│   │   │   └── middleware.js # If a component is dependent on loaded data,
+│   │   │                     # these functions update the store with that data.
 │   │   │
-│   │   └── ... # Route config files
+│   │   └── ... # Route config files.
 │   │
-│   ├── /state # Redux stuff
+│   ├── /state # Redux stuff.
 │   │   ├── ...
-│   │   └── store.js # A singleton that allows for using/accessing the store anywhere without having to use Connect.
+│   │   └── store.js # A singleton that allows for using/accessing the store 
+│   │                # anywhere without having to use Connect.
 │   │
-│   │
-│   ├── /server # All server specific code
-│   │   ├── /routes # Separate files for each route handler
-│   │   │   ├── catchAll.js # The default route handler
-│   │   │   └── index.js # Where you combine all your routes into something the server loads
+│   ├── /server # All server specific code.
+│   │   ├── /routes # Separate files for each route handler.
+│   │   │   ├── catchAll.js # The default route handler.
+│   │   │   └── index.js # Where you combine all your routes into something the 
+│   │   │                # server loads.
 │   │   │
-│   │   ├── /views # Should only be one view, but you can house any others here
-│   │   │   └── AppShell.js # The template that scafolds the html, body, scripts, & css
+│   │   ├── /views # Should only be one view, but you can house any others here.
+│   │   │   └── AppShell.js # The template that scaffolds the html, body,
+│   │   │                   # scripts, & css.
 │   │   │
-│   │   └── index.js # The heart of the beast
+│   │   └── index.js # The heart of the beast.
 │   │
-│   ├── /state # Where the app state lives
-│   ├── /static # Static assets that'll just be copied over to public
-│   ├── /utils # Individual utility files that export one function and do only one thing well
-│   ├── data.js # Where the app gets it's data from (aside from API calls)
-│   └── index.js # The Webpack entry point for the app
+│   ├── /state # Where the app state lives.
+│   ├── /static # Static assets that'll just be copied over to public.
+│   ├── /utils # Individual utility files that export one function and do only 
+│   │          # one thing well.
+│   ├── data.js # Where the app gets it's data from (aside from API calls).
+│   └── index.js # The Webpack entry point for the app.
 │
-└── conf.app.js # The configuration for the app
+└── conf.app.js # The configuration for the app.
 ```
 
 - Currently there's a `catchAll.js` route in `routes` that then renders the

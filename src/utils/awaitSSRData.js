@@ -24,7 +24,7 @@ const awaitSSRData = (url, params, arr) => {
         if(Array.isArray(i)) iterate(i, promises);
         else if(
           key === 'view'
-          && url === replaceUrlToken(params, item.url)
+          && url === replaceUrlToken(params, item.path)
           && item.viewProps.ssr
         ) {
           promises.push(getSSRData(item.viewProps.ssr, params, i.reqOpts));
