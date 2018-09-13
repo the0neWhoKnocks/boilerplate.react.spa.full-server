@@ -24,7 +24,7 @@ const ThreePara = AsyncChunk({
 export default {
   get: [
     {
-      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
+      handler: assignRouteHandler('ROUTES/handlers/app', __dirname),
       label: 'Bacon Ipsum',
       path: IPSUM_3,
       view: ThreePara,

@@ -26,7 +26,7 @@ export default {
   get: [
     {
       exact: true,
-      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
+      handler: assignRouteHandler('ROUTES/handlers/app', __dirname),
       label: 'Rick & Morty',
       path: ROOT,
       view: Items,

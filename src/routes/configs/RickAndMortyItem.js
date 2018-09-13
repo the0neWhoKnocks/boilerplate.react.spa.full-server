@@ -27,7 +27,7 @@ const Item = AsyncChunk({
 export default {
   get: [
     {
-      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
+      handler: assignRouteHandler('ROUTES/handlers/app', __dirname),
       path: `${ ITEM_ROUTE }${ ITEM_TOKEN }`,
       view: Item,
       viewProps: {

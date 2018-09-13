@@ -45,7 +45,7 @@ if( process.env.IS_CLIENT ){
 else{
   const { resolve } = require('path');
   if(process.env.IS_SERVER){
-    catchAllHandler = require('ROUTES/handlers/catchAll').default;
+    catchAllHandler = require('ROUTES/handlers/app').default;
   }
   
   require('glob').sync('**/*.js', {

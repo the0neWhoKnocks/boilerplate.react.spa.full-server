@@ -5,7 +5,7 @@ import assignRouteHandler from 'UTILS/assignRouteHandler';
 export default {
   get: [
     {
-      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
+      handler: assignRouteHandler('ROUTES/handlers/app', __dirname),
       label: 'Terms of Service',
       path: TERMS,
       view: DefaultView,

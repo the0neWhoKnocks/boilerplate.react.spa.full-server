@@ -25,7 +25,7 @@ const OnePara = AsyncChunk({
 export default {
   get: [
     {
-      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
+      handler: assignRouteHandler('ROUTES/handlers/app', __dirname),
       label: 'Bacon Ipsum (SSR)',
       path: IPSUM_1,
       view: OnePara,
