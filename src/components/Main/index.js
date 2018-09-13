@@ -22,10 +22,6 @@ const mapDispatchToProps = {
   setShellClass,
 };
 
-const NoRouteMatch = () => (
-  <h1>No Matching Route Found</h1>
-);
-
 const transitionMiddleware = ({
   from,
   to,
@@ -84,7 +80,6 @@ class Main extends Component {
                 />
               );
             })}
-            <Route path="*" component={ NoRouteMatch } />
           </Switch>
         </ViewTransition>
       </main>

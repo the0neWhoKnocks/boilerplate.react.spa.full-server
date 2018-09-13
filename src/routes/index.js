@@ -1,5 +1,10 @@
+import buildRoutes from 'UTILS/buildRoutes';
+import orderRoutes from 'UTILS/orderRoutes';
+
 const noOp = () => {};
-const routes = {
+// NOTE - Routes can be set up statically here, or dynamically via the mechanism
+// set-up below.
+let routes = {
   get: {},
   post: {
     NOOP: {
@@ -14,55 +19,33 @@ const routes = {
     },
   },
 };
-let catchAllHandler;
 
 // Dynamically set up all routes
 const CONFIGS_DIR = './configs';
 
-const buildRoutes = (conf, name) => {
-  Object.keys(conf).forEach(type => {
-    // `types` will be `get`, `post`, etc.
-    conf[type].forEach(route => {
-      const transformedName = name.replace('./', '').replace('.js', '');
-      // Assign the file name as the key so it can be easily accessed and
-      // references stay associated through out the project in case of
-      // refactors.
-      routes[type][transformedName] = route;
-    });
-  });
-};
-
 if( process.env.IS_CLIENT ){
-  // NOTE - Have to hardcode the path here, otherwise WP can't analyze the path
-  // during the build.
+  // NOTE - WP does a static analysis of all `require.context` calls so the
+  // configs path has to be hard-coded here.
   const configs = require.context('./configs', false, /\.js$/);
   
   configs.keys().forEach(confName => {
     const conf = configs(confName).default;
-    buildRoutes(conf, confName);
+    buildRoutes(conf, confName, routes);
   });
 }
 else{
   const { resolve } = require('path');
-  if(process.env.IS_SERVER){
-    catchAllHandler = require('ROUTES/handlers/app').default;
-  }
   
   require('glob').sync('**/*.js', {
     cwd: resolve(__dirname, CONFIGS_DIR),
   })
     .forEach((confName) => {
       const conf = require(`${ CONFIGS_DIR }/${ confName }`).default;
-      buildRoutes(conf, confName);
+      buildRoutes(conf, confName, routes);
     });
 }
 
-// The `*` route comes last to ensure more specific routes go to their
-// expected handler.
-routes.get.CATCH_ALL = {
-  path: '*',
-  handler: catchAllHandler,
-};
+routes = orderRoutes(routes);
 
 const {
   get,

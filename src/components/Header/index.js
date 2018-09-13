@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { arrayOf, bool, shape, string } from 'prop-types';
 import classnames from 'classnames';
-import Logo from './components/Logo';
+import Logo from 'COMPONENTS/Logo';
 import styles from './styles';
 
 const CLOSE_DELAY = 300;
