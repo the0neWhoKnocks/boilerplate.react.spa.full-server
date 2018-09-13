@@ -2,6 +2,7 @@ import AsyncChunk from 'COMPONENTS/AsyncChunk';
 import { IPSUM_3 } from 'CONSTANTS/routePaths';
 import { DefaultView } from 'ROUTES/shared/composedChunks';
 import { baconIpsum as middleware } from 'ROUTES/shared/middleware';
+import assignRouteHandler from 'UTILS/assignRouteHandler';
 
 const reqOpts = {
   url: 'https://baconipsum.com/api/',
@@ -20,16 +21,10 @@ const ThreePara = AsyncChunk({
   },
 });
 
-// TODO - not happy with this duplication
-let handler;
-if(process.env.IS_SERVER){
-  handler = require('ROUTES/handlers/catchAll').default;
-}
-
 export default {
   get: [
     {
-      handler,
+      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
       label: 'Bacon Ipsum',
       path: IPSUM_3,
       view: ThreePara,

@@ -1,15 +1,11 @@
 import { TERMS } from 'CONSTANTS/routePaths';
 import { DefaultView } from 'ROUTES/shared/composedChunks';
-
-let handler;
-if(process.env.IS_SERVER){
-  handler = require('ROUTES/handlers/catchAll').default;
-}
+import assignRouteHandler from 'UTILS/assignRouteHandler';
 
 export default {
   get: [
     {
-      handler,
+      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
       label: 'Terms of Service',
       path: TERMS,
       view: DefaultView,

@@ -2,6 +2,7 @@ import AsyncChunk from 'COMPONENTS/AsyncChunk';
 import { IPSUM_1 } from 'CONSTANTS/routePaths';
 import { DefaultView } from 'ROUTES/shared/composedChunks';
 import { baconIpsum as middleware } from 'ROUTES/shared/middleware';
+import assignRouteHandler from 'UTILS/assignRouteHandler';
 import getData from 'UTILS/getData';
 
 const oneParaOpts = {
@@ -21,15 +22,10 @@ const OnePara = AsyncChunk({
   },
 });
 
-let handler;
-if(process.env.IS_SERVER){
-  handler = require('ROUTES/handlers/catchAll').default;
-}
-
 export default {
   get: [
     {
-      handler,
+      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
       label: 'Bacon Ipsum (SSR)',
       path: IPSUM_1,
       view: OnePara,

@@ -7,6 +7,7 @@ import {
 } from 'CONSTANTS/routeTokens';
 import { RickAndMortyCharacter } from 'ROUTES/shared/composedChunks';
 import { rickAndMortyCharacter as middleware } from 'ROUTES/shared/middleware';
+import assignRouteHandler from 'UTILS/assignRouteHandler';
 import getData from 'UTILS/getData';
 
 const reqOpts = {
@@ -23,15 +24,10 @@ const Item = AsyncChunk({
   },
 });
 
-let handler;
-if(process.env.IS_SERVER){
-  handler = require('ROUTES/handlers/catchAll').default;
-}
-
 export default {
   get: [
     {
-      handler,
+      handler: assignRouteHandler('ROUTES/handlers/catchAll', __dirname),
       path: `${ ITEM_ROUTE }${ ITEM_TOKEN }`,
       view: Item,
       viewProps: {
