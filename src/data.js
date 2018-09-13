@@ -1,8 +1,4 @@
-import BaconIpsumSingle from 'ROUTES/BaconIpsumSingle';
-import BaconIpsumMultiple from 'ROUTES/BaconIpsumMultiple';
-import RickAndMortyItem from 'ROUTES/RickAndMortyItem';
-import RickAndMortyItems from 'ROUTES/RickAndMortyItems';
-import Terms from 'ROUTES/Terms';
+import { get as CLIENT_ROUTES } from 'ROUTES';
 
 // =============================================================================
 // Print out more verbose errors if a Promise errors without a `catch`.
@@ -25,39 +21,29 @@ if(process.env.IS_SERVER){
 
 // =============================================================================
 // Set up nav data
-// - This in turn, sets up the React routes
+// This in turn will set up the React routes via the `routes` passed to the
+// `Main` component.
 
-const data = {
-  header: {
-    navItems: [
-      RickAndMortyItems,
-      BaconIpsumSingle,
-      BaconIpsumMultiple,
-    ],
-  },
-  footer: {
-    navItems: [
-      Terms,
-    ],
-  },
-};
-
-const otherRoutes = [
-  RickAndMortyItem,
-];
-
+const {
+  BaconIpsumSingle,
+  BaconIpsumMultiple,
+  RickAndMortyItems,
+  Terms,
+} = CLIENT_ROUTES;
 const headerProps = {
-  navItems: data.header.navItems,
-};
-const mainProps = {
-  routes: [
-    ...data.header.navItems,
-    ...data.footer.navItems,
-    ...otherRoutes,
+  navItems: [
+    RickAndMortyItems,
+    BaconIpsumSingle,
+    BaconIpsumMultiple,
   ],
 };
+const mainProps = {
+  routes: Object.keys(CLIENT_ROUTES).map((key) => CLIENT_ROUTES[key]),
+};
 const footerProps = {
-  navItems: data.footer.navItems,
+  navItems: [
+    Terms,
+  ],
 };
 
 export {

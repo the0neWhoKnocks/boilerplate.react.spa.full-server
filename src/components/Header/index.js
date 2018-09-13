@@ -79,7 +79,7 @@ class Header extends Component {
               exact={ item.exact }
               className={`nav__btn ${ styles.navBtn }`}
               activeClassName={ ACTIVE_CLASS }
-              to={ item.url }
+              to={ item.path }
               onClick={ this.handleNavClick }
             >{item.label}</NavLink>
           ))}

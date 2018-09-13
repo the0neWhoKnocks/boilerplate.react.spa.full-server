@@ -9,7 +9,7 @@ import log, {
   BLACK_ON_GREEN,
   BLACK_ON_YELLOW,
 } from 'UTILS/logger';
-import routes from './routes';
+import * as routes from 'ROUTES';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -46,7 +46,10 @@ const app = {
 
     // dynamically wire up routes
     Object.keys(routes).forEach(type => {
+      // `types` will be `get`, `post`, etc.
       Object.keys(routes[type]).forEach(routeKey => {
+        // `routeKey` will be an identifying key, most likely a file name
+        // if dynamically populated.
         const endpoint = routes[type][routeKey];
         this.expressInst[type](endpoint.path, endpoint.handler);
       });

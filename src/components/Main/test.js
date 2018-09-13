@@ -42,7 +42,7 @@ describe('Main', () => {
   it('should render views if a match is found', () => {
     props.routes.forEach((r, ndx) => {
       wrapper = mount(
-        <Router initialEntries={[ r.url ]}>
+        <Router initialEntries={[ r.path ]}>
           <Main { ...props } />
         </Router>
       );

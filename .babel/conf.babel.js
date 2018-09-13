@@ -42,8 +42,11 @@ const conf = {
         '**/test.js',
       ],
       plugins: [
-        ['webpack-alias', {
-          'config': './.webpack/conf.webpack.js',
+        ['./.babel/plugins/webpackAliases', {
+          callers: [
+            'assignRouteHandler',
+          ],
+          config: './.webpack/conf.webpack.js',
         }],
         ['transform-define', {
           'process.env.IS_CLIENT': false,
@@ -61,8 +64,8 @@ const conf = {
       ],
       presets: [
         ['env', {
-          'targets': {
-            'node': 'current',
+          targets: {
+            node: 'current',
           },
         }],
       ],

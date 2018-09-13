@@ -30,7 +30,7 @@ const Footer = ({
           key={ ndx }
           exact={ item.exact }
           activeClassName="current"
-          to={ item.url }
+          to={ item.path }
         >{item.label}</NavLink>
       ))}
     </nav>
