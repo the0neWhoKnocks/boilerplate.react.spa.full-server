@@ -52,7 +52,9 @@ const {
   post,
   put,
 } = routes;
+const CLIENT_ROUTES = Object.keys(get).map((key) => get[key]);
 export {
+  CLIENT_ROUTES,
   get,
   post,
   put,

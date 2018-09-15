@@ -1,12 +1,18 @@
 import React from 'react';
 import { connect, Provider } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { node, shape, string } from 'prop-types';
+import { arrayOf, node, shape, string } from 'prop-types';
 import defaultHeader from 'COMPONENTS/Header';
 import defaultMain from 'COMPONENTS/Main';
 import defaultFooter from 'COMPONENTS/Footer';
+import { CLIENT_ROUTES } from 'ROUTES';
+import {
+  headerNavItems as defaultHeaderNavItems,
+  footerNavItems as defaultFooterNavItems,
+} from 'SRC/data';
 import store from 'STATE/store';
 import {
+  getLoggingEnabled,
   getShellClass,
 } from 'STATE/selectors';
 import './styles';
@@ -47,15 +53,14 @@ ShellWrap.propTypes = {
 };
 
 const composeShell = (
-  Header=defaultHeader,
-  Main=defaultMain,
-  Footer=defaultFooter
+  Header = defaultHeader,
+  Main = defaultMain,
+  Footer = defaultFooter
 ) => {
   const Shell = ({
     context,
-    footerProps,
-    headerProps,
-    mainProps,
+    headerNavItems = defaultHeaderNavItems,
+    footerNavItems = defaultFooterNavItems,
     request,
   }) => {
     const routerProps = {};
@@ -71,9 +76,12 @@ const composeShell = (
       <Provider store={ store.app }>
         <Router { ...routerProps }>
           <ConnectedShell>
-            <Header { ...headerProps } />
-            <Main store={ store.app } { ...mainProps } />
-            <Footer { ...footerProps } />
+            <Header navItems={ headerNavItems } />
+            <Main routes={ CLIENT_ROUTES } />
+            <Footer
+              loggingEnabled={ getLoggingEnabled(store.app.getState()) }
+              navItems={ footerNavItems }
+            />
           </ConnectedShell>
         </Router>
       </Provider>
@@ -83,12 +91,8 @@ const composeShell = (
   Shell.propTypes = {
     // Object from server which allows for tracking redirects from Router
     context: shape({}),
-    // The props for the Footer component
-    footerProps: shape({}).isRequired,
-    // The props for the Header component
-    headerProps: shape({}).isRequired,
-    // The props for the Main component
-    mainProps: shape({}).isRequired,
+    headerNavItems: arrayOf(shape({})),
+    footerNavItems: arrayOf(shape({})),
     // A request from the server
     request: shape({}),
     // The app's store

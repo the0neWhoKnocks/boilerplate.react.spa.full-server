@@ -8,6 +8,7 @@ import { initialState } from './constants';
 import {
   SET_ITEM_LOADED,
   SET_ITEM_RESULTS,
+  SET_LOGGING_ENABLED,
   SET_PREVIOUS_VIEW,
   SET_SHELL_CLASS,
   SET_SCROLL_POS,
@@ -50,6 +51,14 @@ function reducer(extendedData = {}){
             ...state.results,
             ...results,
           ],
+        };
+      }
+
+      case SET_LOGGING_ENABLED: {
+        log('  ', `${ BLACK_ON_GRAY } SET`, 'logging to:', `${ BLUE } ${ payload ? 'enabled' : 'disabled' }`);
+        return {
+          ...state,
+          loggingEnabled: payload,
         };
       }
 

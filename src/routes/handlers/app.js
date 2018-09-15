@@ -1,51 +1,52 @@
-import React from 'react';
-import appConfig from 'ROOT/conf.app';
 import routeWrapper from 'UTILS/routeWrapper';
-import log, {
-  BLACK_ON_GREEN,
-  BLACK_ON_YELLOW,
-  BLUE_START,
-  BLUE_END,
-} from 'UTILS/logger';
-
-const isDev = process.env.NODE_ENV === 'development';
 
 export default routeWrapper.bind(null, (req, res) => {
+  const { statSync } = require('fs');
+  const React = require('react');
+  const { renderToString } = require('react-dom/server');
+  const Loadable = require('react-loadable');
+  const { getBundles } = require('react-loadable/webpack');
+  const { renderStatic } = require('glamor/server');
+  const serialize = require('serialize-javascript');
+  const ClientShell = require('COMPONENTS/Shell').default;
+  const { LOGGING } = require('CONSTANTS/cookies');
+  const appConfig = require('ROOT/conf.app');
+  const { CLIENT_ROUTES } = require('ROUTES');
+  const AppShell = require('SERVER/views/AppShell');
+  const loadableStats = require('SRC/react-loadable.json');
+  const {
+    setLoggingEnabled,
+    setShellClass,
+  } = require('STATE/actions');
+  const { default: store } = require('STATE/store');
+  const {
+    default: log,
+    BLACK_ON_GREEN,
+    BLACK_ON_YELLOW,
+    BLUE_START,
+    BLUE_END,
+  } = require('UTILS/logger');
+  const awaitSSRData = require('UTILS/awaitSSRData').default;
+  
+  const isDev = process.env.NODE_ENV === 'development';
+  
   // if a relative file request makes it here, it's most likely an error
   if( /.*\.(js|css|json|jpg|png|gif)$/.test(req.url) ){
     res.status(404);
     res.send('File not found in catch-all route');
   }
 
-  // route specific modules
-  const { statSync } = require('fs');
-  const { renderToString } = require('react-dom/server');
-  const { renderStatic } = require('glamor/server');
-  const serialize = require('serialize-javascript');
-  const ClientShell = require('COMPONENTS/Shell').default;
-  const awaitSSRData = require('UTILS/awaitSSRData').default;
-  const {
-    footerProps,
-    headerProps,
-    mainProps,
-  } = require('SRC/data');
-  const { default: store } = require('STATE/store');
-  const AppShell = require('SERVER/views/AppShell');
-  const { setShellClass } = require('STATE/actions');
-
-  store.app.dispatch( setShellClass({ pathname: req.path }) );
-
   // ensures the favicon is always current (with every start of the server)
   const faviconModTime = statSync(appConfig.paths.FAVICON).mtimeMs;
-
-  awaitSSRData(req.url, req.params, [
-    mainProps,
-  ]).then(() => {
-    footerProps.loggingEnabled = (req.cookies.logging) ? true : false;
-
-    const Loadable = require('react-loadable');
-    const { getBundles } = require('react-loadable/webpack');
-    const loadableStats = require('SRC/react-loadable.json');
+  
+  awaitSSRData(
+    req.url,
+    req.params,
+    CLIENT_ROUTES,
+  ).then(() => {
+    store.app.dispatch( setLoggingEnabled(!!req.cookies[LOGGING]) );
+    store.app.dispatch( setShellClass({ pathname: req.path }) );
+    
     let modules = [];
     const captureSSRChunks = (moduleName) => modules.push(moduleName);
 
@@ -57,9 +58,6 @@ export default routeWrapper.bind(null, (req, res) => {
         <Loadable.Capture report={captureSSRChunks}>
           <ClientShell
             context={ context }
-            footerProps={ footerProps }
-            headerProps={ headerProps }
-            mainProps={ mainProps }
             request={ req }
           />
         </Loadable.Capture>

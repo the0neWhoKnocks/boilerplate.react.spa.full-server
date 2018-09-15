@@ -7,6 +7,7 @@ import getData from 'UTILS/getData';
 import {
   SET_ITEM_LOADED,
   SET_ITEM_RESULTS,
+  SET_LOGGING_ENABLED,
   SET_PREVIOUS_VIEW,
   SET_SHELL_CLASS,
   SET_SCROLL_POS,
@@ -41,6 +42,11 @@ const setItemResults = data => ({
     nextPage: data.info.next,
     results: data.results,
   },
+});
+
+const setLoggingEnabled = enabled => ({
+  type: SET_LOGGING_ENABLED,
+  payload: enabled,
 });
 
 const setPreviousView = url => ({
@@ -80,6 +86,7 @@ export {
   fetchMoreItems,
   setItemLoaded,
   setItemResults,
+  setLoggingEnabled,
   setPreviousView,
   setShellClass,
   setScrollPos,

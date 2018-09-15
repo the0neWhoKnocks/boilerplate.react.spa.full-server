@@ -1,13 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { arrayOf, bool, shape, string } from 'prop-types';
-import { deleteCookie, setCookie } from 'UTILS/cookie';
 import Toggle from 'COMPONENTS/Toggle';
+import { LOGGING } from 'CONSTANTS/cookies';
+import { deleteCookie, setCookie } from 'UTILS/cookie';
 import styles from './styles';
 
 const handleToggle = (toggled) => {
-  if(toggled) setCookie('logging', true);
-  else deleteCookie('logging');
+  if(toggled) setCookie(LOGGING, true);
+  else deleteCookie(LOGGING);
 };
 
 // The Header creates links that can be used to navigate

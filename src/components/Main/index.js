@@ -49,7 +49,6 @@ class Main extends Component {
     const {
       location,
       routes,
-      store,
     } = this.props;
 
     return (
@@ -73,7 +72,6 @@ class Main extends Component {
                   render={({ match }) => (
                     <View
                       match={ match }
-                      store={ store }
                       { ...route.viewProps }
                     />
                   )}
@@ -96,7 +94,6 @@ Main.propTypes = {
     viewProps: shape({}),
   })),
   setShellClass: func,
-  store: shape({}),
 };
 Main.defaultProps = {
   routes: [],

@@ -1,5 +1,6 @@
 const NAME = 'APP';
 const initialState = () => ({
+  loggingEnabled: false,
   nextPage: undefined,
   previousView: undefined,
   results: [],

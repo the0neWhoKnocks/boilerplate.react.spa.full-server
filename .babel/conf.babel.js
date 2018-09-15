@@ -42,10 +42,7 @@ const conf = {
         '**/test.js',
       ],
       plugins: [
-        ['./.babel/plugins/webpackAliases', {
-          callers: [
-            'assignRouteHandler',
-          ],
+        ['webpack-alias', {
           config: './.webpack/conf.webpack.js',
         }],
         ['transform-define', {

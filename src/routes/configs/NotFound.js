@@ -1,12 +1,14 @@
 import NotFound from 'COMPONENTS/views/NotFound';
-import assignRouteHandler from 'UTILS/assignRouteHandler';
+
+const ROUTE = {
+  path: '*',
+  view: NotFound,
+};
+
+if( process.env.IS_SERVER ){
+  ROUTE.handler = require('ROUTES/handlers/app').default;
+}
 
 export default {
-  get: [
-    {
-      handler: assignRouteHandler('ROUTES/handlers/app', __dirname),
-      path: '*',
-      view: NotFound,
-    },
-  ],
+  get: [ ROUTE ],
 };

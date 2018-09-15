@@ -7,11 +7,24 @@ import appConfig from 'ROOT/conf.app';
 import log, {
   BLUE,
   BLACK_ON_GREEN,
+  BLACK_ON_RED,
   BLACK_ON_YELLOW,
 } from 'UTILS/logger';
 import * as routes from 'ROUTES';
 
 const isDev = process.env.NODE_ENV === 'development';
+
+// =============================================================================
+// Print out more verbose errors if a Promise errors without a `catch`.
+// Shouldn't happen often, but when integrating new services or tools it can
+// come in handy.
+
+process.on('unhandledRejection', (error) => {
+  log(
+    `${ BLACK_ON_RED } ERROR`,
+    (error && error.stack) ? error.stack : JSON.stringify(error)
+  );
+});
 
 // =============================================================================
 
@@ -46,13 +59,14 @@ const app = {
 
     // dynamically wire up routes
     Object.keys(routes).forEach(type => {
-      // `types` will be `get`, `post`, etc.
-      Object.keys(routes[type]).forEach(routeKey => {
-        // `routeKey` will be an identifying key, most likely a file name
-        // if dynamically populated.
-        const endpoint = routes[type][routeKey];
-        this.expressInst[type](endpoint.path, endpoint.handler);
-      });
+      if(['get', 'post', 'put', 'delete'].includes(type)){
+        Object.keys(routes[type]).forEach(routeKey => {
+          // `routeKey` will be an identifying key, most likely a file name
+          // if dynamically populated.
+          const endpoint = routes[type][routeKey];
+          this.expressInst[type](endpoint.path, endpoint.handler);
+        });
+      }
     });
   },
 
