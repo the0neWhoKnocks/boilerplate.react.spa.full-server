@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, unlinkSync, writeFileSync } from 'fs';
 import express from 'express';
 import compression from 'compression';
 import portscanner from 'portscanner';
@@ -25,6 +25,20 @@ process.on('unhandledRejection', (error) => {
     (error && error.stack) ? error.stack : JSON.stringify(error)
   );
 });
+
+// =============================================================================
+// Since a delay is required for server startup it can delay restarts in watch
+// mode. Detecting if the initial files have already been created while in dev
+// mode can speed things up.
+
+let runningFile;
+if(isDev){
+  runningFile = `${ appConfig.paths.DIST_PRIVATE }/.running`;
+  process.on('SIGINT', () => {
+    unlinkSync(runningFile);
+    process.exit();
+  });
+}
 
 // =============================================================================
 
@@ -101,6 +115,9 @@ const app = {
   },
 
   startServer: function(){
+    const isRunning = runningFile && existsSync(runningFile);
+    const delay = (isRunning) ? 0 : 1000;
+
     // don't start server until required files are built
     const timeout = setInterval(() => {
       const file = `${ appConfig.paths.DIST_PUBLIC }/${ appConfig.webpack.MANIFEST_NAME }`;
@@ -130,16 +147,18 @@ const app = {
           require('ROUTES/shared/composedChunks');
 
           Loadable.preloadAll().then(() => {
+            if(!isRunning) writeFileSync(runningFile, '');
+
             this.server.listen(appConfig.PORT, this.onBootComplete.bind(this, {
               url: `http://localhost:${ appConfig.PORT }/`,
             }));
           });
-        }, 1000);
+        }, delay);
       }
       else{
         log(`${ BLACK_ON_YELLOW } WAITING`, 'for', `${ BLUE } ${ file }`, 'to be created');
       }
-    }, 1000);
+    }, delay);
   },
 };
 
