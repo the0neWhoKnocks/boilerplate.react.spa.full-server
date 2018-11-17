@@ -4,7 +4,8 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import Waypoint from 'react-waypoint';
 import { arrayOf, func, number, shape, string } from 'prop-types';
-import ImageLoader from 'COMPONENTS/ImageLoader';
+import ImageLoader from '@noxx/react-image-loader';
+import LoadIndicator from 'COMPONENTS/LoadIndicator';
 import Spinner from 'COMPONENTS/Spinner';
 import {
   fetchMoreItems,
@@ -48,7 +49,7 @@ class ItemsView extends Component {
   handleClick() {
     this.props.setPreviousView(this.props.location.pathname);
   }
-  
+
   // NOTE - to facilitate consitent view transitions, we need to record the
   // images that have loaded so that the loaded images don't flicker a loading
   // state on initial render.
@@ -92,9 +93,13 @@ class ItemsView extends Component {
                     <ImageLoader
                       alt={ `${ item.name } thumbnail` }
                       onLoad={ this.handleImageLoad.bind(null, ndx) }
-                      overlayColor={ITEM_BG_COLOR}
-                      spinnerBGColor="transparent"
-                      spinnerColor={ITEM_LOADER_COLOR}
+                      LoadingIndicator={() => (
+                        <LoadIndicator
+                          overlayColor={ITEM_BG_COLOR}
+                          spinnerBGColor="transparent"
+                          spinnerColor={ITEM_LOADER_COLOR}
+                        />
+                      )}
                       src={ item.image }
                     />
                   )}

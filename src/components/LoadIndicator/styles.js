@@ -21,15 +21,8 @@ const styles = {
       bottom: 0,
       right: 0,
       transition: 'opacity 0.2s',
-      opacity: 0,
       userSelect: 'none',
       pointerEvents: 'none',
-
-      '.is--visible': {
-        opacity: 1,
-        userSelect: 'auto',
-        pointerEvents: 'auto',
-      },
     });
   },
 

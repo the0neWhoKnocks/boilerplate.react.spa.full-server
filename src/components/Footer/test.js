@@ -9,17 +9,17 @@ describe('Footer', () => {
         {
           exact: true,
           label: 'Link 1',
-          url: 'http://test.com/fake/1',
+          path: 'http://test.com/fake/1',
         },
         {
           exact: false,
           label: 'Link 2',
-          url: 'http://test.com/fake/2',
+          path: 'http://test.com/fake/2',
         },
         {
           exact: true,
           label: 'Link 3',
-          url: 'http://test.com/fake/3',
+          path: 'http://test.com/fake/3',
         },
       ],
     };

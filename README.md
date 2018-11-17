@@ -119,7 +119,7 @@ yarn start:server
 - How to set up a `logger` that can log the same colored output on the server
   as it does the client.
   1. The [`logger` util][file-logger] utilizes a `clientTransform` and
-     `serverTransform` to allow for a consistent API usage, but allow for 
+     `serverTransform` to allow for a consistent API usage, but allow for
      the custom coloring syntax required for terminals, or the Client's Dev-Tools.
   1. Admittedly the API's a bit kludgy, but it's what works atm. For any
      text that you want colorized, you [use the constants exported from
@@ -141,7 +141,7 @@ yarn start:server
 
 - How to set up SSR and client data/style hydration.
   1. For the server, you have to [`renderStatic` (for `glamor`) and
-     `renderToString` (for `react-dom`)][ssr-hydration-1]. The results of 
+     `renderToString` (for `react-dom`)][ssr-hydration-1]. The results of
      those calls return to you the `css`, `html`, and `ids`. We only care about
      `ids` for CSS hydration.
   1. We then [pass `ids` and the current Redux store state][ssr-hydration-2]
@@ -165,7 +165,7 @@ yarn start:server
   default view transitions for most pages, or custom transitions based on the
   route you're coming `from` and `to`, or visa versa.
   1. Created the `ViewTransition` component that can tap into the `react-router`
-     data to [allow for a user-defined `middleware`][viewtransition-1] to 
+     data to [allow for a user-defined `middleware`][viewtransition-1] to
      temporarily display the current component and next component, and
      transition between the two. It has default transition styles set for
      `from` and `to`, but [they can be overridden in the passed in `middleware`][viewtransition-2].
@@ -196,7 +196,7 @@ yarn start:server
   the page.
   1. The result in `results` come with an image URL. When looping over those
      results [I check if a `_loaded` prop's been set][async-img-load] - if it has,
-     I just render a normal `img` tag - if not, I use the `ImageLoader` component
+     I just render a normal `img` tag - if not, I use the `@noxx/react-image-loader` component
      which will still render an `img` tag, but with a base64 1x1 pixel (so all `img`
      styling still behaves the same) for the `src`, and a `data-src` attribute with
      the actual image source. On the Client, once the load of the image has begun,
@@ -291,13 +291,13 @@ Files of note:
 │   │
 │   ├── /state # Redux stuff.
 │   │   ├── ...
-│   │   └── store.js # A singleton that allows for using/accessing the store 
+│   │   └── store.js # A singleton that allows for using/accessing the store
 │   │                # anywhere without having to use Connect.
 │   │
 │   ├── /server # All server specific code.
 │   │   ├── /routes # Separate files for each route handler.
 │   │   │   ├── catchAll.js # The default route handler.
-│   │   │   └── index.js # Where you combine all your routes into something the 
+│   │   │   └── index.js # Where you combine all your routes into something the
 │   │   │                # server loads.
 │   │   │
 │   │   ├── /views # Should only be one view, but you can house any others here.
@@ -308,7 +308,7 @@ Files of note:
 │   │
 │   ├── /state # Where the app state lives.
 │   ├── /static # Static assets that'll just be copied over to public.
-│   ├── /utils # Individual utility files that export one function and do only 
+│   ├── /utils # Individual utility files that export one function and do only
 │   │          # one thing well.
 │   ├── data.js # Where the app gets it's data from (aside from API calls).
 │   └── index.js # The Webpack entry point for the app.

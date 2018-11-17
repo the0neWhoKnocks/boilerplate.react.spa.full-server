@@ -13,7 +13,7 @@ describe('Header', () => {
       navItems: [{
         exact: true,
         label: 'Nav Item',
-        url: 'http://test.com/some/page',
+        path: 'http://test.com/some/page',
       }],
     };
     mockContains = false;

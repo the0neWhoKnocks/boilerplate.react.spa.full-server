@@ -1,12 +1,25 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { CLIENT_ROUTES } from 'ROUTES';
+import {
+  headerNavItems,
+  footerNavItems,
+} from 'SRC/data';
+
+jest.mock('ROUTES', () => [
+  {},
+]);
+jest.mock('SRC/data', () => ({
+  headerNavItems: [],
+  footerNavItems: [],
+}));
 
 describe('Shell', () => {
   let props, wrapper, mockStore, index, Shell, composeShell, store,
     mapStateToProps, ShellWrap;
 
-  const setupEnv = (isClient) => {
-    if(isClient) process.env.IS_CLIENT = 'true';
+  const setupEnv = (isClient, state={}) => {
+    if(isClient) process.env.IS_CLIENT = true;
     else delete process.env.IS_CLIENT;
 
     index = require('./index');
@@ -19,13 +32,13 @@ describe('Shell', () => {
 
     mockStore = {
       dispatch: jest.fn(),
-      getState: jest.fn(),
+      getState: jest.fn(() => state),
       subscribe: jest.fn(),
     };
     store.app = mockStore;
     props = {
-      footerProps: { footer: true },
-      headerProps: { header: true },
+      footerNavItems: [{}],
+      headerNavItems: [{}],
       mainProps: {
         main: true,
         store: store.app,
@@ -106,18 +119,38 @@ describe('Shell', () => {
       const CustomMain = () => (<div />);
       const CustomFooter = () => (<div />);
       const CustomShell = composeShell(CustomHeader, CustomMain, CustomFooter);
+      let header, main, footer;
 
       wrapper = shallow(<CustomShell { ...props } />);
-      const header = wrapper.find('CustomHeader');
-      const main = wrapper.find('CustomMain');
-      const footer = wrapper.find('CustomFooter');
+      header = wrapper.find('CustomHeader');
+      main = wrapper.find('CustomMain');
+      footer = wrapper.find('CustomFooter');
 
       expect(header.length).toBe(1);
-      expect(header.props()).toEqual(props.headerProps);
+      expect(header.props()).toEqual({
+        navItems: props.headerNavItems,
+      });
       expect(main.length).toBe(1);
-      expect(main.props()).toEqual(props.mainProps);
+      expect(main.props()).toEqual({
+        routes: CLIENT_ROUTES,
+      });
       expect(footer.length).toBe(1);
-      expect(footer.props()).toEqual(props.footerProps);
+      expect(footer.props()).toEqual({
+        navItems: props.footerNavItems,
+      });
+
+      delete props.footerNavItems;
+      delete props.headerNavItems;
+      wrapper = shallow(<CustomShell { ...props } />);
+      header = wrapper.find('CustomHeader');
+      footer = wrapper.find('CustomFooter');
+
+      expect(header.props()).toEqual({
+        navItems: headerNavItems,
+      });
+      expect(footer.props()).toEqual({
+        navItems: footerNavItems,
+      });
     });
   });
 

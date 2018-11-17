@@ -14,21 +14,26 @@ describe('Main', () => {
   let props, wrapper;
 
   beforeEach(() => {
-    const View1 = () => (<div />);
-    const View2 = () => (<div />);
+    const View1 = () => null;
+    const View2 = () => null;
+    const NotFound = () => null;
     props = {
       routes: [
         {
           exact: true,
-          url: '/fake/1',
+          path: '/fake/1',
           view: View1,
           viewProps: { view1: true },
         },
         {
           exact: false,
-          url: '/fake/2',
+          path: '/fake/2',
           view: View2,
           viewProps: { view2: true },
+        },
+        {
+          path: '*',
+          view: NotFound,
         },
       ],
       store: {
@@ -65,7 +70,7 @@ describe('Main', () => {
       </Router>
     );
 
-    expect(wrapper.find('NoRouteMatch').length).toBe(1);
+    expect(wrapper.find('NotFound').length).toBe(1);
   });
 
   it('should apply View transitions', () => {
