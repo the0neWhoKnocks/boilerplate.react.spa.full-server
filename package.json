@@ -27,7 +27,7 @@
   "author": "Trevor Lemon",
   "license": "MIT",
   "dependencies": {
-    "@noxx/react-image-loader": "^1.0.1",
+    "@noxx/react-image-loader": "1.1.1",
     "@noxx/webpack-tidy-plugin": "^2.0.2",
     "axios": "^0.17.0",
     "babel-cli": "^6.26.0",

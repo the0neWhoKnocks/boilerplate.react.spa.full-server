@@ -2,10 +2,14 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { arrayOf, number, shape, string } from 'prop-types';
 import { Link } from 'react-router-dom';
+import ImageLoader from '@noxx/react-image-loader';
+import LoadIndicator from 'COMPONENTS/LoadIndicator';
 import {
   getPreviousView,
 } from 'STATE/selectors';
 import {
+  ITEM_BG_COLOR,
+  ITEM_LOADER_COLOR,
   globals as globalStyles,
   loadFonts,
 } from 'COMPONENTS/views/Items/styles';
@@ -31,10 +35,17 @@ const ItemView = ({
           <h1 className={ `${ styles.title }` }>{ data.name }</h1>
           <div className={`view__body ${ styles.root }`}>
             <div className={`view__body ${ styles.infoWrapper }`}>
-              <img
-                className={ `${ styles.img }` }
-                src={ data.image }
+              <ImageLoader
                 alt={ `${ data.name } thumbnail` }
+                className={ `${ styles.img }` }
+                LoadingIndicator={() => (
+                  <LoadIndicator
+                    overlayColor={ITEM_BG_COLOR}
+                    spinnerBGColor="transparent"
+                    spinnerColor={ITEM_LOADER_COLOR}
+                  />
+                )}
+                src={ data.image }
               />
               <ul className={ `${ styles.info }` }>
                 <li>

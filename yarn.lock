@@ -35,9 +35,9 @@
     eslint-plugin-jest "^21.12.2"
     eslint-plugin-react "^7.7.0"
 
-"@noxx/react-image-loader@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@noxx/react-image-loader/-/react-image-loader-1.0.1.tgz#b60b4ab1acbd4f1410407fbdb3cbf447564f6ec9"
+"@noxx/react-image-loader@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@noxx/react-image-loader/-/react-image-loader-1.1.1.tgz#b72709e65754dfe01bb103ad2dd2c49040688ce0"
 
 "@noxx/webpack-tidy-plugin@^2.0.2":
   version "2.0.2"
